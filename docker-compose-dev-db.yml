@@ -1,0 +1,10 @@
+services:
+  dev-db:
+    image: postgres:17.2-alpine
+    container_name: wn-dev-db
+    environment:
+      - POSTGRES_USER=worldnews
+      - POSTGRES_PASSWORD=worldnews
+      - POSTGRES_DB=worldnews
+    ports:
+      - 5438:5432

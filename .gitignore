@@ -1,0 +1,23 @@
+.idea
+
+target/
+log/
+rsa-store/
+
+!.mvn/wrapper/maven-wrapper.jar
+src/main/resources/public
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+.~lock.*
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### draw.IO ###
+.$*
+*.bkp
+/scratches/http-client.private.env.json

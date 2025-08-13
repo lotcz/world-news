@@ -1,0 +1,20 @@
+package eu.zavadil.wn.data.topic;
+
+import eu.zavadil.wn.data.realm.Realm;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Entity
+public class Topic extends TopicBase {
+
+	@ManyToOne
+	private Topic parent;
+
+	@ManyToOne
+	private Realm realm;
+
+}
