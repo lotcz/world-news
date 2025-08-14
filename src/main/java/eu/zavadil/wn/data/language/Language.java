@@ -19,5 +19,4 @@ public class Language extends EntityWithNameBase {
 
 	private String code;
 
-
 }

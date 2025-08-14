@@ -12,17 +12,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(
-	name = "article",
+	name = "topic",
 	indexes = {
 		@Index(columnList = "processingState")
 	}
 )
 public class TopicStub extends ArticleSourceBase {
 
-	@Column(name = "rodic_id")
-	private Integer rodicId;
-
-	@Column(name = "zeme_id")
-	private Integer zemeId;
+	@Column(name = "realm_id")
+	private Integer realmId;
 
 }

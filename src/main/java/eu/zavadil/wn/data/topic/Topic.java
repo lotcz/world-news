@@ -12,9 +12,6 @@ import lombok.EqualsAndHashCode;
 public class Topic extends TopicBase {
 
 	@ManyToOne
-	private Topic parent;
-
-	@ManyToOne
 	private Realm realm;
 
 }

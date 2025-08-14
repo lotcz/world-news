@@ -25,4 +25,5 @@ public class Realm extends EntityWithNameBase {
 	@ManyToMany(mappedBy = "realms")
 	private Set<ArticleSource> sources = new HashSet<>();
 
+	private boolean approved = false;
 }

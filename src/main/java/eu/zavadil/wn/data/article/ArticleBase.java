@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @MappedSuperclass
@@ -22,6 +24,10 @@ public class ArticleBase extends EntityBase {
 	public void setTitle(String title) {
 		this.title = this.truncateString(title, TITLE_SIZE);
 	}
+
+	private Instant publishDate;
+
+	private String originalUrl;
 
 	@Column(columnDefinition = "TEXT")
 	private String annotation;

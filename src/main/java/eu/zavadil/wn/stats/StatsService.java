@@ -1,6 +1,6 @@
 package eu.zavadil.wn.stats;
 
-import eu.zavadil.wn.service.CountryService;
+import eu.zavadil.wn.service.RealmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 public class StatsService {
 
 	@Autowired
-	CountryService countryService;
+	RealmService realmService;
 
 	public WnStats getStats() {
 		final WnStats stats = new WnStats();
 
 		// cache
-		stats.setCountryCache(this.countryService.getStats());
+		stats.setRealmCache(this.realmService.getStats());
 
 		return stats;
 	}

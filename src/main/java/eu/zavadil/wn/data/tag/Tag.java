@@ -17,7 +17,4 @@ import lombok.EqualsAndHashCode;
 )
 public class Tag extends EntityWithNameBase {
 
-	private String summary;
-
-
 }

@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface ArticleRepository extends EntityRepository<Article> {
 
 	@Query("""
@@ -14,5 +16,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 				where lower(a.title) LIKE %:search%
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
+
+	Optional<Article> findFirstByOriginalUrl(String originalUrl);
 
 }

@@ -11,6 +11,6 @@ public class WnStats {
 	private final JavaHeapStats javaHeap = JavaHeapStats.ofCurrent();
 
 	@Setter
-	private HashCacheStats countryCache;
+	private HashCacheStats realmCache;
 
 }

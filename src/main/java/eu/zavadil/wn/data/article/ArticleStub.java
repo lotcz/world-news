@@ -14,15 +14,18 @@ import lombok.EqualsAndHashCode;
 @Table(
 	name = "article",
 	indexes = {
-		@Index(columnList = "processingState")
+		@Index(columnList = "processingState"),
+		@Index(columnList = "originalUrl", unique = true)
 	}
 )
 public class ArticleStub extends ArticleSourceBase {
 
-	@Column(name = "rodic_id")
-	private Integer rodicId;
+	@Column(name = "topic_id")
+	private Integer topicId;
 
-	@Column(name = "zeme_id")
-	private Integer zemeId;
+	@Column(name = "source_id")
+	private Integer sourceId;
 
+	@Column(name = "language_id")
+	private Integer languageId;
 }

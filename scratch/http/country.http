@@ -1,0 +1,35 @@
+### Search
+GET {{url}}/country
+Authorization: Bearer {{accessToken}}
+
+### Load all
+GET {{url}}/country/all
+Authorization: Bearer {{accessToken}}
+
+### Load single country
+GET {{url}}/country/3
+Authorization: Bearer {{accessToken}}
+
+### Insert
+POST {{url}}/country
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "name": "Czech republic",
+    "code": "cz"
+}
+
+### Update
+PUT {{url}}/country/4
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "name": "Czech republic",
+    "code": "cs"
+}
+
+### Delete
+DELETE {{url}}/country/3
+Authorization: Bearer {{accessToken}}
