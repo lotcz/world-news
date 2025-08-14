@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @MappedSuperclass
@@ -24,4 +26,7 @@ public class ArticleSourceBase extends EntityWithNameBase {
 	}
 
 	private ImportType importType;
+
+	private Instant lastImported;
+	
 }

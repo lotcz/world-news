@@ -27,4 +27,18 @@ public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSour
 		).toList();
 		return PagingUtils.getPage(filtered, pr);
 	}
+
+	public ArticleSource getNextImportSource() {
+		List<ArticleSource> sources = this.all();
+		ArticleSource oldest = null;
+
+		for (ArticleSource ars : sources) {
+			if (ars.getLastImported() == null) return ars;
+			if (oldest == null || ars.getLastImported().isBefore(oldest.getLastImported())) {
+				oldest = ars;
+			}
+		}
+
+		return oldest;
+	}
 }

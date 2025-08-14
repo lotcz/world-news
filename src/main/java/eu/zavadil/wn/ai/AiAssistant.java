@@ -19,7 +19,7 @@ public class AiAssistant {
 
 	@PostConstruct
 	public void init() {
-		this.ask("You are a helpful assistant.", "Say just \"Hello\"");
+		//this.ask("You are a helpful assistant.", "Say just \"Hello\"");
 	}
 
 	public AiLog ask(AiParams params) {
