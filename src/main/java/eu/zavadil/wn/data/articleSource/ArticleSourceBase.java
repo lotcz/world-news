@@ -25,8 +25,9 @@ public class ArticleSourceBase extends EntityWithNameBase {
 		this.url = this.truncateString(url, URL_SIZE);
 	}
 
+	@Column(nullable = false)
 	private ImportType importType;
 
 	private Instant lastImported;
-	
+
 }

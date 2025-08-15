@@ -25,26 +25,29 @@ public class ArticleImportWorker {
 	@Autowired
 	ArticleDataSourceContainer articleDataSourceContainer;
 
-	@Scheduled(fixedDelay = 10 * 60 * 1000)
+	@Scheduled(fixedDelay = 10 * 1000)
 	public void execute() {
 		ArticleSource articleSource = this.articleSourceService.getNextImportSource();
 		if (articleSource == null) {
-			log.info("No article source suitable for import found!");
+			log.error("No article source suitable for import found!");
 			return;
 		}
-
-		log.info("Importing articles from {}", articleSource.getUrl());
 
 		ArticleDataSource articleDataSource = this.articleDataSourceContainer.get(articleSource.getImportType());
 
 		if (articleDataSource == null) {
-			log.info("No article data source found for import type {} !", articleSource.getImportType());
+			log.error("No article data source found for import type {} !", articleSource.getImportType());
 			return;
 		}
+
+		int totalArticles = 0;
+		int updatedArticles = 0;
+		int newArticles = 0;
 
 		BasicIterator<ArticleData> iterator = articleDataSource.getIterator(articleSource);
 
 		while (iterator.hasNext()) {
+			totalArticles++;
 			ArticleData articleData = iterator.next();
 			Article article = this.articleService.loadByOriginalUrl(articleData.getOriginalUrl());
 			if (article == null) {
@@ -52,6 +55,7 @@ public class ArticleImportWorker {
 				if (StringUtils.isBlank(url)) {
 					continue;
 				}
+				newArticles++;
 				article = new Article();
 				article.setOriginalUrl(url);
 			} else {
@@ -59,18 +63,40 @@ public class ArticleImportWorker {
 					&& StringUtils.safeEquals(article.getSummary(), articleData.getSummary())
 					&& StringUtils.safeEquals(article.getBody(), articleData.getBody());
 				if (identical) {
-					log.info("Article identical skipping.");
 					continue;
 				}
+				if (!StringUtils.safeEquals(article.getTitle(), articleData.getTitle())) {
+					log.info("title mismatch");
+					log.info(article.getTitle());
+					log.info(articleData.getTitle());
+				}
+				if (!StringUtils.safeEquals(article.getSummary(), articleData.getSummary())) {
+					log.info("summary mismatch");
+				}
+				if (!StringUtils.safeEquals(article.getBody(), articleData.getBody())) {
+					log.info("body mismatch");
+				}
+				updatedArticles++;
 			}
 
+			article.setSource(articleSource);
+			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 			article.setSummary(articleData.getSummary());
+			article.setBody(articleData.getBody());
 			article.setPublishDate(articleData.getPublishDate());
 			article.setProcessingState(ProcessingState.NotReady);
+			//article.setLastUpdatedOn(Instant.now());
 
 			this.articleService.save(article);
 		}
 
+		log.info(
+			"Processed article source {}. Total {} articles, {} new, {} updated.",
+			articleSource.getUrl(),
+			totalArticles,
+			newArticles,
+			updatedArticles
+		);
 	}
 }

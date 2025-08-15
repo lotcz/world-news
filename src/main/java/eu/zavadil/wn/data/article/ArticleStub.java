@@ -1,6 +1,5 @@
 package eu.zavadil.wn.data.article;
 
-import eu.zavadil.wn.data.articleSource.ArticleSourceBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -18,14 +17,14 @@ import lombok.EqualsAndHashCode;
 		@Index(columnList = "originalUrl", unique = true)
 	}
 )
-public class ArticleStub extends ArticleSourceBase {
+public class ArticleStub extends ArticleBase {
 
 	@Column(name = "topic_id")
 	private Integer topicId;
 
-	@Column(name = "source_id")
+	@Column(name = "source_id", nullable = false)
 	private Integer sourceId;
 
-	@Column(name = "language_id")
+	@Column(name = "language_id", nullable = false)
 	private Integer languageId;
 }

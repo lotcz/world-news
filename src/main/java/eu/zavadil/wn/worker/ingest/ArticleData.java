@@ -3,6 +3,7 @@ package eu.zavadil.wn.worker.ingest;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 public class ArticleData {
@@ -16,4 +17,6 @@ public class ArticleData {
 	private String originalUrl;
 
 	private Instant publishDate;
+
+	private List<ImageData> images;
 }

@@ -20,10 +20,10 @@ public class Article extends ArticleBase {
 	@ManyToOne
 	private Topic topic;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private ArticleSource source;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Language language;
 
 	@ManyToMany

@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "article_source")
 public class ArticleSource extends ArticleSourceBase {
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Language language;
 
 	@ManyToMany

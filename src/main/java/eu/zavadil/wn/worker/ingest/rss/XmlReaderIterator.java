@@ -5,6 +5,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import eu.zavadil.java.iterators.BasicIterator;
+import eu.zavadil.wn.util.WnUtil;
 import eu.zavadil.wn.worker.ingest.ArticleData;
 
 import java.net.URL;
@@ -38,9 +39,12 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		this.index++;
 		ArticleData articleData = new ArticleData();
 		articleData.setOriginalUrl(entry.getLink());
-		articleData.setTitle(entry.getTitle());
-		articleData.setSummary((entry.getDescription() != null) ? entry.getDescription().getValue() : "");
+		articleData.setTitle(WnUtil.normalizeAndClean(entry.getTitle()));
+		articleData.setSummary((entry.getDescription() != null) ? WnUtil.normalizeAndClean(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
+
+		// todo: load body
+
 		return articleData;
 	}
 }
