@@ -1,7 +1,8 @@
-package eu.zavadil.wn.ai;
+package eu.zavadil.wn.service;
 
+import eu.zavadil.wn.ai.AiEngine;
+import eu.zavadil.wn.ai.AiParams;
 import eu.zavadil.wn.data.aiLog.AiLog;
-import eu.zavadil.wn.service.AiLogService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AiAssistant {
+public class AiService {
 
 	@Autowired
 	AiEngine aiEngine;

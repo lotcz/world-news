@@ -1,6 +1,7 @@
 package eu.zavadil.wn.data.article;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
+import eu.zavadil.wn.data.ProcessingState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +19,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 
 	Optional<Article> findFirstByOriginalUrl(String originalUrl);
+
+	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);
 
 }

@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(
 	indexes = {
-		@Index(columnList = "name"),
+		@Index(columnList = "name", unique = true),
 	}
 )
 public class Tag extends EntityWithNameBase {

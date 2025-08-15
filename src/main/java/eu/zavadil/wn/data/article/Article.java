@@ -26,7 +26,7 @@ public class Article extends ArticleBase {
 	@ManyToOne(optional = false)
 	private Language language;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "article_tag",
 		joinColumns = @JoinColumn(name = "article_id"),
