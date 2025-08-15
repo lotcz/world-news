@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 @Slf4j
 public class ArticleImportWorker {
@@ -65,17 +67,6 @@ public class ArticleImportWorker {
 				if (identical) {
 					continue;
 				}
-				if (!StringUtils.safeEquals(article.getTitle(), articleData.getTitle())) {
-					log.info("title mismatch");
-					log.info(article.getTitle());
-					log.info(articleData.getTitle());
-				}
-				if (!StringUtils.safeEquals(article.getSummary(), articleData.getSummary())) {
-					log.info("summary mismatch");
-				}
-				if (!StringUtils.safeEquals(article.getBody(), articleData.getBody())) {
-					log.info("body mismatch");
-				}
 				updatedArticles++;
 			}
 
@@ -86,10 +77,12 @@ public class ArticleImportWorker {
 			article.setBody(articleData.getBody());
 			article.setPublishDate(articleData.getPublishDate());
 			article.setProcessingState(ProcessingState.NotReady);
-			//article.setLastUpdatedOn(Instant.now());
 
 			this.articleService.save(article);
 		}
+
+		articleSource.setLastImported(Instant.now());
+		this.articleSourceService.set(articleSource);
 
 		log.info(
 			"Processed article source {}. Total {} articles, {} new, {} updated.",

@@ -5,6 +5,8 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import eu.zavadil.java.iterators.BasicIterator;
+import eu.zavadil.java.util.StringUtils;
+import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.WnUtil;
 import eu.zavadil.wn.worker.ingest.ArticleData;
 
@@ -43,7 +45,9 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		articleData.setSummary((entry.getDescription() != null) ? WnUtil.normalizeAndClean(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 
-		// todo: load body
+		String body = ArticleScraper.scrape(entry.getLink());
+		body = StringUtils.safeReplace(body, "Článek si také můžete poslechnout v audioverzi.", "");
+		articleData.setBody(StringUtils.safeTrim(body));
 
 		return articleData;
 	}
