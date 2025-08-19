@@ -30,4 +30,10 @@ public class ArticleSourceBase extends EntityWithNameBase {
 
 	private Instant lastImported;
 
+	/**
+	 * Prohibited words/sentences delimited by new line.
+	 */
+	@Column(columnDefinition = "TEXT")
+	private String filterOut;
+
 }

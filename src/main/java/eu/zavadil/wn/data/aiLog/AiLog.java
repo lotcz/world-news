@@ -30,6 +30,8 @@ public class AiLog extends EntityBase {
 
 	private double temperature;
 
+	private String model;
+
 	@Column(columnDefinition = "TEXT")
 	private String response;
 

@@ -42,4 +42,8 @@ public class Article extends ArticleBase {
 	)
 	private Set<Image> images = new HashSet<>();
 
+	@Override
+	public String toString() {
+		return String.format("Article[ID:%d, TITLE:%s]", this.getId(), this.getTitle());
+	}
 }

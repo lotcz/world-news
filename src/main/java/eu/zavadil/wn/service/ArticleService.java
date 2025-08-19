@@ -25,7 +25,7 @@ public class ArticleService {
 		return this.articleRepository.findFirstByOriginalUrl(originalUrl).orElse(null);
 	}
 
-	public List<Article> loadNotReady() {
+	public List<Article> loadArticlesForAnnotationWorker() {
 		return this.articleRepository
 			.findAllByProcessingStateOrderByLastUpdatedOnAsc(
 				ProcessingState.NotReady,

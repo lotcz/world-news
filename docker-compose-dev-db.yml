@@ -1,6 +1,6 @@
 services:
   dev-db:
-    image: postgres:17.2-alpine
+    image: pgvector/pgvector:pg17
     container_name: wn-dev-db
     environment:
       - POSTGRES_USER=worldnews

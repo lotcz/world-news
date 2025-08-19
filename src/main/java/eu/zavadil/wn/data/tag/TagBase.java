@@ -1,17 +1,13 @@
 package eu.zavadil.wn.data.tag;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity
-public class Tag extends EntityWithNameBase {
-
-	@ManyToOne
-	private Tag synonymOf;
+@MappedSuperclass
+public class TagBase extends EntityWithNameBase {
 
 }

@@ -1,8 +1,9 @@
-package eu.zavadil.wn.ai.chatgpt;
+package eu.zavadil.wn.ai.assistant.chatgpt;
 
 import eu.zavadil.java.spring.common.client.HttpApiClientBase;
-import eu.zavadil.wn.ai.AiEngine;
-import eu.zavadil.wn.ai.AiParams;
+import eu.zavadil.wn.ai.assistant.AiAssistantEngine;
+import eu.zavadil.wn.ai.assistant.AiAssistantParams;
+import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ChatGpt extends HttpApiClientBase implements AiEngine {
-
-	String model = "gpt-4o-mini";
+public class ChatGpt extends HttpApiClientBase implements AiAssistantEngine {
 
 	@Value("${chatgpt.apikey}")
 	String apiKey;
@@ -31,20 +30,25 @@ public class ChatGpt extends HttpApiClientBase implements AiEngine {
 		return headers;
 	}
 
-	public String ask(AiParams params) {
+	public AiAssistantResponse ask(AiAssistantParams params) {
 		List<ChatGptMessage> messages = new ArrayList<>();
 		params.getSystemPrompt().forEach(sp -> messages.add(new ChatGptMessage("system", sp)));
 		params.getUserPrompt().forEach(up -> messages.add(new ChatGptMessage("user", up)));
 
 		ChatGptRequest request = ChatGptRequest.builder()
-			.maxTokens(2000)
+			.maxTokens(10000)
 			.temperature(params.getTemperature() * 2)
-			.model(this.model)
+			.model(params.getModel())
 			.messages(messages)
 			.build();
 
 		ChatGptResponse response = this.exchange(HttpMethod.POST, "", request, ChatGptResponse.class);
 
-		return response.getChoices().get(0).getMessage().getContent();
+		String responseText = response.getChoices().get(0).getMessage().getContent();
+
+		return AiAssistantResponse
+			.builder()
+			.response(responseText)
+			.build();
 	}
 }

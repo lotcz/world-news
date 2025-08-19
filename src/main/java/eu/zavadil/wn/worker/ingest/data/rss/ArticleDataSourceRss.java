@@ -1,11 +1,11 @@
-package eu.zavadil.wn.worker.ingest.rss;
+package eu.zavadil.wn.worker.ingest.data.rss;
 
 import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.wn.data.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
-import eu.zavadil.wn.worker.ingest.ArticleData;
-import eu.zavadil.wn.worker.ingest.ArticleDataSource;
-import eu.zavadil.wn.worker.ingest.ArticleDataSourceContainer;
+import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import eu.zavadil.wn.worker.ingest.data.ArticleDataSource;
+import eu.zavadil.wn.worker.ingest.data.ArticleDataSourceContainer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

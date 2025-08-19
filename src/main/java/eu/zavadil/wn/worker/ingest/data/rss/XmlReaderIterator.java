@@ -1,4 +1,4 @@
-package eu.zavadil.wn.worker.ingest.rss;
+package eu.zavadil.wn.worker.ingest.data.rss;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -8,7 +8,7 @@ import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.WnUtil;
-import eu.zavadil.wn.worker.ingest.ArticleData;
+import eu.zavadil.wn.worker.ingest.data.ArticleData;
 
 import java.net.URL;
 import java.util.List;

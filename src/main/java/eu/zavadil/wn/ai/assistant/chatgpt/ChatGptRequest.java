@@ -1,4 +1,4 @@
-package eu.zavadil.wn.ai.chatgpt;
+package eu.zavadil.wn.ai.assistant.chatgpt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

@@ -30,9 +30,6 @@ public class ArticleBase extends EntityBase {
 	private String originalUrl;
 
 	@Column(columnDefinition = "TEXT")
-	private String annotation;
-
-	@Column(columnDefinition = "TEXT")
 	private String summary;
 
 	@Column(columnDefinition = "TEXT")

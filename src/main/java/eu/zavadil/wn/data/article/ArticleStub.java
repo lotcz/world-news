@@ -14,7 +14,9 @@ import lombok.EqualsAndHashCode;
 	name = "article",
 	indexes = {
 		@Index(columnList = "processingState"),
-		@Index(columnList = "originalUrl", unique = true)
+		@Index(columnList = "originalUrl", unique = true),
+		@Index(columnList = "topicId"),
+		@Index(columnList = "sourceId")
 	}
 )
 public class ArticleStub extends ArticleBase {

@@ -7,6 +7,9 @@ import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.ArticleSourceService;
+import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import eu.zavadil.wn.worker.ingest.data.ArticleDataSource;
+import eu.zavadil.wn.worker.ingest.data.ArticleDataSourceContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +19,7 @@ import java.time.Instant;
 
 @Service
 @Slf4j
-public class ArticleImportWorker {
+public class IngestWorker {
 
 	@Autowired
 	ArticleService articleService;
@@ -38,7 +41,7 @@ public class ArticleImportWorker {
 		ArticleDataSource articleDataSource = this.articleDataSourceContainer.get(articleSource.getImportType());
 
 		if (articleDataSource == null) {
-			log.error("No article data source found for import type {} !", articleSource.getImportType());
+			log.error("No article data source found for import type {}!", articleSource.getImportType());
 			return;
 		}
 

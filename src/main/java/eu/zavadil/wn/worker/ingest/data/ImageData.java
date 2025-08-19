@@ -1,4 +1,4 @@
-package eu.zavadil.wn.worker.ingest;
+package eu.zavadil.wn.worker.ingest.data;
 
 import lombok.Data;
 

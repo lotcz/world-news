@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.6 Chrome/138.0.7204.100 Electron/37.2.3 Safari/537.36" version="28.0.6">
   <diagram name="Page-1" id="2f0_UIn1QX5p4JlgjNAr">
-    <mxGraphModel dx="1307" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="1068" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -35,10 +35,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="fIE31c6hWo1CscnfOw33-9" value="Identify current trending topics and affairs" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="220" y="130" width="120" height="60" as="geometry" />
+          <mxGeometry x="220" y="150" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-1" value="Assign topic to realm(s)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="460" y="130" width="120" height="60" as="geometry" />
+          <mxGeometry x="460" y="150" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-3" value="Identify trends&lt;div&gt;Identifies trending topics and proposes new realms&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="40" y="130" width="150" height="100" as="geometry" />
@@ -47,13 +47,13 @@
           <mxGeometry x="40" y="620" width="160" height="100" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-10" value="Ingest&lt;br&gt;&lt;div&gt;Import articles from multiple sources&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="40" y="290" width="150" height="100" as="geometry" />
+          <mxGeometry x="40" y="250" width="150" height="100" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="_1Ch5Hdbkco9YCcDuAIu-13" target="_1Ch5Hdbkco9YCcDuAIu-22" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-13" value="3rd party article source" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="220" y="305" width="120" height="60" as="geometry" />
+          <mxGeometry x="220" y="265" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-20" value="&lt;div&gt;Realm examples:&lt;/div&gt;World Politics/US Tabloid/American Sport/Video Games/Global Business/Science/Česká politika/český bulvár/Pecularities/Crime" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="670" y="130" width="330" height="65" as="geometry" />
@@ -65,7 +65,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-22" value="import top articles" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="390" y="305" width="120" height="60" as="geometry" />
+          <mxGeometry x="390" y="265" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="_1Ch5Hdbkco9YCcDuAIu-28" value="AI Audio" style="whiteSpace=wrap;html=1;rounded=1;dashed=1;dashPattern=1 2;" parent="1" vertex="1">
           <mxGeometry x="880" y="640" width="120" height="60" as="geometry" />
@@ -73,8 +73,11 @@
         <mxCell id="s1_NxwoBrpegGPB-QbzP-15" value="AI newsroom" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=22;fontColor=default;labelBackgroundColor=default;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="380" y="30" width="340" height="30" as="geometry" />
         </mxCell>
+        <mxCell id="ciIE_CoD7rSya75Oq5se-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="s1_NxwoBrpegGPB-QbzP-16" target="jjYnuseNqR3K3UAZzciC-59">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="s1_NxwoBrpegGPB-QbzP-16" value="&lt;div&gt;Tag content with semantical tags&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="840" y="475" width="140" height="60" as="geometry" />
+          <mxGeometry x="590" y="390" width="140" height="60" as="geometry" />
         </mxCell>
         <mxCell id="s2s7f9IMEK1w8N7TYZo1-18" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;" parent="1" source="jjYnuseNqR3K3UAZzciC-6" target="jjYnuseNqR3K3UAZzciC-22" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -285,25 +288,19 @@
         <mxCell id="jjYnuseNqR3K3UAZzciC-33" value="+ description: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="jjYnuseNqR3K3UAZzciC-30" vertex="1">
           <mxGeometry y="78" width="140" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="jjYnuseNqR3K3UAZzciC-55" value="Process&lt;br&gt;&lt;div&gt;Detect article realm, topic(s) and categorize&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="40" y="460" width="150" height="100" as="geometry" />
+        <mxCell id="jjYnuseNqR3K3UAZzciC-55" value="Annotate&lt;br&gt;&lt;div&gt;Detect article tags and&amp;nbsp; topic&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="375" width="150" height="100" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-56" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jjYnuseNqR3K3UAZzciC-57" target="jjYnuseNqR3K3UAZzciC-80" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="420" y="505" as="targetPoint" />
+            <mxPoint x="420" y="420" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-57" value="imported article" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="220" y="475" width="120" height="60" as="geometry" />
+          <mxGeometry x="220" y="390" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="jjYnuseNqR3K3UAZzciC-60" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jjYnuseNqR3K3UAZzciC-80" target="jjYnuseNqR3K3UAZzciC-59" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="jjYnuseNqR3K3UAZzciC-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jjYnuseNqR3K3UAZzciC-59" target="s1_NxwoBrpegGPB-QbzP-16" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="jjYnuseNqR3K3UAZzciC-59" value="detect topics" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="650" y="475" width="120" height="60" as="geometry" />
+        <mxCell id="jjYnuseNqR3K3UAZzciC-59" value="save embeddings" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
+          <mxGeometry x="790" y="390" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-61" value="AI Log" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="935" y="960" width="140" height="208" as="geometry" />
@@ -356,17 +353,20 @@
         <mxCell id="jjYnuseNqR3K3UAZzciC-73" value="AI Video" style="whiteSpace=wrap;html=1;rounded=1;dashed=1;dashPattern=1 2;" parent="1" vertex="1">
           <mxGeometry x="880" y="730" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="jjYnuseNqR3K3UAZzciC-80" value="create summary" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="450" y="475" width="120" height="60" as="geometry" />
+        <mxCell id="ciIE_CoD7rSya75Oq5se-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jjYnuseNqR3K3UAZzciC-80" target="s1_NxwoBrpegGPB-QbzP-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="jjYnuseNqR3K3UAZzciC-80" value="create summary" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;dashed=1;dashPattern=1 2;" parent="1" vertex="1">
+          <mxGeometry x="390" y="390" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-85" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jjYnuseNqR3K3UAZzciC-82" target="jjYnuseNqR3K3UAZzciC-84" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-82" value="extract images" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="590" y="305" width="120" height="60" as="geometry" />
+          <mxGeometry x="590" y="265" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-84" value="clean text" style="rounded=1;whiteSpace=wrap;html=1;flipH=1;" parent="1" vertex="1">
-          <mxGeometry x="790" y="305" width="120" height="60" as="geometry" />
+          <mxGeometry x="790" y="265" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="jjYnuseNqR3K3UAZzciC-86" value="DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
           <mxGeometry x="60" y="1840" width="60" height="80" as="geometry" />
@@ -424,6 +424,21 @@
         </mxCell>
         <mxCell id="s2s7f9IMEK1w8N7TYZo1-5" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Creating a new website&lt;/h1&gt;&lt;p&gt;When creating a new website, user must enter website name, url and specify l&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;ist of realms from which articles will be loaded.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Website can specify custom prompts to personalize writing style or accent on factuality.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Each website also has default language.&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="70" y="2080" width="450" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="ciIE_CoD7rSya75Oq5se-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;elbow=horizontal;" edge="1" parent="1" source="jjYnuseNqR3K3UAZzciC-69" target="jjYnuseNqR3K3UAZzciC-69">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="890" y="1550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ciIE_CoD7rSya75Oq5se-9" value="synonym of" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ciIE_CoD7rSya75Oq5se-8">
+          <mxGeometry x="-0.0506" y="-1" relative="1" as="geometry">
+            <mxPoint x="1" y="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ciIE_CoD7rSya75Oq5se-14" value="Group&lt;br&gt;&lt;div&gt;Group articles by topic similarity&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="150" height="100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

@@ -1,8 +1,10 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.caching.Lazy;
 import eu.zavadil.java.spring.common.entity.cache.RepositoryLookupTableCache;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.java.util.StringUtils;
+import eu.zavadil.wn.data.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.articleSource.ArticleSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,21 @@ import java.util.List;
 
 @Service
 public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSource> {
+
+	private Lazy<ArticleSource> internalArticleSource = new Lazy<>(
+		() -> this.all()
+			.stream()
+			.filter(ars -> ars.getImportType() == ImportType.Internal)
+			.findFirst()
+			.orElseGet(
+				() -> {
+					ArticleSource articleSource = new ArticleSource();
+					articleSource.setName("Internal");
+					articleSource.setImportType(ImportType.Internal);
+					return this.set(articleSource);
+				}
+			)
+	);
 
 	@Autowired
 	public ArticleSourceService(ArticleSourceRepository repository) {
@@ -28,11 +45,20 @@ public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSour
 		return PagingUtils.getPage(filtered, pr);
 	}
 
+	public ArticleSource getInternalArticleSource() {
+		return this.internalArticleSource.get();
+	}
+
+	/**
+	 * Get next import source to be imported.
+	 * That would be a non-internal source that was last imported before the longest time.
+	 */
 	public ArticleSource getNextImportSource() {
 		List<ArticleSource> sources = this.all();
 		ArticleSource oldest = null;
 
 		for (ArticleSource ars : sources) {
+			if (ars.getImportType() == ImportType.Internal) continue;
 			if (ars.getLastImported() == null) return ars;
 			if (oldest == null || ars.getLastImported().isBefore(oldest.getLastImported())) {
 				oldest = ars;

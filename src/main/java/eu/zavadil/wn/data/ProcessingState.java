@@ -4,5 +4,6 @@ public enum ProcessingState {
 	NotReady,
 	Waiting,
 	Processing,
-	Done
+	Done,
+	Error
 }

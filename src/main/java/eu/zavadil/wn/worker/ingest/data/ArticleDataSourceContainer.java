@@ -1,4 +1,4 @@
-package eu.zavadil.wn.worker.ingest;
+package eu.zavadil.wn.worker.ingest.data;
 
 import eu.zavadil.wn.data.ImportType;
 import org.springframework.stereotype.Component;
