@@ -35,11 +35,15 @@ public class AiEmbeddingService {
 		);
 	}
 
-	public List<Double> createEmbedding(Article article) {
+	public List<Double> updateEmbedding(Article article) {
 		String text = String.format("%s\r\n%s", article.getTitle(), article.getBody());
 		List<Double> embedding = this.createEmbedding(text);
 		this.embeddingStoreService.updateEmbedding(article.getId(), this.model, embedding);
 		return embedding;
+	}
+
+	public List<Integer> searchSimilar(List<Float> queryVector) {
+		return this.embeddingStoreService.searchSimilar(queryVector, this.model);
 	}
 
 }

@@ -139,7 +139,7 @@ public class AnnotateWorker {
 			);
 		}
 
-		List<Double> embedding = this.aiEmbeddingService.createEmbedding(article);
+		List<Double> embedding = this.aiEmbeddingService.updateEmbedding(article);
 
 		// todo: narrow search by searching by tags
 

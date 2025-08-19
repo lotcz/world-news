@@ -61,8 +61,8 @@ public class EmbeddingStoreService {
 		}
 	}
 
-	public List<Integer> searchSimilar(List<Float> queryVector) {
-		return this.searchSimilar(queryVector, "text-embedding-3-small", 0.2f, 10);
+	public List<Integer> searchSimilar(List<Float> queryVector, String model) {
+		return this.searchSimilar(queryVector, model, 0.2f, 10);
 	}
 
 }
