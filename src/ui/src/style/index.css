@@ -1,0 +1,89 @@
+:root {
+	--white: #fff;
+	--light-gray: rgb(222, 226, 230);
+	--gray: rgb(85, 85, 85);
+	--dark-gray: rgb(45, 45, 45);
+	--orange: rgb(254, 127, 31);
+	--red: rgb(190, 31, 31);
+	--green: rgb(31, 127, 31);
+	--blue: #023399;
+	--light-blue: rgb(160, 160, 200);
+}
+
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body, #root, .min-h-100 {
+	min-height: 100vh;
+}
+
+body {
+
+}
+
+a, a:visited, a:active {
+	text-decoration: none;
+}
+
+a.active {
+	font-weight: bold;
+}
+
+pre {
+	margin: 0;
+}
+
+.text-small {
+	font-size: 85%;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.cursor-crosshair {
+	cursor: crosshair;
+}
+
+.cursor-move {
+	cursor: move;
+}
+
+.cursor-resize {
+	cursor: se-resize;
+}
+
+.btn-unsaved {
+	font-weight: bold;
+}
+
+.btn-unsaved::after {
+	content: '*';
+}
+
+.doc-preview {
+	display: block;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.doc-preview.left {
+	left: 0;
+	right: auto;
+}
+
+tr.selectable.selected td {
+	background-color: var(--bs-primary-bg-subtle);
+}
+
+.main-menu {
+	font-size: 14pt;
+}

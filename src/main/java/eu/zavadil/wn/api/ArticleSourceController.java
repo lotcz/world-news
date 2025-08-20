@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.base-url}/article-source")
-@Tag(name = "Article Source")
+@RequestMapping("${api.base-url}/article-sources")
+@Tag(name = "Article Sources")
 @Slf4j
 public class ArticleSourceController {
 
