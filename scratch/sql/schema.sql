@@ -1,0 +1,185 @@
+create type tp_entity_type AS ENUM ('Article', 'Topic');
+create cast	(varchar AS tp_entity_type) WITH INOUT AS IMPLICIT;
+
+create type tp_operation AS ENUM ('CreateTitle', 'CreateSummary', 'MergeArticles');
+create cast	(varchar AS tp_operation) WITH INOUT AS IMPLICIT;
+
+create table ai_log (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone NOT NULL default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone NOT NULL default CURRENT_TIMESTAMP,
+    entity_id integer,
+    entity_type tp_entity_type,
+    operation tp_operation,
+    response text,
+    system_prompt text,
+    temperature double precision not null,
+    user_prompt text,
+    model varchar(100)
+);
+
+create index idx_ai_log_created_on
+    on ai_log (created_on);
+
+create index idx_ai_log_entity
+    on ai_log (entity_type, entity_id, created_on);
+
+create index idx_ai_log_operation
+    on ai_log (operation, created_on);
+
+create table language (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255),
+    code varchar(5)
+);
+
+create type tp_import_type AS ENUM ('Unknown', 'Rss', 'Internal');
+create cast	(varchar AS tp_import_type) WITH INOUT AS IMPLICIT;
+
+create table article_source (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255),
+    import_type tp_import_type not null,
+    last_imported timestamp(6) with time zone,
+    url varchar(255),
+    language_id integer not null
+    	constraint fk_article_source_language
+       	references language,
+    filter_out text
+);
+
+create index idx_article_source_url
+    on article_source (url);
+
+create index idx_language_name
+    on language (name);
+
+create table realm (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255),
+    approved boolean not null default false,
+    summary text
+);
+
+create index idx_realm_name
+    on realm (name);
+
+create table article_source_realm (
+    article_source_id integer not null
+        constraint fkcp59ajplvu3i1n32fmegft0lf
+        references article_source,
+    realm_id          integer not null
+        constraint fk3jhg2gwueixnef316q0q8q6k0
+            references realm,
+    primary key (article_source_id, realm_id)
+);
+
+create table tag (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255) not null,
+    synonym_of_id integer
+        constraint fkqv68mmko7bkuu53wnoo57ou52
+        references tag
+);
+
+create unique index idx_tag_name
+    on tag (name);
+
+create index idx_tag_synonym
+    on tag (synonym_of_id);
+
+create type tp_processing_state AS ENUM ('NotReady', 'Waiting', 'Processing', 'Done', 'Error');
+create cast	(varchar AS tp_processing_state) WITH INOUT AS IMPLICIT;
+
+create table topic (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255),
+    realm_id integer
+        constraint fk2c5koqvpw2aylwd4yhrr9cjer
+        references realm,
+    processing_state tp_processing_state not null default 'NotReady',
+    summary text
+);
+
+create index idx_topic_processing_state
+    on topic (processing_state);
+
+create table article (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    body text,
+    original_url varchar(255),
+    processing_state tp_processing_state not null default 'NotReady',
+    publish_date timestamp(6) with time zone,
+    summary text,
+    title varchar(255),
+    language_id integer not null
+        constraint fkntjo7u9ep5digg27txr8fnqa5
+        references language,
+    source_id integer not null
+        constraint fk76ghi213is4pqftv2cjg96box
+        references article_source,
+    topic_id integer
+        constraint fk6x3cr4vpqhjktvuju4u1f77q1
+        references topic
+);
+
+create index idx_article_processing_state
+    on article (processing_state);
+
+create unique index idx_article_original_url
+    on article (original_url);
+
+create index idx_article_topic
+    on article (topic_id);
+
+create index idx_article_source
+    on article (source_id);
+
+create table article_tag (
+    article_id integer not null
+        constraint fkenqeees0y8hkm7x1p1ittuuye
+        references article
+        on delete cascade,
+    tag_id integer not null
+        constraint fkesqp7s9jj2wumlnhssbme5ule
+        references tag
+        on delete cascade,
+    primary key (article_id, tag_id)
+);
+
+create table image (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    description varchar(255),
+    original_url varchar(255),
+    path varchar(255),
+    article_id integer
+        constraint fkj1itl8jvakcxyqmrq91bmp49u
+        references article
+        on delete cascade
+);
+
+create table article_image (
+    article_id integer not null
+        constraint fkt3rm1gwoysmll8kpy7lt1vpwc
+        references article
+        on delete cascade,
+    image_id integer not null
+        constraint fkt9nr91sf73hmdyvejuqwvobnt
+        references image
+        on delete cascade,
+    primary key (article_id, image_id)
+);

@@ -7,6 +7,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.Instant;
 
@@ -26,6 +28,7 @@ public class ArticleSourceBase extends EntityWithNameBase {
 	}
 
 	@Column(nullable = false)
+	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private ImportType importType;
 
 	private Instant lastImported;

@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,6 +17,7 @@ public class TopicBase extends EntityWithNameBase {
 	@Column(columnDefinition = "TEXT")
 	private String summary;
 
+	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private ProcessingState processingState = ProcessingState.NotReady;
 
 }

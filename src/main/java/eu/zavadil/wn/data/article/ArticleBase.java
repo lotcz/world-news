@@ -7,6 +7,8 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 import java.time.Instant;
 
@@ -35,6 +37,7 @@ public class ArticleBase extends EntityBase {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
+	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private ProcessingState processingState = ProcessingState.NotReady;
 
 }

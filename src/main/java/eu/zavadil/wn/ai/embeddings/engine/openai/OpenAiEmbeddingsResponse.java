@@ -1,4 +1,4 @@
-package eu.zavadil.wn.ai.embeddings.openai;
+package eu.zavadil.wn.ai.embeddings.engine.openai;
 
 import lombok.Data;
 

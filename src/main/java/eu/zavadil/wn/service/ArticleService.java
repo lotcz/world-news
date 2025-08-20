@@ -1,5 +1,7 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleRepository;
@@ -15,6 +17,9 @@ public class ArticleService {
 
 	@Autowired
 	ArticleRepository articleRepository;
+
+	@Autowired
+	ArticleEmbeddingsService articleEmbeddingsService;
 
 	@Transactional
 	public Article save(Article article) {
@@ -34,4 +39,7 @@ public class ArticleService {
 			.getContent();
 	}
 
+	public Embedding updateEmbedding(Article article) {
+		return this.articleEmbeddingsService.updateEmbedding(article.getId(), article.getSummary());
+	}
 }

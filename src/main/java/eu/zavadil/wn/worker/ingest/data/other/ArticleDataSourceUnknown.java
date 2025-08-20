@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArticleDataSourceOther implements ArticleDataSource {
+public class ArticleDataSourceUnknown implements ArticleDataSource {
 
 	@Autowired
 	ArticleDataSourceContainer articleImporterContainer;
 
 	@PostConstruct
 	public void init() {
-		this.articleImporterContainer.put(ImportType.Other, this);
+		this.articleImporterContainer.put(ImportType.Unknown, this);
 	}
 
 	@Override

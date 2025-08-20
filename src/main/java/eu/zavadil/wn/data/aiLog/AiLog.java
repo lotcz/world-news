@@ -7,8 +7,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -28,17 +31,23 @@ public class AiLog extends EntityBase {
 	@Column(columnDefinition = "TEXT")
 	private String userPrompt;
 
-	private double temperature;
+	private Double temperature;
 
+	private static final int MODEL_SIZE = 100;
+
+	@Column(length = MODEL_SIZE)
+	@Size(max = MODEL_SIZE)
 	private String model;
-
+	
 	@Column(columnDefinition = "TEXT")
 	private String response;
 
+	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private EntityType entityType;
 
-	private int entityId;
+	private Integer entityId;
 
+	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private AiOperation operation;
 
 }

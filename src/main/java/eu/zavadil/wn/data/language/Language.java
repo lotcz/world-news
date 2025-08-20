@@ -1,9 +1,11 @@
 package eu.zavadil.wn.data.language;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +19,10 @@ import lombok.EqualsAndHashCode;
 )
 public class Language extends EntityWithNameBase {
 
+	private static final int CODE_SIZE = 5;
+
+	@Column(length = CODE_SIZE)
+	@Size(max = CODE_SIZE)
 	private String code;
 
 }

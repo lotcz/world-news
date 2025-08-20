@@ -1,13 +1,15 @@
 package eu.zavadil.wn.worker.annotate;
 
 import eu.zavadil.java.util.StringUtils;
+import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
+import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.AiAssistantService;
-import eu.zavadil.wn.service.AiEmbeddingService;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.TagService;
+import eu.zavadil.wn.service.TopicService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,13 +27,13 @@ public class AnnotateWorker {
 	ArticleService articleService;
 
 	@Autowired
+	TopicService topicService;
+
+	@Autowired
 	TagService tagService;
 
 	@Autowired
 	AiAssistantService aiAssistantService;
-
-	@Autowired
-	AiEmbeddingService aiEmbeddingService;
 
 	List<String> systemPrompt = List.of(
 		"Jsi redaktor v online časopise, který analyzuje články a jiné zpravodajské texty."
@@ -139,11 +141,21 @@ public class AnnotateWorker {
 			);
 		}
 
-		List<Double> embedding = this.aiEmbeddingService.updateEmbedding(article);
+		Embedding embedding = this.articleService.updateEmbedding(article);
 
 		// todo: narrow search by searching by tags
 
-		// todo: find suitable topic
+		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
+
+		if (mostSimilar == null) {
+			mostSimilar = new Topic();
+			mostSimilar.setName(article.getTitle());
+			mostSimilar.setSummary(article.getSummary());
+			mostSimilar.setProcessingState(ProcessingState.Waiting);
+			this.topicService.save(mostSimilar);
+		}
+
+		article.setTopic(mostSimilar);
 	}
 
 	@Scheduled(fixedDelay = 10 * 1000)

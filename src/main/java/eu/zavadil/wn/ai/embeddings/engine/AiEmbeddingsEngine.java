@@ -1,4 +1,4 @@
-package eu.zavadil.wn.ai.embeddings;
+package eu.zavadil.wn.ai.embeddings.engine;
 
 public interface AiEmbeddingsEngine {
 

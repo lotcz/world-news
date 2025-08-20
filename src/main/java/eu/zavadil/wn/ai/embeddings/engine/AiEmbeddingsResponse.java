@@ -1,12 +1,10 @@
-package eu.zavadil.wn.ai.embeddings;
+package eu.zavadil.wn.ai.embeddings.engine;
 
+import eu.zavadil.wn.ai.embeddings.Embedding;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +12,6 @@ import java.util.List;
 @Builder
 public class AiEmbeddingsResponse {
 
-	private List<Double> result = new ArrayList<>();
+	private Embedding result = new Embedding();
 
 }

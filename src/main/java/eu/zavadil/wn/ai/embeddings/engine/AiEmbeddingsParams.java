@@ -1,4 +1,4 @@
-package eu.zavadil.wn.ai.embeddings;
+package eu.zavadil.wn.ai.embeddings.engine;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +12,5 @@ import lombok.NoArgsConstructor;
 public class AiEmbeddingsParams {
 
 	private String text;
-
-	@Builder.Default
-	private String model = "text-embedding-3-small";
 
 }

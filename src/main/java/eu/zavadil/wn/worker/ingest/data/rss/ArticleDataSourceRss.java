@@ -20,7 +20,7 @@ public class ArticleDataSourceRss implements ArticleDataSource {
 
 	@PostConstruct
 	public void init() {
-		this.articleImporterContainer.put(ImportType.Other, this);
+		this.articleImporterContainer.put(ImportType.Rss, this);
 	}
 
 	@Override

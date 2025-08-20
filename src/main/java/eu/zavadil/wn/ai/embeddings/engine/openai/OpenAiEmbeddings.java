@@ -1,21 +1,25 @@
-package eu.zavadil.wn.ai.embeddings.openai;
+package eu.zavadil.wn.ai.embeddings.engine.openai;
 
 import eu.zavadil.java.spring.common.client.HttpApiClientBase;
-import eu.zavadil.wn.ai.embeddings.AiEmbeddingsEngine;
-import eu.zavadil.wn.ai.embeddings.AiEmbeddingsParams;
-import eu.zavadil.wn.ai.embeddings.AiEmbeddingsResponse;
+import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
+import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
+import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class OpenAiEmbeddings extends HttpApiClientBase implements AiEmbeddingsEngine {
 
 	@Value("${chatgpt.apikey}")
 	String apiKey;
+
+	/**
+	 * Don't change this without resetting database! Different models are not compatible for search.
+	 */
+	private String model = "text-embedding-3-small";
 
 	public OpenAiEmbeddings() {
 		super("https://api.openai.com/v1/embeddings");
@@ -33,12 +37,12 @@ public class OpenAiEmbeddings extends HttpApiClientBase implements AiEmbeddingsE
 	public AiEmbeddingsResponse getEmbedding(AiEmbeddingsParams params) {
 		OpenAiEmbeddingsRequest request = OpenAiEmbeddingsRequest
 			.builder()
-			.model(params.getModel())
+			.model(this.model)
 			.input(params.getText())
 			.build();
 
 		OpenAiEmbeddingsResponse response = this.exchange(HttpMethod.POST, "", request, OpenAiEmbeddingsResponse.class);
-		List<Double> embedding = response.getData().get(0).getEmbedding();
+		Embedding embedding = response.getData().get(0).getEmbedding();
 
 		return AiEmbeddingsResponse
 			.builder()
