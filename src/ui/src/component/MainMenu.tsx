@@ -31,6 +31,9 @@ function MainMenu() {
 					<NavLink to="/languages">Languages</NavLink>
 				</div>
 				<div>
+					<NavLink to="/realms">Realms</NavLink>
+				</div>
+				<div>
 					<NavLink to="/article-sources">Article Sources</NavLink>
 				</div>
 

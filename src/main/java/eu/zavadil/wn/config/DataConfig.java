@@ -1,5 +1,6 @@
 package eu.zavadil.wn.config;
 
+import com.pgvector.PGvector;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -14,6 +15,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 @Configuration
@@ -60,5 +63,22 @@ public class DataConfig {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(this.entityManagerFactory().getObject());
 		return transactionManager;
+	}
+
+	/* code below is for PGVector registration */
+
+	@Bean
+	public DataSourceInitializer pgvectorInitializer(DataSource dataSource) {
+		return new DataSourceInitializer(dataSource);
+	}
+
+	static class DataSourceInitializer {
+		public DataSourceInitializer(DataSource dataSource) {
+			try (Connection conn = dataSource.getConnection()) {
+				PGvector.addVectorType(conn);
+			} catch (SQLException e) {
+				throw new RuntimeException("Failed to register pgvector type", e);
+			}
+		}
 	}
 }

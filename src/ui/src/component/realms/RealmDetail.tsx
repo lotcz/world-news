@@ -5,19 +5,20 @@ import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {Language} from "../../types/Language";
+import {Realm} from "../../types/Realm";
+import {Switch} from "zavadil-react-common";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 2;
 const COL_2_LG = 3;
 
-export default function LanguageDetail() {
+export default function RealmDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Language>();
+	const [data, setData] = useState<Realm>();
 	const [changed, setChanged] = useState<boolean>(false);
 
 	useEffect(
@@ -25,11 +26,13 @@ export default function LanguageDetail() {
 			if (!id) {
 				setData({
 					name: '',
-					code: ''
+					summary: '',
+					approved: false,
+					sources: []
 				});
 				return;
 			}
-			restClient.languages.loadSingle(Number(id))
+			restClient.realms.loadSingle(Number(id))
 				.then(setData)
 				.catch((e: Error) => userAlerts.err(e))
 		},
@@ -41,12 +44,12 @@ export default function LanguageDetail() {
 			if (!data) return;
 			const inserting = NumberUtil.isEmpty(data.id);
 			restClient
-				.languages
+				.realms
 				.save(data)
 				.then(
 					(f) => {
 						if (inserting) {
-							navigate(`/languages/detail/${f.id}`);
+							navigate(`/realms/detail/${f.id}`);
 						} else {
 							setData(f);
 						}
@@ -65,7 +68,7 @@ export default function LanguageDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate('/languages')}>Back</Button>
+					<Button variant="link" onClick={() => navigate('/realms')}>Back</Button>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -98,17 +101,34 @@ export default function LanguageDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Code:</Form.Label>
+							<Form.Label>Summary:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								type="text"
-								value={data.code}
+								value={data.summary}
 								onChange={(e) => {
-									data.code = e.target.value;
+									data.summary = e.target.value;
 									setData({...data});
 									setChanged(true);
 								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Approved:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								checked={data.approved}
+								onChange={
+									(e) => {
+										data.approved = e;
+										setData({...data});
+										setChanged(true);
+									}
+								}
 							/>
 						</Col>
 					</Row>

@@ -1,5 +1,6 @@
 package eu.zavadil.wn.ai.embeddings.repository;
 
+import com.pgvector.PGvector;
 import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import org.postgresql.util.PGobject;
@@ -25,16 +26,8 @@ public abstract class EmbeddingRepositoryBase {
 	}
 
 	private final RowMapper<Embedding> embeddingRowMapper = (rs, rowNum) -> {
-		java.sql.Array sqlArray = rs.getArray("embedding");
-		if (sqlArray == null) {
-			return null;
-		}
-		double[] arr = (double[]) sqlArray.getArray();
-		Embedding embedding = new Embedding();
-		for (double d : arr) {
-			embedding.add(d);
-		}
-		return embedding;
+		PGvector v = (PGvector) rs.getObject("embedding");
+		return new Embedding(v.toArray());
 	};
 
 	public Embedding loadEmbedding(String text) {
@@ -73,11 +66,11 @@ public abstract class EmbeddingRepositoryBase {
 		}
 	}
 
-	public List<Integer> searchSimilar(Embedding queryVector, float maxDistance, int limit) {
+	public List<Integer> searchSimilar(Embedding embedding, float maxDistance, int limit) {
 		try {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
-			vectorObj.setValue(queryVector.toString());
+			vectorObj.setValue(embedding.toString());
 
 			String sql = String.format(
 				"""

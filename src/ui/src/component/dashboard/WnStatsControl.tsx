@@ -38,7 +38,7 @@ function WnStatsControl() {
 						</Placeholder>
 				}
 				{
-					stats ? <CacheStatsControl name="Templates Cache" stats={stats.realmCache}/>
+					stats ? <CacheStatsControl name="Realms Cache" stats={stats.realmCache}/>
 						: <Placeholder className="w-100" as="p" animation="glow">
 							<Placeholder className="w-100"/>
 						</Placeholder>

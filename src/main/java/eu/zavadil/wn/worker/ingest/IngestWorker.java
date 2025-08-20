@@ -79,7 +79,7 @@ public class IngestWorker {
 			article.setSummary(articleData.getSummary());
 			article.setBody(articleData.getBody());
 			article.setPublishDate(articleData.getPublishDate());
-			article.setProcessingState(ProcessingState.NotReady);
+			article.setProcessingState(ProcessingState.Waiting);
 
 			this.articleService.save(article);
 		}
@@ -88,9 +88,9 @@ public class IngestWorker {
 		this.articleSourceService.set(articleSource);
 
 		log.info(
-			"Processed article source {}. Total {} articles, {} new, {} updated.",
-			articleSource.getUrl(),
+			"Loaded {} articles from {} - {} new, {} updated",
 			totalArticles,
+			articleSource.getUrl(),
 			newArticles,
 			updatedArticles
 		);

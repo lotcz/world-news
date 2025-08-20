@@ -22,7 +22,7 @@ public class Realm extends EntityWithNameBase {
 	@Column(columnDefinition = "text")
 	private String summary;
 
-	@ManyToMany(mappedBy = "realms")
+	@ManyToMany(mappedBy = "realms", fetch = FetchType.EAGER)
 	private Set<ArticleSource> sources = new HashSet<>();
 
 	private boolean approved = false;

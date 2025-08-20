@@ -18,7 +18,7 @@ public class ArticleSource extends ArticleSourceBase {
 	@ManyToOne(optional = false)
 	private Language language;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "article_source_realm",
 		joinColumns = @JoinColumn(name = "article_source_id"),

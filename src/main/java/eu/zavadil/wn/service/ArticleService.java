@@ -33,7 +33,7 @@ public class ArticleService {
 	public List<Article> loadArticlesForAnnotationWorker() {
 		return this.articleRepository
 			.findAllByProcessingStateOrderByLastUpdatedOnAsc(
-				ProcessingState.NotReady,
+				ProcessingState.Waiting,
 				PageRequest.of(0, 10)
 			)
 			.getContent();
