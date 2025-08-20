@@ -39,7 +39,7 @@ public class DataConfig {
 		em.setDataSource(this.mainDataSource());
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setGenerateDdl(true);
+		vendorAdapter.setGenerateDdl(false);
 		vendorAdapter.setShowSql(false);
 		em.setJpaVendorAdapter(vendorAdapter);
 
