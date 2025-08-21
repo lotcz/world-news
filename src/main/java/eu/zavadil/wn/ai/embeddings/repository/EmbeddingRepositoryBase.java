@@ -26,8 +26,9 @@ public abstract class EmbeddingRepositoryBase {
 	}
 
 	private final RowMapper<Embedding> embeddingRowMapper = (rs, rowNum) -> {
-		PGvector v = (PGvector) rs.getObject("embedding");
-		return new Embedding(v.toArray());
+		PGobject po = (PGobject) rs.getObject("embedding");
+		PGvector pv = new PGvector(po.getValue());
+		return new Embedding(pv.toArray());
 	};
 
 	public Embedding loadEmbedding(String text) {

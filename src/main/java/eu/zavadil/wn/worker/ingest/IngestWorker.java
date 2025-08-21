@@ -30,7 +30,7 @@ public class IngestWorker {
 	@Autowired
 	ArticleDataSourceContainer articleDataSourceContainer;
 
-	@Scheduled(fixedDelay = 10 * 1000)
+	@Scheduled(fixedDelay = 5 * 60 * 1000)
 	public void execute() {
 		ArticleSource articleSource = this.articleSourceService.getNextImportSource();
 		if (articleSource == null) {
