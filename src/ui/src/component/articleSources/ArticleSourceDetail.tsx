@@ -59,6 +59,18 @@ export default function ArticleSourceDetail() {
 		[restClient, data, userAlerts, navigate]
 	);
 
+	const startIngestion = useCallback(
+		() => {
+			const id = data?.id;
+			if (!id) return;
+			restClient
+				.startIngestion(id)
+				.then((f) => userAlerts.info("Ingestion started"))
+				.catch((e: Error) => userAlerts.err(e))
+		},
+		[restClient, data, userAlerts]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -78,6 +90,7 @@ export default function ArticleSourceDetail() {
 							<div>Save</div>
 						</div>
 					</Button>
+					<Button variant="primary" onClick={() => startIngestion()}>Ingest</Button>
 				</Stack>
 			</div>
 			<Form className="p-3">

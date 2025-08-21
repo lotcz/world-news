@@ -1,5 +1,10 @@
 /* reschedule articles in Error for reprocessing */
-UPDATE article set processing_state = 'Waiting' WHERE processing_state = 'Error';
+UPDATE article set processing_state = 'Waiting' WHERE processing_state IN ('Error', 'Processing');
+
+/* reset all topics */
+UPDATE article SET topic_id = NULL WHERE topic_id IS NOT NULL;
+DELETE FROM topic WHERE 1=1;
+UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiting';
 
 /* delete duplicate articles */
 DELETE FROM article

@@ -136,8 +136,11 @@ create table article (
         references topic
 );
 
+create index idx_article_created_on
+    on article (created_on desc);
+
 create index idx_article_processing_state
-    on article (processing_state);
+    on article (processing_state, last_updated_on desc);
 
 create unique index idx_article_original_url
     on article (original_url);

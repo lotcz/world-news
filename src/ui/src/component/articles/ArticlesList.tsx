@@ -9,13 +9,24 @@ import {Article} from "../../types/Article";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
+	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'source.name', label: 'Source'},
-	{name: 'processingState', label: 'State'},
 	{name: 'topic', label: 'Topic'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
+
+const DEFAULT_PAGING: PagingRequest = {
+	page: 0,
+	size: 100,
+	sorting: [
+		{
+			name: 'createdOn',
+			desc: true
+		}
+	]
+}
 
 function ArticlesList() {
 	const {pagingString} = useParams();
@@ -25,7 +36,7 @@ function ArticlesList() {
 	const [data, setData] = useState<Page<Article> | null>(null);
 
 	const paging = useMemo(
-		() => PagingUtil.pagingRequestFromString(pagingString),
+		() => StringUtil.isBlank(pagingString) ? DEFAULT_PAGING : PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
 
@@ -110,9 +121,9 @@ function ArticlesList() {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
+													<td>{item.processingState}</td>
 													<td>{item.title}</td>
 													<td>{item.source?.name}</td>
-													<td>{item.processingState}</td>
 													<td>{item.topic?.name}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>

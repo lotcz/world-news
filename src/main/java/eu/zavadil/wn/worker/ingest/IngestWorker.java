@@ -12,7 +12,7 @@ import eu.zavadil.wn.worker.ingest.data.ArticleDataSource;
 import eu.zavadil.wn.worker.ingest.data.ArticleDataSourceContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -30,7 +30,7 @@ public class IngestWorker {
 	@Autowired
 	ArticleDataSourceContainer articleDataSourceContainer;
 
-	@Scheduled(fixedDelay = 5 * 60 * 1000)
+	//@Scheduled(fixedDelay = 5 * 60 * 1000)
 	public void execute() {
 		ArticleSource articleSource = this.articleSourceService.getNextImportSource();
 		if (articleSource == null) {
@@ -38,6 +38,13 @@ public class IngestWorker {
 			return;
 		}
 
+		this.ingestDataSource(articleSource);
+	}
+
+	@Async
+	public void ingestDataSource(ArticleSource articleSource) {
+		log.info("Starting ingestion from {}", articleSource.getUrl());
+		
 		ArticleDataSource articleDataSource = this.articleDataSourceContainer.get(articleSource.getImportType());
 
 		if (articleDataSource == null) {
