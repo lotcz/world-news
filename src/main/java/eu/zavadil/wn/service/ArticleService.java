@@ -42,6 +42,10 @@ public class ArticleService {
 		return this.articleRepository.search(search, pr);
 	}
 
+	public Page<Article> loadByTopicId(int topicId, PageRequest pr) {
+		return this.articleRepository.findAllByTopicId(topicId, pr);
+	}
+
 	public ArticleStub loadById(int id) {
 		return this.articleStubRepository.findById(id).orElse(null);
 	}

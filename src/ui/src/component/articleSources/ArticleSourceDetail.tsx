@@ -2,11 +2,13 @@ import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
-import {NumberUtil} from "zavadil-ts-common";
+import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {DateInput} from "zavadil-react-common";
 import {ArticleSource} from "../../types/ArticleSource";
+import {DateTimeInput} from "zavadil-react-common";
+import ImportTypeSelect from "./ImportTypeSelect";
+import {LanguageSelect} from "../languages/LanguageSelect";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -27,6 +29,7 @@ export default function ArticleSourceDetail() {
 				setData({
 					name: '',
 					url: '',
+					importType: 'Rss',
 					realms: []
 				});
 				return;
@@ -113,6 +116,23 @@ export default function ArticleSourceDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Type:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<ImportTypeSelect
+								value={data.importType}
+								onChange={
+									(e) => {
+										data.importType = StringUtil.getNonEmpty(e);
+										setData({...data});
+										setChanged(true);
+									}
+								}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>URL:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -129,10 +149,27 @@ export default function ArticleSourceDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Language:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<LanguageSelect
+								language={data.language}
+								onChange={
+									(e) => {
+										data.language = e;
+										setData({...data});
+										setChanged(true);
+									}
+								}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Last Imported:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<DateInput
+							<DateTimeInput
 								value={data.lastImported}
 								onChange={
 									(e) => {

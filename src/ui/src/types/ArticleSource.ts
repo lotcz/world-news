@@ -5,7 +5,7 @@ import {Realm} from "./Realm";
 export type ArticleSourceBase = EntityWithName & {
 	url?: string;
 	lastImported?: Date | null;
-	importType?: string | null;
+	importType: string;
 	filterOut?: string | null;
 }
 

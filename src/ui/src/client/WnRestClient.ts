@@ -2,13 +2,16 @@ import {createContext} from "react";
 import conf from "../config/conf.json";
 import {EntityClientWithStub, LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
 import {Language} from "../types/Language";
-import {Article, ArticleStub} from "../types/Article";
 import {ClientStats, WnStats} from "../types/Stats";
 import {Realm} from "../types/Realm";
 import {ArticleSource} from "../types/ArticleSource";
 import {Topic, TopicStub} from "../types/Topic";
+import {EnumerationsClient} from "./EnumerationsClient";
+import {ArticlesClient} from "./ArticlesClient";
 
 export class WnRestClient extends RestClientWithOAuth {
+
+	public enumerations: EnumerationsClient;
 
 	public languages: LookupClient<Language>;
 
@@ -18,16 +21,17 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public topics: EntityClientWithStub<Topic, TopicStub>;
 
-	public articles: EntityClientWithStub<Article, ArticleStub>;
+	public articles: ArticlesClient;
 
 	constructor() {
 		super(conf.API_URL);
 
+		this.enumerations = new EnumerationsClient(this);
 		this.languages = new LookupClient<Language>(this, 'languages');
 		this.realms = new LookupClient<Realm>(this, 'realms');
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
 		this.topics = new EntityClientWithStub<Topic, TopicStub>(this, 'topics');
-		this.articles = new EntityClientWithStub<Article, ArticleStub>(this, 'articles');
+		this.articles = new ArticlesClient(this);
 	}
 
 	version(): Promise<string> {

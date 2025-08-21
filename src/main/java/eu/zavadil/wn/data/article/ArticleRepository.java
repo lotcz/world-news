@@ -18,6 +18,8 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 
+	Page<Article> findAllByTopicId(@Param("topicId") int topicId, PageRequest pr);
+
 	Optional<Article> findFirstByOriginalUrl(String originalUrl);
 
 	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);

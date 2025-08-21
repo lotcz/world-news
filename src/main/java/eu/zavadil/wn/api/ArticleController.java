@@ -30,6 +30,16 @@ public class ArticleController {
 		return JsonPageImpl.of(this.articleService.search(search, PagingUtils.of(page, size, sorting)));
 	}
 
+	@GetMapping("by-topic/{topicId}")
+	public JsonPage<Article> loadByTopic(
+		@PathVariable int topicId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
+	) {
+		return JsonPageImpl.of(this.articleService.loadByTopicId(topicId, PagingUtils.of(page, size, sorting)));
+	}
+
 	@PostMapping("")
 	public ArticleStub insert(@RequestBody ArticleStub document) {
 		document.setId(null);

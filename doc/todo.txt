@@ -1,0 +1,6 @@
+- better import queue
+  - import more pages from rss feed
+- better annotation queue
+  - load one by one, but queue is infinite
+- fotografie
+  - https://www.ctk.cz/sluzby/fotobanka/

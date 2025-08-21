@@ -1,13 +1,11 @@
 package eu.zavadil.wn.data.articleSource;
 
 import eu.zavadil.wn.data.language.Language;
-import eu.zavadil.wn.data.realm.Realm;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,13 +15,5 @@ public class ArticleSource extends ArticleSourceBase {
 
 	@ManyToOne(optional = false)
 	private Language language;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-		name = "article_source_realm",
-		joinColumns = @JoinColumn(name = "article_source_id"),
-		inverseJoinColumns = @JoinColumn(name = "realm_id")
-	)
-	private Set<Realm> realms = new HashSet<>();
 
 }

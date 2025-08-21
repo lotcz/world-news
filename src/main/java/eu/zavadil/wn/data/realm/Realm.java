@@ -1,13 +1,12 @@
 package eu.zavadil.wn.data.realm;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
-import eu.zavadil.wn.data.articleSource.ArticleSource;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -21,9 +20,6 @@ public class Realm extends EntityWithNameBase {
 
 	@Column(columnDefinition = "text")
 	private String summary;
-
-	@ManyToMany(mappedBy = "realms", fetch = FetchType.EAGER)
-	private Set<ArticleSource> sources = new HashSet<>();
 
 	private boolean approved = false;
 }

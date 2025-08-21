@@ -6,6 +6,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicStub} from "../../types/Topic";
+import TopicArticlesList from "./TopicArticlesList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -115,6 +116,11 @@ export default function TopicDetail() {
 					</Row>
 				</Stack>
 			</Form>
+			<div className="p-3">
+				{
+					data.id && <TopicArticlesList topicId={data.id}/>
+				}
+			</div>
 		</div>
 	)
 }
