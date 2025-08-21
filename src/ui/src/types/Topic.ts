@@ -3,7 +3,7 @@ import {Realm} from "./Realm";
 
 export type TopicBase = EntityWithName & {
 	summary?: string;
-	processingState?: string;
+	processingState?: string | null;
 	articleCount: number;
 }
 

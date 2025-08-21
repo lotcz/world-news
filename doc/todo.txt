@@ -4,3 +4,6 @@
   - load one by one, but queue is infinite
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
+- move prompts to language table
+- define filter texts and elements on article source level
+- transform tags, define synonyms, search by tags

@@ -2,14 +2,13 @@ package eu.zavadil.wn.worker.annotate;
 
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.data.ImportType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
-import eu.zavadil.wn.service.AiAssistantService;
-import eu.zavadil.wn.service.ArticleService;
-import eu.zavadil.wn.service.TagService;
-import eu.zavadil.wn.service.TopicService;
+import eu.zavadil.wn.service.*;
+import eu.zavadil.wn.util.WnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,6 +24,9 @@ public class AnnotateWorker {
 
 	@Autowired
 	ArticleService articleService;
+
+	@Autowired
+	ArticleSourceService articleSourceService;
 
 	@Autowired
 	TopicService topicService;
@@ -66,7 +68,7 @@ public class AnnotateWorker {
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
-		article.setSummary(StringUtils.safeTrim(response));
+		article.setTitle(WnUtil.removeWrappingQuotes(response));
 	}
 
 	private void updateSummary(Article article) {
@@ -89,7 +91,7 @@ public class AnnotateWorker {
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
-		article.setSummary(StringUtils.safeTrim(response));
+		article.setSummary(WnUtil.removeWrappingQuotes(response));
 	}
 
 	private void updateTags(Article article) {
@@ -113,7 +115,7 @@ public class AnnotateWorker {
 		List<String> words = StringUtils.safeSplit(response, ",");
 
 		for (String raw : words) {
-			String word = StringUtils.safeTrim(raw);
+			String word = WnUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
 			if (StringUtils.notBlank(word)) {
 				Tag tag = this.tagService.obtain(word);
 				article.getTags().add(tag);
@@ -121,7 +123,7 @@ public class AnnotateWorker {
 		}
 	}
 
-	private void updateEmbeddingAndAssignTopic(Article article) {
+	private Embedding updateEmbedding(Article article) {
 		Set<Tag> tags = article.getTags();
 		if (tags.isEmpty()) {
 			throw new RuntimeException(
@@ -141,8 +143,10 @@ public class AnnotateWorker {
 			);
 		}
 
-		Embedding embedding = this.articleService.updateEmbedding(article);
+		return this.articleService.updateEmbedding(article);
+	}
 
+	private Topic assignTopic(Article article, Embedding embedding) {
 		// todo: narrow search by searching by tags
 
 		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
@@ -151,11 +155,15 @@ public class AnnotateWorker {
 			mostSimilar = new Topic();
 			mostSimilar.setName(article.getTitle());
 			mostSimilar.setSummary(article.getSummary());
-			mostSimilar.setProcessingState(ProcessingState.Waiting);
-			this.topicService.save(mostSimilar);
+			mostSimilar.setLanguage(article.getLanguage());
 		}
 
+		// save topic, but don't mark it ready for compilation until article is not saved
+		mostSimilar.setProcessingState(ProcessingState.NotReady);
+		this.topicService.save(mostSimilar);
+
 		article.setTopic(mostSimilar);
+		return mostSimilar;
 	}
 
 	@Scheduled(fixedDelay = 10 * 1000)
@@ -172,17 +180,26 @@ public class AnnotateWorker {
 			article.setProcessingState(ProcessingState.Processing);
 			this.articleService.save(article);
 
+			Topic topic = null;
 			try {
 				this.updateTitle(article);
 				this.updateSummary(article);
 				this.updateTags(article);
-				this.updateEmbeddingAndAssignTopic(article);
+				Embedding embedding = this.updateEmbedding(article);
+				if (!article.getSource().getImportType().equals(ImportType.Internal)) {
+					topic = this.assignTopic(article, embedding);
+				}
 				article.setProcessingState(ProcessingState.Done);
 			} catch (Exception e) {
 				log.error("Error during article annotation", e);
 				article.setProcessingState(ProcessingState.Error);
 			} finally {
 				this.articleService.save(article);
+				if (topic != null) {
+					// if topic was assigned, mark it for compilation now
+					topic.setProcessingState(ProcessingState.Waiting);
+					this.topicService.save(topic);
+				}
 			}
 
 			annotated++;

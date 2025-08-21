@@ -1,5 +1,6 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.assistant.AiAssistantEngine;
 import eu.zavadil.wn.ai.assistant.AiAssistantParams;
 import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
@@ -20,7 +21,7 @@ public class AiAssistantService {
 	public String ask(AiAssistantParams params) {
 		AiAssistantResponse response = this.aiEngine.ask(params);
 		this.aiLogService.log(params, response.getResponse());
-		return response.getResponse();
+		return StringUtils.safeTrim(response.getResponse());
 	}
 
 	public String ask(List<String> systemPrompt, List<String> userPrompt, int temperature) {

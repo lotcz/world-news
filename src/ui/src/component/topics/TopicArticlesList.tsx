@@ -26,7 +26,7 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 	const [paging, setPaging] = useState<PagingRequest>({page: 0, size: 10});
 
 	const navigateToDetail = (d: Article) => {
-		navigate(`/article/detail/${d.id}`);
+		navigate(`/articles/detail/${d.id}`);
 	}
 
 	const loadPageHandler = useCallback(

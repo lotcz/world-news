@@ -6,6 +6,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
+import {ConfirmDialogContext} from "zavadil-react-common";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -17,6 +18,7 @@ export default function ArticleDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const confirmDialog = useContext(ConfirmDialogContext);
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -45,7 +47,7 @@ export default function ArticleDetail() {
 				.then(
 					(f) => {
 						if (inserting) {
-							navigate(`/articles/detail/${f.id}`);
+							navigate(`/articles/detail/${f.id}`, {replace: true});
 						} else {
 							setData(f);
 						}
@@ -56,6 +58,25 @@ export default function ArticleDetail() {
 		[restClient, data, userAlerts, navigate]
 	);
 
+	const deleteArticle = useCallback(
+		() => {
+			if (!data?.id) return;
+			confirmDialog.confirm(
+				'Confirm',
+				'Really delete this article?',
+				() => restClient
+					.articles
+					.delete(Number(data.id))
+					.then(
+						(f) => {
+							navigate(-1);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+			);
+		},
+		[restClient, data, userAlerts, navigate, confirmDialog]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -64,7 +85,7 @@ export default function ArticleDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate('/articles')}>Back</Button>
+					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -75,6 +96,7 @@ export default function ArticleDetail() {
 							<div>Save</div>
 						</div>
 					</Button>
+					<Button variant="danger" onClick={deleteArticle}>Delete</Button>
 				</Stack>
 			</div>
 			<Form className="p-3">

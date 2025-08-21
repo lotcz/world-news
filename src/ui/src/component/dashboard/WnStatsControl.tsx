@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Card, Placeholder} from "react-bootstrap";
-import {CacheStatsControl, JavaHeapControl} from "zavadil-react-common";
+import {CacheStatsControl, JavaHeapControl, QueueStatsControl} from "zavadil-react-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnStats} from "../../types/Stats";
 
@@ -39,6 +39,24 @@ function WnStatsControl() {
 				}
 				{
 					stats ? <CacheStatsControl name="Realms Cache" stats={stats.realmCache}/>
+						: <Placeholder className="w-100" as="p" animation="glow">
+							<Placeholder className="w-100"/>
+						</Placeholder>
+				}
+				{
+					stats ? <CacheStatsControl name="Languages Cache" stats={stats.languageCache}/>
+						: <Placeholder className="w-100" as="p" animation="glow">
+							<Placeholder className="w-100"/>
+						</Placeholder>
+				}
+				{
+					stats ? <CacheStatsControl name="Article Sources Cache" stats={stats.articleSourceCache}/>
+						: <Placeholder className="w-100" as="p" animation="glow">
+							<Placeholder className="w-100"/>
+						</Placeholder>
+				}
+				{
+					stats ? <QueueStatsControl name="Compilation Queue" stats={stats.compileQueue}/>
 						: <Placeholder className="w-100" as="p" animation="glow">
 							<Placeholder className="w-100"/>
 						</Placeholder>

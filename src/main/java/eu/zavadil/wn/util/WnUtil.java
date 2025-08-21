@@ -1,5 +1,6 @@
 package eu.zavadil.wn.util;
 
+import eu.zavadil.java.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.Normalizer;
@@ -25,6 +26,14 @@ public class WnUtil {
 		result = result.trim();
 
 		return result;
+	}
+
+	public static String removeWrappingQuotes(String text) {
+		if (StringUtils.isBlank(text)) return text;
+		if (text.startsWith("\"") && text.endsWith("\"")) {
+			return text.substring(1, text.length() - 3);
+		}
+		return text;
 	}
 
 }

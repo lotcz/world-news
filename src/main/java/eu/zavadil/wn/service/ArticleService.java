@@ -1,5 +1,6 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
@@ -39,7 +40,8 @@ public class ArticleService {
 	}
 
 	public Page<Article> search(@Param("search") String search, PageRequest pr) {
-		return this.articleRepository.search(search, pr);
+		return StringUtils.isBlank(search) ? this.articleRepository.findAll(pr)
+			: this.articleRepository.search(search, pr);
 	}
 
 	public Page<Article> loadByTopicId(int topicId, PageRequest pr) {

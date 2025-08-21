@@ -17,24 +17,32 @@ import java.util.List;
 @Service
 public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSource> {
 
-	private Lazy<ArticleSource> internalArticleSource = new Lazy<>(
-		() -> this.all()
-			.stream()
-			.filter(ars -> ars.getImportType() == ImportType.Internal)
-			.findFirst()
-			.orElseGet(
-				() -> {
-					ArticleSource articleSource = new ArticleSource();
-					articleSource.setName("Internal");
-					articleSource.setImportType(ImportType.Internal);
-					return this.set(articleSource);
-				}
-			)
-	);
+	private final LanguageService languageService;
+
+	private Lazy<ArticleSource> internalArticleSource;
 
 	@Autowired
-	public ArticleSourceService(ArticleSourceRepository repository) {
+	public ArticleSourceService(
+		ArticleSourceRepository repository,
+		LanguageService languageService
+	) {
 		super(repository);
+		this.languageService = languageService;
+		this.internalArticleSource = new Lazy<>(
+			() -> this.all()
+				.stream()
+				.filter(ars -> ars.getImportType() == ImportType.Internal)
+				.findFirst()
+				.orElseGet(
+					() -> {
+						ArticleSource articleSource = new ArticleSource();
+						articleSource.setName("Internal");
+						articleSource.setImportType(ImportType.Internal);
+						articleSource.setLanguage(this.languageService.getDefaultLanguage());
+						return this.set(articleSource);
+					}
+				)
+		);
 	}
 
 	public Page<ArticleSource> search(String search, PageRequest pr) {

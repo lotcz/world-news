@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.topic;
 
+import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.realm.Realm;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -13,5 +14,8 @@ public class Topic extends TopicBase {
 
 	@ManyToOne
 	private Realm realm;
+
+	@ManyToOne(optional = false)
+	private Language language;
 
 }

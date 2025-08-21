@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {WnRestClientContext} from "../../client/WnRestClient";
 
 export type ProcessingStateSelectProps = {
-	value: string;
+	value?: string | null;
 	onChange: (value?: string | null) => any;
 }
 
@@ -12,7 +12,7 @@ export default function ProcessingStateSelect({value, onChange}: ProcessingState
 	const [data, setData] = useState(Array<string>);
 
 	useEffect(() => {
-		restClient.enumerations.importType.get().then(setData);
+		restClient.enumerations.processingState.get().then(setData);
 	}, []);
 
 	return <EnumSelect

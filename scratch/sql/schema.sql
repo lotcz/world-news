@@ -35,6 +35,9 @@ create table language (
     code varchar(5)
 );
 
+create unique index idx_language_code
+    on language (code);
+
 create type tp_import_type AS ENUM ('Unknown', 'Rss', 'Internal');
 create cast	(varchar AS tp_import_type) WITH INOUT AS IMPLICIT;
 
@@ -107,13 +110,16 @@ create table topic (
     realm_id integer
         constraint fk2c5koqvpw2aylwd4yhrr9cjer
         references realm,
+	language_id integer not null
+        constraint fk_topic_language
+        references language,
     processing_state tp_processing_state not null default 'NotReady',
     summary text,
     article_count int not null default 0
 );
 
 create index idx_topic_processing_state
-    on topic (processing_state);
+    on topic (processing_state, article_count);
 
 create table article (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

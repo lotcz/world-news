@@ -1,7 +1,9 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
+import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.data.topic.TopicRepository;
 import eu.zavadil.wn.data.topic.TopicStub;
@@ -9,6 +11,7 @@ import eu.zavadil.wn.data.topic.TopicStubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +53,8 @@ public class TopicService {
 	}
 
 	public Page<Topic> search(@Param("search") String search, PageRequest pr) {
-		return this.topicRepository.search(search, pr);
+		return StringUtils.isBlank(search) ? this.topicRepository.findAll(pr)
+			: this.topicRepository.search(search, pr);
 	}
 
 	public TopicStub loadById(int id) {
@@ -71,6 +75,14 @@ public class TopicService {
 	public Topic findMostSimilar(String summary) {
 		Embedding embedding = this.topicEmbeddingsService.createEmbedding(summary);
 		return this.findMostSimilar(embedding);
+	}
+
+	public Page<Topic> loadTopicsForCompilation() {
+		return this.topicRepository.findAllByProcessingStateAndArticleCountGreaterThan(
+			ProcessingState.Waiting,
+			1,
+			PageRequest.of(0, 10, Sort.by(Sort.Order.desc("lastUpdatedOn")))
+		);
 	}
 
 }
