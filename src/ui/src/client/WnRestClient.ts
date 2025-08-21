@@ -6,6 +6,7 @@ import {Article, ArticleStub} from "../types/Article";
 import {ClientStats, WnStats} from "../types/Stats";
 import {Realm} from "../types/Realm";
 import {ArticleSource} from "../types/ArticleSource";
+import {Topic, TopicStub} from "../types/Topic";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -15,6 +16,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public articleSources: LookupClient<ArticleSource>;
 
+	public topics: EntityClientWithStub<Topic, TopicStub>;
+
 	public articles: EntityClientWithStub<Article, ArticleStub>;
 
 	constructor() {
@@ -23,6 +26,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.languages = new LookupClient<Language>(this, 'languages');
 		this.realms = new LookupClient<Realm>(this, 'realms');
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
+		this.topics = new EntityClientWithStub<Topic, TopicStub>(this, 'topics');
 		this.articles = new EntityClientWithStub<Article, ArticleStub>(this, 'articles');
 	}
 

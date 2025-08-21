@@ -1,8 +1,10 @@
 import {EntityBase} from "zavadil-ts-common";
 import {Language} from "./Language";
+import {ArticleSource} from "./ArticleSource";
+import {Topic} from "./Topic";
 
 export type ArticleBase = EntityBase & {
-	title?: string | null;
+	title?: string;
 	publishDate?: Date | null;
 	originalUrl?: string | null;
 	summary?: string | null;
@@ -17,5 +19,7 @@ export type ArticleStub = ArticleBase & {
 }
 
 export type Article = ArticleBase & {
-	language?: Language | null;
+	language?: Language;
+	source?: ArticleSource;
+	topic?: Topic;
 }

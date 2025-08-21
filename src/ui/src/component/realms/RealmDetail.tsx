@@ -10,7 +10,7 @@ import {Switch} from "zavadil-react-common";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
-const COL_1_LG = 2;
+const COL_1_LG = 1;
 const COL_2_LG = 3;
 
 export default function RealmDetail() {
@@ -85,6 +85,23 @@ export default function RealmDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Approved:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								checked={data.approved}
+								onChange={
+									(e) => {
+										data.approved = e;
+										setData({...data});
+										setChanged(true);
+									}
+								}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Name:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -105,7 +122,8 @@ export default function RealmDetail() {
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
-								type="text"
+								as="textarea"
+								rows={5}
 								value={data.summary}
 								onChange={(e) => {
 									data.summary = e.target.value;
@@ -115,23 +133,7 @@ export default function RealmDetail() {
 							/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Approved:</Form.Label>
-						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<Switch
-								checked={data.approved}
-								onChange={
-									(e) => {
-										data.approved = e;
-										setData({...data});
-										setChanged(true);
-									}
-								}
-							/>
-						</Col>
-					</Row>
+
 				</Stack>
 			</Form>
 		</div>

@@ -4,7 +4,12 @@ import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.data.topic.TopicRepository;
+import eu.zavadil.wn.data.topic.TopicStub;
+import eu.zavadil.wn.data.topic.TopicStubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +22,16 @@ public class TopicService {
 	TopicRepository topicRepository;
 
 	@Autowired
+	TopicStubRepository topicStubRepository;
+
+	@Autowired
 	TopicEmbeddingsService topicEmbeddingsService;
 
 	private Embedding updateEmbedding(Topic topic) {
+		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
+	}
+
+	private Embedding updateEmbedding(TopicStub topic) {
 		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
 	}
 
@@ -28,6 +40,25 @@ public class TopicService {
 		this.topicRepository.save(topic);
 		this.updateEmbedding(topic);
 		return topic;
+	}
+
+	@Transactional
+	public TopicStub save(TopicStub topic) {
+		this.topicStubRepository.save(topic);
+		this.updateEmbedding(topic);
+		return topic;
+	}
+
+	public Page<Topic> search(@Param("search") String search, PageRequest pr) {
+		return this.topicRepository.search(search, pr);
+	}
+
+	public TopicStub loadById(int id) {
+		return this.topicStubRepository.findById(id).orElse(null);
+	}
+
+	public void deleteById(int id) {
+		this.topicRepository.deleteById(id);
 	}
 
 	public Topic findMostSimilar(Embedding embedding) {

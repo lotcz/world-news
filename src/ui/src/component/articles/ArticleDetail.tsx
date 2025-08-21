@@ -2,36 +2,33 @@ import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
-import {NumberUtil} from "zavadil-ts-common";
+import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {DateInput} from "zavadil-react-common";
-import {ArticleSource} from "../../types/ArticleSource";
+import {ArticleStub} from "../../types/Article";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 1;
-const COL_2_LG = 3;
+const COL_2_LG = 6;
 
-export default function ArticleSourceDetail() {
+export default function ArticleDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<ArticleSource>();
+	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
 	useEffect(
 		() => {
 			if (!id) {
 				setData({
-					name: '',
-					url: '',
-					realms: []
+					title: ''
 				});
 				return;
 			}
-			restClient.articleSources.loadSingle(Number(id))
+			restClient.articles.loadSingleStub(Number(id))
 				.then(setData)
 				.catch((e: Error) => userAlerts.err(e))
 		},
@@ -43,12 +40,12 @@ export default function ArticleSourceDetail() {
 			if (!data) return;
 			const inserting = NumberUtil.isEmpty(data.id);
 			restClient
-				.articleSources
-				.save(data)
+				.articles
+				.saveStub(data)
 				.then(
 					(f) => {
 						if (inserting) {
-							navigate(`/article-sources/detail/${f.id}`);
+							navigate(`/articles/detail/${f.id}`);
 						} else {
 							setData(f);
 						}
@@ -67,7 +64,7 @@ export default function ArticleSourceDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate('/article-sources')}>Back</Button>
+					<Button variant="link" onClick={() => navigate('/articles')}>Back</Button>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -84,14 +81,14 @@ export default function ArticleSourceDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Name:</Form.Label>
+							<Form.Label>Original URL:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								type="text"
-								value={data.name}
+								value={StringUtil.getNonEmpty(data.originalUrl)}
 								onChange={(e) => {
-									data.name = e.target.value;
+									data.originalUrl = e.target.value;
 									setData({...data});
 									setChanged(true);
 								}}
@@ -100,14 +97,14 @@ export default function ArticleSourceDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>URL:</Form.Label>
+							<Form.Label>Title:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								type="text"
-								value={data.url}
+								value={data.title}
 								onChange={(e) => {
-									data.url = e.target.value;
+									data.title = e.target.value;
 									setData({...data});
 									setChanged(true);
 								}}
@@ -116,18 +113,35 @@ export default function ArticleSourceDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Last Imported:</Form.Label>
+							<Form.Label>Summary:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<DateInput
-								value={data.lastImported}
-								onChange={
-									(e) => {
-										data.lastImported = e;
-										setData({...data});
-										setChanged(true);
-									}
-								}
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.summary)}
+								onChange={(e) => {
+									data.summary = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Body:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								as="textarea"
+								rows={15}
+								value={StringUtil.getNonEmpty(data.body)}
+								onChange={(e) => {
+									data.body = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
 							/>
 						</Col>
 					</Row>

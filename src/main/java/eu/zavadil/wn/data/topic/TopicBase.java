@@ -20,4 +20,6 @@ public class TopicBase extends EntityWithNameBase {
 	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private ProcessingState processingState = ProcessingState.NotReady;
 
+	@Column(updatable = false, insertable = false)
+	private int articleCount;
 }

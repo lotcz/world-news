@@ -33,10 +33,15 @@ function MainMenu() {
 				<div>
 					<NavLink to="/realms">Realms</NavLink>
 				</div>
-				<div>
+				<div className="text-nowrap">
 					<NavLink to="/article-sources">Article Sources</NavLink>
 				</div>
-
+				<div>
+					<NavLink to="/topics">Topics</NavLink>
+				</div>
+				<div>
+					<NavLink to="/articles">Articles</NavLink>
+				</div>
 			</div>
 			<h3 className="mt-2"><Localize text="System"/></h3>
 			<div className="ps-3">

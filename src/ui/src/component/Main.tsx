@@ -9,6 +9,10 @@ import RealmsList from "./realms/RealmsList";
 import RealmDetail from "./realms/RealmDetail";
 import ArticleSourcesList from "./articleSources/ArticleSourcesList";
 import ArticleSourceDetail from "./articleSources/ArticleSourceDetail";
+import ArticlesList from "./articles/ArticlesList";
+import ArticleDetail from "./articles/ArticleDetail";
+import TopicsList from "./topics/TopicsList";
+import TopicDetail from "./topics/TopicDetail";
 
 function Main() {
 	return (
@@ -41,6 +45,22 @@ function Main() {
 								<Route path=":id" element={<ArticleSourceDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<ArticleSourcesList/>}/>
+						</Route>
+						<Route path="topics">
+							<Route path="" element={<TopicsList/>}/>
+							<Route path="detail">
+								<Route path="add" element={<TopicDetail/>}/>
+								<Route path=":id" element={<TopicDetail/>}/>
+							</Route>
+							<Route path=":pagingString" element={<TopicsList/>}/>
+						</Route>
+						<Route path="articles">
+							<Route path="" element={<ArticlesList/>}/>
+							<Route path="detail">
+								<Route path="add" element={<ArticleDetail/>}/>
+								<Route path=":id" element={<ArticleDetail/>}/>
+							</Route>
+							<Route path=":pagingString" element={<ArticlesList/>}/>
 						</Route>
 						<Route path="*" element={<span>404</span>}/>
 					</Routes>

@@ -9,7 +9,7 @@ import {Language} from "../../types/Language";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
-const COL_1_LG = 2;
+const COL_1_LG = 1;
 const COL_2_LG = 3;
 
 export default function LanguageDetail() {

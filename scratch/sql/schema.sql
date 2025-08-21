@@ -108,7 +108,8 @@ create table topic (
         constraint fk2c5koqvpw2aylwd4yhrr9cjer
         references realm,
     processing_state tp_processing_state not null default 'NotReady',
-    summary text
+    summary text,
+    article_count int not null default 0
 );
 
 create index idx_topic_processing_state
