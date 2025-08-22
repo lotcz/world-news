@@ -13,6 +13,7 @@ import ArticlesList from "./articles/ArticlesList";
 import ArticleDetail from "./articles/ArticleDetail";
 import TopicsList from "./topics/TopicsList";
 import TopicDetail from "./topics/TopicDetail";
+import AiLogList from "./ailog/AiLogList";
 
 function Main() {
 	return (
@@ -22,6 +23,10 @@ function Main() {
 				<div className="flex-grow-1">
 					<Routes>
 						<Route path="/" element={<Dashboard/>}/>
+						<Route path="ai-log">
+							<Route path="" element={<AiLogList/>}/>
+							<Route path=":pagingString" element={<AiLogList/>}/>
+						</Route>
 						<Route path="languages">
 							<Route path="" element={<LanguagesList/>}/>
 							<Route path="detail">

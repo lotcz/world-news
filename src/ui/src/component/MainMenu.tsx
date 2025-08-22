@@ -24,9 +24,12 @@ function MainMenu() {
 	);
 
 	return (
-		<div className="main-menu pt-2 pb-5 px-5">
+		<div className="main-menu px-3">
 			<h3 className="mt-2">Manage</h3>
 			<div className="ps-3">
+				<div>
+					<NavLink to="/ai-log">AI Log</NavLink>
+				</div>
 				<div>
 					<NavLink to="/languages">Languages</NavLink>
 				</div>

@@ -8,6 +8,7 @@ import {ArticleSource} from "../types/ArticleSource";
 import {Topic, TopicStub} from "../types/Topic";
 import {EnumerationsClient} from "./EnumerationsClient";
 import {ArticlesClient} from "./ArticlesClient";
+import {AiLogClient} from "./AiLogClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -23,6 +24,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public articles: ArticlesClient;
 
+	public aiLog: AiLogClient;
+
 	constructor() {
 		super(conf.API_URL);
 
@@ -32,6 +35,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
 		this.topics = new EntityClientWithStub<Topic, TopicStub>(this, 'topics');
 		this.articles = new ArticlesClient(this);
+		this.aiLog = new AiLogClient(this);
 	}
 
 	version(): Promise<string> {

@@ -15,7 +15,9 @@ $$;
 CREATE OR REPLACE FUNCTION article_inserted_or_updated()
 RETURNS TRIGGER AS $$
 BEGIN
-	IF TG_OP = 'INSERT' THEN
+	IF TG_OP = 'DELETE' THEN
+        CALL update_topic_article_count(OLD.topic_id);
+    ELSEIF TG_OP = 'INSERT' THEN
         CALL update_topic_article_count(NEW.topic_id);
     ELSIF (OLD.topic_id IS DISTINCT FROM NEW.topic_id) THEN
         CALL update_topic_article_count(OLD.topic_id);
@@ -26,8 +28,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_update_article_count
-AFTER INSERT OR UPDATE ON article
+CREATE OR REPLACE TRIGGER trg_update_article_count
+AFTER DELETE OR INSERT OR UPDATE ON article
 FOR EACH ROW EXECUTE FUNCTION article_inserted_or_updated();
 
 DO $$

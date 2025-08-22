@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface ArticleRepository extends EntityRepository<Article> {
 
 	@Query("""
-				select a
-				from Article a
-				where lower(a.title) LIKE %:search%
+			select a
+			from Article a
+			where lower(a.title) LIKE %:search%
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 

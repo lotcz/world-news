@@ -13,9 +13,10 @@ export type TopicArticlesListProps = {
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
+	{name: 'source.name', label: 'Source'},
+	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'source.name', label: 'Source'}
 ];
 
 function TopicArticlesList({topicId}: TopicArticlesListProps) {
@@ -67,9 +68,10 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(article)}>
 													<td>{article.id}</td>
+													<td>{article.source?.name}</td>
+													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
-													<td>{article.source?.name}</td>
 												</tr>
 											);
 										})

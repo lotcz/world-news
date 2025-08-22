@@ -6,7 +6,11 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
-import {ConfirmDialogContext} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput} from "zavadil-react-common";
+import ProcessingStateSelect from "../general/ProcessingStateSelect";
+import {BsBoxArrowUpRight} from "react-icons/bs";
+import RefreshIconButton from "../general/RefreshIconButton";
+import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -22,7 +26,7 @@ export default function ArticleDetail() {
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
-	useEffect(
+	const reload = useCallback(
 		() => {
 			if (!id) {
 				setData({
@@ -30,12 +34,15 @@ export default function ArticleDetail() {
 				});
 				return;
 			}
+			setData(undefined);
 			restClient.articles.loadSingleStub(Number(id))
 				.then(setData)
 				.catch((e: Error) => userAlerts.err(e))
 		},
-		[id]
+		[id, restClient, userAlerts]
 	);
+
+	useEffect(reload, []);
 
 	const saveData = useCallback(
 		() => {
@@ -86,6 +93,7 @@ export default function ArticleDetail() {
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
 					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<RefreshIconButton onClick={reload}/>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -103,9 +111,44 @@ export default function ArticleDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>State:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<ProcessingStateSelect
+									value={data.processingState}
+									onChange={(e) => {
+										data.processingState = e;
+										setData({...data});
+										setChanged(true);
+									}}
+								/>
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Published:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<div>
+								<DateTimeInput
+									value={data.publishDate}
+									onChange={(e) => {
+										data.publishDate = e;
+										setData({...data});
+										setChanged(true);
+									}}
+								/>
+							</div>
+							<ArticleSourceInfo articleSourceId={data.sourceId}/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Original URL:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<Form.Control
 								type="text"
 								value={StringUtil.getNonEmpty(data.originalUrl)}
@@ -115,6 +158,13 @@ export default function ArticleDetail() {
 									setChanged(true);
 								}}
 							/>
+							{
+								StringUtil.notBlank(data.originalUrl) && <a
+									className="py-1 px-2"
+									href={data.originalUrl}
+									target="_blank"
+								><BsBoxArrowUpRight/></a>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">
@@ -133,7 +183,7 @@ export default function ArticleDetail() {
 							/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
+					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Summary:</Form.Label>
 						</Col>
@@ -150,7 +200,7 @@ export default function ArticleDetail() {
 							/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
+					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Body:</Form.Label>
 						</Col>

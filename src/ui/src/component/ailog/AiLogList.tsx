@@ -1,102 +1,104 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {AdvancedTable, DateTimeInput} from "zavadil-react-common";
 import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {ArticleSource} from "../../types/ArticleSource";
-import RefreshIconButton from "../general/RefreshIconButton";
+import {AiLog} from "../../types/AiLog";
 
 const HEADER = [
-	{name: 'id', label: 'ID'},
-	{name: 'name', label: 'Name'},
-	{name: 'url', label: 'URL'},
-	{name: 'importType', label: 'Import Type'},
-	{name: 'lastImported', label: 'Last Imported'},
-	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'}
+	{name: 'createdOn', label: 'Created'},
+	{name: 'systemPrompt', label: 'systemPrompt'},
+	{name: 'userPrompt', label: 'userPrompt'},
+	{name: 'response', label: 'response'},
+	{name: 'entityType', label: 'entityType'},
+	{name: 'operation', label: 'operation'}
 ];
 
-function ArticleSourcesList() {
+const DEFAULT_PAGING: PagingRequest = {
+	page: 0,
+	size: 10,
+	sorting: [
+		{
+			name: 'createdOn',
+			desc: true
+		}
+	]
+}
+
+function AiLogList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<ArticleSource> | null>(null);
+	const [from, setFrom] = useState<Date>();
+	const [to, setTo] = useState<Date>();
+	const [data, setData] = useState<Page<AiLog>>();
 
 	const paging = useMemo(
-		() => PagingUtil.pagingRequestFromString(pagingString),
+		() => StringUtil.isBlank(pagingString) ? DEFAULT_PAGING : PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
 
-	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
-
-	const createNew = () => {
-		navigate("/article-sources/detail/add")
-	};
-
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/article-sources/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/ai-log/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);
 
-	const navigateToDetail = (l: ArticleSource) => {
-		navigate(`/article-sources/detail/${l.id}`);
+	const navigateToDetail = (l: AiLog) => {
+		navigate(`/ai-log/detail/${l.id}`);
 	}
 
 	const applySearch = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
-			paging.search = searchInput;
 			paging.page = 0;
 			navigateToPage(paging);
 		},
-		[paging, searchInput, navigateToPage]
+		[paging, navigateToPage]
 	);
 
 	const loadPageHandler = useCallback(
 		() => {
 			restClient
-				.articleSources
-				.loadPage(paging)
+				.aiLog
+				.filter(paging, from, to)
 				.then(setData)
 				.catch((e: Error) => {
-					setData(null);
+					setData(undefined);
 					userAlerts.err(e);
 				});
 		},
-		[paging, restClient, userAlerts]
+		[from, to, paging, restClient, userAlerts]
 	);
 
 	useEffect(loadPageHandler, [paging]);
-
-	const reload = useCallback(loadPageHandler, []);
 
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<RefreshIconButton onClick={reload}/>
-					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
-					<div style={{width: '250px'}}>
-						<Form onSubmit={applySearch}>
-							<TextInputWithReset
-								value={searchInput}
-								onChange={setSearchInput}
-								onReset={navigateToPage}
-							/>
-						</Form>
-					</div>
+					<Form onSubmit={applySearch} className="d-flex align-items-center">
+						<DateTimeInput
+							value={from}
+							onChange={setFrom}
+						/>
+						-
+						<DateTimeInput
+							value={to}
+							onChange={setTo}
+						/>
+					</Form>
 					<Button onClick={applySearch}>Search</Button>
 				</Stack>
 			</div>
 
 			<div className="d-flex pt-2 px-3 gap-3">
 				{
-					(data === null) ? <span><Spinner/></span>
+					(data === undefined) ? <span><Spinner/></span>
 						: (
 							<AdvancedTable
 								header={HEADER}
@@ -113,13 +115,12 @@ function ArticleSourcesList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{item.id}</td>
-													<td>{item.name}</td>
-													<td>{item.url}</td>
-													<td>{item.importType}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastImported)}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+													<td>{item.systemPrompt}</td>
+													<td>{item.userPrompt}</td>
+													<td>{item.response}</td>
+													<td>{item.entityType}</td>
+													<td>{item.operation}</td>
 												</tr>
 											);
 										})
@@ -132,4 +133,4 @@ function ArticleSourcesList() {
 	);
 }
 
-export default ArticleSourcesList;
+export default AiLogList;

@@ -9,6 +9,7 @@ import {ArticleSource} from "../../types/ArticleSource";
 import {DateTimeInput} from "zavadil-react-common";
 import ImportTypeSelect from "./ImportTypeSelect";
 import {LanguageSelect} from "../languages/LanguageSelect";
+import {BsBoxArrowUpRight} from "react-icons/bs";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -135,7 +136,7 @@ export default function ArticleSourceDetail() {
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>URL:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<Form.Control
 								type="text"
 								value={data.url}
@@ -145,6 +146,13 @@ export default function ArticleSourceDetail() {
 									setChanged(true);
 								}}
 							/>
+							{
+								StringUtil.notBlank(data.url) && <a
+									className="py-1 px-2"
+									href={data.url}
+									target="_blank"
+								><BsBoxArrowUpRight/></a>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">

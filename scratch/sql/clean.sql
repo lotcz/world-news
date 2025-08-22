@@ -6,6 +6,9 @@ UPDATE article SET topic_id = NULL WHERE topic_id IS NOT NULL;
 DELETE FROM topic WHERE 1=1;
 UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiting';
 
+/* delete topics with no articles */
+DELETE FROM topic WHERE article_count = 0;
+
 /* delete duplicate articles */
 DELETE FROM article
 WHERE id IN (

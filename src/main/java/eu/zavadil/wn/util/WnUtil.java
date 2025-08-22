@@ -31,7 +31,7 @@ public class WnUtil {
 	public static String removeWrappingQuotes(String text) {
 		if (StringUtils.isBlank(text)) return text;
 		if (text.startsWith("\"") && text.endsWith("\"")) {
-			return text.substring(1, text.length() - 3);
+			return text.substring(1, text.length() - 1);
 		}
 		return text;
 	}

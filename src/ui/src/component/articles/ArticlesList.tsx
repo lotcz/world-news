@@ -9,10 +9,9 @@ import {Article} from "../../types/Article";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
+	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
-	{name: 'source.name', label: 'Source'},
-	{name: 'topic', label: 'Topic'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
@@ -121,10 +120,9 @@ function ArticlesList() {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
+													<td>{item.source?.name}</td>
 													<td>{item.processingState}</td>
 													<td>{item.title}</td>
-													<td>{item.source?.name}</td>
-													<td>{item.topic?.name}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 												</tr>

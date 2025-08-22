@@ -95,6 +95,8 @@ public class AnnotateWorker {
 	}
 
 	private void updateTags(Article article) {
+		if (!article.getTags().isEmpty()) return;
+		
 		if (StringUtils.isBlank(article.getTitle())) {
 			throw new RuntimeException(
 				String.format("Article %s has no title! Cannot update tags.", article.toString())

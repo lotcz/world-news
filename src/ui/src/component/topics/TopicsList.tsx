@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Topic} from "../../types/Topic";
+import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
@@ -26,7 +27,8 @@ function TopicsList() {
 	const [data, setData] = useState<Page<Topic> | null>(null);
 
 	const paging = useMemo(
-		() => PagingUtil.pagingRequestFromString(pagingString),
+		() => StringUtil.isBlank(pagingString) ? {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]}
+			: PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
 
@@ -73,10 +75,19 @@ function TopicsList() {
 
 	useEffect(loadPageHandler, [paging]);
 
+	const reload = useCallback(
+		() => {
+			setData(null);
+			loadPageHandler();
+		},
+		[loadPageHandler]
+	);
+
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
+					<RefreshIconButton onClick={reload}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch}>
