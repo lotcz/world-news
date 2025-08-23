@@ -54,8 +54,11 @@ public class ArticleService {
 		this.articleRepository.deleteById(id);
 	}
 
-	public Article loadByOriginalUrl(String originalUrl) {
-		return this.articleRepository.findFirstByOriginalUrl(originalUrl).orElse(null);
+	public Article loadByOriginalUrlOrUid(String originalUrl, String originalUid) {
+		return this.articleRepository.findFirstByOriginalUrl(originalUrl).orElseGet(
+			() -> StringUtils.isBlank(originalUid) ? null
+				: this.articleRepository.findFirstByOriginalUid(originalUid).orElse(null)
+		);
 	}
 
 	public Page<Article> loadArticlesForAnnotationWorker() {

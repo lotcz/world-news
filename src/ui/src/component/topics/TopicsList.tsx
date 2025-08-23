@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Spinner, Stack} from 'react-bootstrap';
 import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -19,6 +19,8 @@ const HEADER = [
 	{name: 'createdOn', label: 'Created'}
 ];
 
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
+
 function TopicsList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
@@ -27,7 +29,7 @@ function TopicsList() {
 	const [data, setData] = useState<Page<Topic> | null>(null);
 
 	const paging = useMemo(
-		() => StringUtil.isBlank(pagingString) ? {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]}
+		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
 			: PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
@@ -90,11 +92,16 @@ function TopicsList() {
 					<RefreshIconButton onClick={reload}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
-						<Form onSubmit={applySearch}>
+						<Form onSubmit={applySearch} id="topics-search-form">
 							<TextInputWithReset
 								value={searchInput}
 								onChange={setSearchInput}
-								onReset={navigateToPage}
+								onReset={
+									() => {
+										setSearchInput('');
+										navigateToPage(DEFAULT_PAGING);
+									}
+								}
 							/>
 						</Form>
 					</div>

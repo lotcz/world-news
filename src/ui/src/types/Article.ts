@@ -7,6 +7,7 @@ export type ArticleBase = EntityBase & {
 	title?: string;
 	publishDate?: Date | null;
 	originalUrl?: string | null;
+	originalUid?: string | null;
 	summary?: string | null;
 	body?: string | null;
 	processingState?: string | null;

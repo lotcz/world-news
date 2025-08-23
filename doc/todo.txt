@@ -1,15 +1,17 @@
-- import more pages from rss feed
-- UI - temporary error message
-- deduplicate articles by rss guid (and summary hash?)
 - some rss have content
 - move prompts to language table
 - define filter texts and elements on article source level
 
+- cookies/ad warning
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
 - transform tags, define synonyms, search by tags
 - multilanguage (english)
-
+- UI - temporary error messages
+- integrate AI log (save operation and entity type/ID)
+- display tags
+- looks like sometimes compilation includes internal article
+- add "test drive" - search similar articles listing similarity/distance
 
 Realms and websites
 
@@ -31,3 +33,4 @@ Realms and websites
 - Ecology and global warming
 - consiracy theories
 - satire and parody
+- Linux and open source

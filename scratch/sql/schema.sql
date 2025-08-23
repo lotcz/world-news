@@ -128,6 +128,7 @@ create table article (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     body text,
     original_url varchar(255),
+    original_uid varchar(255),
     processing_state tp_processing_state not null default 'NotReady',
     publish_date timestamp(6) with time zone,
     summary text,
@@ -151,6 +152,9 @@ create index idx_article_processing_state
 
 create unique index idx_article_original_url
     on article (original_url);
+
+create index idx_article_original_uid
+    on article (original_uid);
 
 create index idx_article_topic
     on article (topic_id);

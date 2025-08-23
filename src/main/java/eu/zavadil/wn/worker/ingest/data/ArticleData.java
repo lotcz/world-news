@@ -16,6 +16,8 @@ public class ArticleData {
 
 	private String originalUrl;
 
+	private String originalUid;
+
 	private Instant publishDate;
 
 	private List<ImageData> images;

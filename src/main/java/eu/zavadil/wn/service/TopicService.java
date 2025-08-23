@@ -11,7 +11,6 @@ import eu.zavadil.wn.data.topic.TopicStubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +80,7 @@ public class TopicService {
 		return this.topicRepository.findAllByProcessingStateAndArticleCountGreaterThan(
 			ProcessingState.Waiting,
 			1,
-			PageRequest.of(0, 10, Sort.by(Sort.Order.desc("lastUpdatedOn")))
+			PageRequest.of(0, 10)
 		);
 	}
 

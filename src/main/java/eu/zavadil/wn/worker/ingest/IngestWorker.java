@@ -55,15 +55,15 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 		while (iterator.hasNext()) {
 			totalArticles++;
 			ArticleData articleData = iterator.next();
-			Article article = this.articleService.loadByOriginalUrl(articleData.getOriginalUrl());
+			String url = StringUtils.safeTrim(articleData.getOriginalUrl());
+			if (StringUtils.isBlank(url)) {
+				log.warn("Article has no URL: {}", articleData);
+				continue;
+			}
+			Article article = this.articleService.loadByOriginalUrlOrUid(url, articleData.getOriginalUid());
 			if (article == null) {
-				String url = StringUtils.safeTrim(articleData.getOriginalUrl());
-				if (StringUtils.isBlank(url)) {
-					continue;
-				}
 				newArticles++;
 				article = new Article();
-				article.setOriginalUrl(url);
 			} else {
 				boolean identical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
 					&& StringUtils.safeEquals(article.getSummary(), articleData.getSummary())
@@ -75,6 +75,8 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			}
 
 			article.setSource(articleSource);
+			article.setOriginalUrl(url);
+			article.setOriginalUid(articleData.getOriginalUid());
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 			article.setSummary(articleData.getSummary());

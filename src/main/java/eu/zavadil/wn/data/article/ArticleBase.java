@@ -31,6 +31,8 @@ public class ArticleBase extends EntityBase {
 
 	private String originalUrl;
 
+	private String originalUid;
+
 	@Column(columnDefinition = "TEXT")
 	private String summary;
 

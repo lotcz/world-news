@@ -226,6 +226,22 @@ export default function ArticleDetail() {
 							/>
 						</Col>
 					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>GUID:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.originalUid)}
+								onChange={(e) => {
+									data.originalUid = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
 				</Stack>
 			</Form>
 		</div>

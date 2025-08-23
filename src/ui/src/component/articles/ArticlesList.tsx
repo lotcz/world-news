@@ -1,11 +1,12 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Spinner, Stack} from 'react-bootstrap';
 import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
+import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
@@ -16,16 +17,7 @@ const HEADER = [
 	{name: 'createdOn', label: 'Created'}
 ];
 
-const DEFAULT_PAGING: PagingRequest = {
-	page: 0,
-	size: 100,
-	sorting: [
-		{
-			name: 'createdOn',
-			desc: true
-		}
-	]
-}
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'createdOn', desc: true}]}
 
 function ArticlesList() {
 	const {pagingString} = useParams();
@@ -35,7 +27,8 @@ function ArticlesList() {
 	const [data, setData] = useState<Page<Article> | null>(null);
 
 	const paging = useMemo(
-		() => StringUtil.isBlank(pagingString) ? DEFAULT_PAGING : PagingUtil.pagingRequestFromString(pagingString),
+		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
+			: PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
 
@@ -57,8 +50,8 @@ function ArticlesList() {
 	}
 
 	const applySearch = useCallback(
-		(e: FormEvent) => {
-			e.preventDefault();
+		(e?: FormEvent) => {
+			e && e.preventDefault();
 			paging.search = searchInput;
 			paging.page = 0;
 			navigateToPage(paging);
@@ -86,13 +79,19 @@ function ArticlesList() {
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
+					<RefreshIconButton onClick={loadPageHandler}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
-						<Form onSubmit={applySearch}>
+						<Form onSubmit={applySearch} id="articles-search-form">
 							<TextInputWithReset
 								value={searchInput}
 								onChange={setSearchInput}
-								onReset={navigateToPage}
+								onReset={
+									() => {
+										setSearchInput('');
+										navigateToPage(DEFAULT_PAGING);
+									}
+								}
 							/>
 						</Form>
 					</div>

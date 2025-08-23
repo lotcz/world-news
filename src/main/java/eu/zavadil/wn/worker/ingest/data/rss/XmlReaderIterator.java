@@ -2,137 +2,68 @@ package eu.zavadil.wn.worker.ingest.data.rss;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.feed.synd.SyndLink;
 import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.WnUtil;
+import eu.zavadil.wn.util.XmlReaderUtil;
 import eu.zavadil.wn.worker.ingest.data.ArticleData;
-import org.mozilla.universalchardet.UniversalDetector;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 public class XmlReaderIterator implements BasicIterator<ArticleData> {
 
-	private final List<SyndEntry> entries;
+	private final int maxReadItems = 100;
+
+	private List<SyndEntry> entries = null;
+
+	private int processedItems = 0;
 
 	private int index = 0;
 
-	private static final int MAX_REDIRECTS = 5;
+	private String nextPageUrl;
 
-	public static SyndFeed readFeed(String feedUrl) {
-		return readFeed(feedUrl, 0);
-	}
-
-	private static SyndFeed readFeed(String feedUrl, int redirectCount) {
-		if (redirectCount > MAX_REDIRECTS) {
-			throw new RuntimeException("Too many redirects for feed: " + feedUrl);
-		}
-
-		try {
-			HttpURLConnection conn = (HttpURLConnection) new URL(feedUrl).openConnection();
-
-			// Browser-like headers
-			conn.setRequestProperty("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-					"AppleWebKit/537.36 (KHTML, like Gecko) " +
-					"Chrome/115.0 Safari/537.36");
-			conn.setRequestProperty("Accept",
-				"application/rss+xml, application/xml;q=0.9, */*;q=0.8");
-			conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
-			conn.setInstanceFollowRedirects(false); // handle manually
-			conn.setConnectTimeout(10000);
-			conn.setReadTimeout(10000);
-
-			int code = conn.getResponseCode();
-			if (code == HttpURLConnection.HTTP_MOVED_PERM ||
-				code == HttpURLConnection.HTTP_MOVED_TEMP ||
-				code == 307 || code == 308) {
-				String location = conn.getHeaderField("Location");
-				return readFeed(location, redirectCount + 1);
+	private void loadNextPage(String url) {
+		SyndFeed feed = XmlReaderUtil.readFeed(url);
+		this.entries = feed.getEntries();
+		this.index = 0;
+		this.nextPageUrl = null;
+		for (SyndLink link : feed.getLinks()) {
+			if ("next".equals(link.getRel())) {
+				this.nextPageUrl = link.getHref();
+				break;
 			}
-
-			if (code != HttpURLConnection.HTTP_OK) {
-				throw new IOException("HTTP " + code + " from " + feedUrl);
-			}
-
-			byte[] data;
-			try (InputStream raw = conn.getInputStream();
-				 InputStream in = wrapStream(raw, conn.getContentEncoding())) {
-				data = in.readAllBytes();
-			}
-
-			if (data.length == 0) {
-				throw new IOException("Empty response from " + feedUrl);
-			}
-
-			// Step 1: Try charset from Content-Type
-			String contentType = conn.getContentType();
-			String charset = null;
-			if (contentType != null && contentType.toLowerCase().contains("charset=")) {
-				charset = contentType.substring(contentType.toLowerCase().indexOf("charset=") + 8).trim();
-			}
-
-			// Step 2: Fallback to juniversalchardet
-			if (charset == null) {
-				UniversalDetector detector = new UniversalDetector(null);
-				detector.handleData(data, 0, data.length);
-				detector.dataEnd();
-				charset = detector.getDetectedCharset();
-			}
-
-			// Step 3: Default UTF-8
-			if (charset == null) charset = "UTF-8";
-
-			String xml = new String(data, Charset.forName(charset));
-			
-			SyndFeedInput input = new SyndFeedInput();
-			return input.build(new StringReader(xml));
-
-		} catch (Exception e) {
-			throw new RuntimeException("Error when reading feed: " + feedUrl, e);
 		}
 	}
 
-	private static InputStream wrapStream(InputStream in, String encoding) throws IOException {
-		if (encoding == null) {
-			return in;
-		}
-		switch (encoding.toLowerCase()) {
-			case "gzip":
-				return new GZIPInputStream(in);
-			case "deflate":
-				return new InflaterInputStream(in, new Inflater(true));
-			default:
-				return in; // unknown encoding, just return raw
+	private void checkReloadNextPage() {
+		if (this.index >= this.entries.size() && StringUtils.notBlank(this.nextPageUrl)) {
+			this.loadNextPage(this.nextPageUrl);
 		}
 	}
 
 	public XmlReaderIterator(String url) {
-		this.entries = readFeed(url).getEntries();
+		this.loadNextPage(url);
 	}
 
 	@Override
 	public boolean hasNext() {
-		return this.entries.size() > this.index;
+		this.checkReloadNextPage();
+		return (this.entries.size() > this.index)
+			&& (this.processedItems < this.maxReadItems);
 	}
 
 	@Override
 	public ArticleData next() {
+		this.checkReloadNextPage();
 		SyndEntry entry = this.entries.get(this.index);
 		this.index++;
+		this.processedItems++;
 
 		ArticleData articleData = new ArticleData();
 		articleData.setOriginalUrl(entry.getLink());
+		articleData.setOriginalUid(entry.getUri());
 		articleData.setTitle(WnUtil.normalizeAndClean(entry.getTitle()));
 		articleData.setSummary((entry.getDescription() != null) ? WnUtil.normalizeAndClean(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
