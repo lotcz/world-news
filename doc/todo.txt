@@ -1,7 +1,6 @@
+- better annotation queue
 - better import queue
   - import more pages from rss feed
-- better annotation queue
-  - load one by one, but queue is infinite
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
 - move prompts to language table
@@ -12,6 +11,9 @@
 - deduplicate articles by rss guid and summary hash
 - some rss have content
 
+Sources
+
+https://www.denik.cz/rss/zpravy.html
 
 Realms and websites
 
@@ -30,3 +32,6 @@ Realms and websites
 - Nature
 - Dogs and animals
 - Cars
+- Ecology and global warming
+- consiracy theories
+- satire and parody

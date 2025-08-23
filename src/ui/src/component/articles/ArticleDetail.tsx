@@ -11,6 +11,7 @@ import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import {BsBoxArrowUpRight} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
 import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
+import TopicInfo from "../topics/TopicInfo";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -142,6 +143,14 @@ export default function ArticleDetail() {
 								/>
 							</div>
 							<ArticleSourceInfo articleSourceId={data.sourceId}/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Topic:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<TopicInfo topicId={data.topicId}/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

@@ -3,6 +3,7 @@ package eu.zavadil.wn.stats;
 import eu.zavadil.wn.service.ArticleSourceService;
 import eu.zavadil.wn.service.LanguageService;
 import eu.zavadil.wn.service.RealmService;
+import eu.zavadil.wn.worker.annotate.AnnotateQueueProcessor;
 import eu.zavadil.wn.worker.compile.CompileQueueProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class StatsService {
 	@Autowired
 	CompileQueueProcessor compileWorker;
 
+	@Autowired
+	AnnotateQueueProcessor annotateWorker;
+
 	public WnStats getStats() {
 		final WnStats stats = new WnStats();
 
@@ -32,6 +36,7 @@ public class StatsService {
 
 		// queue
 		stats.setCompileQueue(this.compileWorker.getStats());
+		stats.setAnnotateQueue(this.annotateWorker.getStats());
 
 		return stats;
 	}

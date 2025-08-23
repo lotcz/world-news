@@ -1,5 +1,6 @@
 package eu.zavadil.wn.worker.annotate;
 
+import eu.zavadil.java.spring.common.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.data.ImportType;
@@ -7,11 +8,13 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
-import eu.zavadil.wn.service.*;
+import eu.zavadil.wn.service.AiAssistantService;
+import eu.zavadil.wn.service.ArticleService;
+import eu.zavadil.wn.service.TagService;
+import eu.zavadil.wn.service.TopicService;
 import eu.zavadil.wn.util.WnUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,13 +23,10 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class AnnotateWorker {
+public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements AnnotateQueueProcessor {
 
 	@Autowired
 	ArticleService articleService;
-
-	@Autowired
-	ArticleSourceService articleSourceService;
 
 	@Autowired
 	TopicService topicService;
@@ -55,6 +55,23 @@ public class AnnotateWorker {
 		"Najdi nejdůležitější klíčová slova v následujícím textu:"
 	);
 
+	@Autowired
+	public AnnotateWorker(AnnotateArticleQueue queue) {
+		super(queue);
+	}
+
+	private String cleanResponse(String response) {
+		return StringUtils.blankToNull(
+			WnUtil.removeWrappingQuotes(
+				WnUtil.removeWrappingAsterisks(
+					WnUtil.removeWrappingQuotes(
+						WnUtil.normalizeAndClean(response)
+					)
+				)
+			)
+		);
+	}
+
 	private void updateTitle(Article article) {
 		if (StringUtils.notBlank(article.getTitle())) return;
 
@@ -68,7 +85,7 @@ public class AnnotateWorker {
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
-		article.setTitle(WnUtil.removeWrappingQuotes(response));
+		article.setTitle(this.cleanResponse(response));
 	}
 
 	private void updateSummary(Article article) {
@@ -91,12 +108,12 @@ public class AnnotateWorker {
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
-		article.setSummary(WnUtil.removeWrappingQuotes(response));
+		article.setSummary(this.cleanResponse(response));
 	}
 
 	private void updateTags(Article article) {
 		if (!article.getTags().isEmpty()) return;
-		
+
 		if (StringUtils.isBlank(article.getTitle())) {
 			throw new RuntimeException(
 				String.format("Article %s has no title! Cannot update tags.", article.toString())
@@ -168,45 +185,35 @@ public class AnnotateWorker {
 		return mostSimilar;
 	}
 
-	@Scheduled(fixedDelay = 10 * 1000)
-	public void execute() {
-		List<Article> articles = this.articleService.loadArticlesForAnnotationWorker();
-		if (articles.isEmpty()) {
-			log.info("No articles need annotation!");
-			return;
-		}
+	public void annotateArticle(Article article) {
+		article.setProcessingState(ProcessingState.Processing);
+		this.articleService.save(article);
 
-		int annotated = 0;
-
-		for (Article article : articles) {
-			article.setProcessingState(ProcessingState.Processing);
-			this.articleService.save(article);
-
-			Topic topic = null;
-			try {
-				this.updateTitle(article);
-				this.updateSummary(article);
-				this.updateTags(article);
-				Embedding embedding = this.updateEmbedding(article);
-				if (!article.getSource().getImportType().equals(ImportType.Internal)) {
-					topic = this.assignTopic(article, embedding);
-				}
-				article.setProcessingState(ProcessingState.Done);
-			} catch (Exception e) {
-				log.error("Error during article annotation", e);
-				article.setProcessingState(ProcessingState.Error);
-			} finally {
-				this.articleService.save(article);
-				if (topic != null) {
-					// if topic was assigned, mark it for compilation now
-					topic.setProcessingState(ProcessingState.Waiting);
-					this.topicService.save(topic);
-				}
+		Topic topic = null;
+		try {
+			this.updateTitle(article);
+			this.updateSummary(article);
+			this.updateTags(article);
+			Embedding embedding = this.updateEmbedding(article);
+			if (!article.getSource().getImportType().equals(ImportType.Internal)) {
+				topic = this.assignTopic(article, embedding);
 			}
-
-			annotated++;
+			article.setProcessingState(ProcessingState.Done);
+		} catch (Exception e) {
+			log.error("Error during article annotation", e);
+			article.setProcessingState(ProcessingState.Error);
+		} finally {
+			this.articleService.save(article);
+			if (topic != null) {
+				// if topic was assigned, mark it for compilation now
+				topic.setProcessingState(ProcessingState.Waiting);
+				this.topicService.save(topic);
+			}
 		}
+	}
 
-		log.info("Annotated {} articles.", annotated);
+	@Override
+	public void processItem(Article a) {
+		this.annotateArticle(a);
 	}
 }

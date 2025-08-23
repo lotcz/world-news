@@ -15,8 +15,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class ArticleService {
 
@@ -60,13 +58,12 @@ public class ArticleService {
 		return this.articleRepository.findFirstByOriginalUrl(originalUrl).orElse(null);
 	}
 
-	public List<Article> loadArticlesForAnnotationWorker() {
+	public Page<Article> loadArticlesForAnnotationWorker() {
 		return this.articleRepository
 			.findAllByProcessingStateOrderByLastUpdatedOnAsc(
 				ProcessingState.Waiting,
 				PageRequest.of(0, 10)
-			)
-			.getContent();
+			);
 	}
 
 	public Embedding updateEmbedding(Article article) {

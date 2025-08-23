@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {AiLog} from "../../types/AiLog";
+import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
 	{name: 'createdOn', label: 'Created'},
@@ -63,6 +64,7 @@ function AiLogList() {
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(undefined);
 			restClient
 				.aiLog
 				.filter(paging, from, to)
@@ -81,7 +83,8 @@ function AiLogList() {
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<Form onSubmit={applySearch} className="d-flex align-items-center">
+					<Form onSubmit={applySearch} className="d-flex align-items-center gap-2">
+						<RefreshIconButton onClick={loadPageHandler}/>
 						<DateTimeInput
 							value={from}
 							onChange={setFrom}
@@ -91,8 +94,8 @@ function AiLogList() {
 							value={to}
 							onChange={setTo}
 						/>
+						<Button onClick={applySearch}>Search</Button>
 					</Form>
-					<Button onClick={applySearch}>Search</Button>
 				</Stack>
 			</div>
 

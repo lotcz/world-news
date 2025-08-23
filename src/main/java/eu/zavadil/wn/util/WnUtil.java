@@ -8,6 +8,9 @@ import java.text.Normalizer;
 @Slf4j
 public class WnUtil {
 
+	/**
+	 * Normalized bytes and spaces in content coming from external sources
+	 */
 	public static String normalizeAndClean(String input) {
 		if (input == null) {
 			return null;
@@ -29,9 +32,17 @@ public class WnUtil {
 	}
 
 	public static String removeWrappingQuotes(String text) {
-		if (StringUtils.isBlank(text)) return text;
-		if (text.startsWith("\"") && text.endsWith("\"")) {
+		if (StringUtils.isBlank(text)) return "";
+		if ((text.startsWith("\"") && text.endsWith("\"") || (text.startsWith("„") && text.endsWith("“")))) {
 			return text.substring(1, text.length() - 1);
+		}
+		return text;
+	}
+
+	public static String removeWrappingAsterisks(String text) {
+		if (StringUtils.isBlank(text)) return "";
+		if (text.startsWith("*") && text.endsWith("*")) {
+			return removeWrappingAsterisks(text.substring(1, text.length() - 1));
 		}
 		return text;
 	}

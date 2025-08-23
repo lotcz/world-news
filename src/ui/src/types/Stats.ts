@@ -6,6 +6,7 @@ export type WnStats = {
 	languageCache: CacheStats;
 	articleSourceCache: CacheStats;
 	compileQueue: QueueStats;
+	annotateQueue: QueueStats;
 };
 
 export type ClientStats = {
