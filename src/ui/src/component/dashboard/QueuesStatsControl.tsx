@@ -31,7 +31,12 @@ function QueuesStatsControl() {
 				<Card.Title>Queues</Card.Title>
 			</Card.Header>
 			<Card.Body>
-
+				{
+					stats ? <QueueStatsControl name="Ingestion" stats={stats.ingestQueue}/>
+						: <Placeholder className="w-100" as="p" animation="glow">
+							<Placeholder className="w-100"/>
+						</Placeholder>
+				}
 				{
 					stats ? <QueueStatsControl name="Annotation" stats={stats.annotateQueue}/>
 						: <Placeholder className="w-100" as="p" animation="glow">

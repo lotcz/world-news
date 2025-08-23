@@ -16,6 +16,8 @@ public class WnStats {
 
 	private HashCacheStats articleSourceCache;
 
+	private SmartQueueProcessorStats ingestQueue;
+
 	private SmartQueueProcessorStats compileQueue;
 
 	private SmartQueueProcessorStats annotateQueue;

@@ -5,6 +5,7 @@ export type WnStats = {
 	realmCache: CacheStats;
 	languageCache: CacheStats;
 	articleSourceCache: CacheStats;
+	ingestQueue: QueueStats;
 	compileQueue: QueueStats;
 	annotateQueue: QueueStats;
 };

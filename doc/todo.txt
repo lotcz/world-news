@@ -1,15 +1,12 @@
-- better import queue
-	- import more pages from rss feed
-- deduplicate articles by rss guid and summary hash
+- import more pages from rss feed
+- UI - temporary error message
+- deduplicate articles by rss guid (and summary hash?)
 - some rss have content
 - move prompts to language table
 - define filter texts and elements on article source level
 
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
-
-
-
 - transform tags, define synonyms, search by tags
 - multilanguage (english)
 

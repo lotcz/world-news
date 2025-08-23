@@ -1,6 +1,7 @@
 package eu.zavadil.wn.worker.ingest;
 
 import eu.zavadil.java.iterators.BasicIterator;
+import eu.zavadil.java.spring.common.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
@@ -13,14 +14,13 @@ import eu.zavadil.wn.worker.ingest.data.ArticleDataSourceContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 @Service
 @Slf4j
-public class IngestWorker {
+public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> implements IngestQueueProcessor {
 
 	@Autowired
 	ArticleService articleService;
@@ -31,18 +31,11 @@ public class IngestWorker {
 	@Autowired
 	ArticleDataSourceContainer articleDataSourceContainer;
 
-	@Scheduled(fixedDelay = 60 * 1000)
-	public void execute() {
-		ArticleSource articleSource = this.articleSourceService.getNextImportSource();
-		if (articleSource == null) {
-			log.error("No article source suitable for import found!");
-			return;
-		}
-
-		this.ingestDataSource(articleSource);
+	@Autowired
+	public IngestWorker(IngestArticleSourceQueue queue) {
+		super(queue);
 	}
 
-	@Async
 	public void ingestDataSource(ArticleSource articleSource) {
 		log.info("Starting ingestion from {}", articleSource.getUrl());
 
@@ -102,5 +95,15 @@ public class IngestWorker {
 			newArticles,
 			updatedArticles
 		);
+	}
+
+	@Async
+	public void ingestDataSourceAsync(ArticleSource articleSource) {
+		this.ingestDataSource(articleSource);
+	}
+
+	@Override
+	public void processItem(ArticleSource ars) {
+		this.ingestDataSource(ars);
 	}
 }

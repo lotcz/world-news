@@ -57,22 +57,4 @@ public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSour
 		return this.internalArticleSource.get();
 	}
 
-	/**
-	 * Get next import source to be imported.
-	 * That would be a non-internal source that was last imported before the longest time.
-	 */
-	public ArticleSource getNextImportSource() {
-		List<ArticleSource> sources = this.all();
-		ArticleSource oldest = null;
-
-		for (ArticleSource ars : sources) {
-			if (ars.getImportType() == ImportType.Internal) continue;
-			if (ars.getLastImported() == null) return ars;
-			if (oldest == null || ars.getLastImported().isBefore(oldest.getLastImported())) {
-				oldest = ars;
-			}
-		}
-
-		return oldest;
-	}
 }

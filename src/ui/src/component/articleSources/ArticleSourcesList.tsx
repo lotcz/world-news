@@ -61,6 +61,7 @@ function ArticleSourcesList() {
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(null);
 			restClient
 				.articleSources
 				.loadPage(paging)
@@ -75,13 +76,11 @@ function ArticleSourcesList() {
 
 	useEffect(loadPageHandler, [paging]);
 
-	const reload = useCallback(loadPageHandler, []);
-
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<RefreshIconButton onClick={reload}/>
+					<RefreshIconButton onClick={loadPageHandler}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch}>
