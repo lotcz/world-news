@@ -1,4 +1,4 @@
-DROP PROCEDURE update_topic_article_count(integer);
+/* topic's article count */
 
 CREATE OR REPLACE PROCEDURE update_topic_article_count(p_topic_id INT)
 LANGUAGE plpgsql
@@ -12,25 +12,6 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION article_inserted_or_updated()
-RETURNS TRIGGER AS $$
-BEGIN
-	IF TG_OP = 'DELETE' THEN
-        CALL update_topic_article_count(OLD.topic_id);
-    ELSEIF TG_OP = 'INSERT' THEN
-        CALL update_topic_article_count(NEW.topic_id);
-    ELSIF (OLD.topic_id IS DISTINCT FROM NEW.topic_id) THEN
-        CALL update_topic_article_count(OLD.topic_id);
-        CALL update_topic_article_count(NEW.topic_id);
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER trg_update_article_count
-AFTER DELETE OR INSERT OR UPDATE ON article
-FOR EACH ROW EXECUTE FUNCTION article_inserted_or_updated();
 
 DO $$
 DECLARE
@@ -41,3 +22,53 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+/* source's article count */
+
+CREATE OR REPLACE PROCEDURE update_source_article_count(p_source_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE article_source ars
+    SET article_count = (
+        SELECT COUNT(*) FROM article a WHERE a.source_id = p_source_id
+    )
+    WHERE ars.id = p_source_id;
+END;
+$$;
+
+DO $$
+DECLARE
+    r topic%ROWTYPE;
+BEGIN
+    FOR r IN SELECT id FROM article_source LOOP
+        CALL update_source_article_count(r.id);
+    END LOOP;
+END;
+$$;
+
+/* article changed trigger */
+
+CREATE OR REPLACE FUNCTION article_inserted_or_updated()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF TG_OP = 'DELETE' THEN
+        CALL update_topic_article_count(OLD.topic_id);
+        CALL update_source_article_count(OLD.source_id);
+    ELSEIF TG_OP = 'INSERT' THEN
+        CALL update_topic_article_count(NEW.topic_id);
+        CALL update_source_article_count(NEW.source_id);
+    ELSIF (OLD.topic_id IS DISTINCT FROM NEW.topic_id) THEN
+        CALL update_topic_article_count(OLD.topic_id);
+        CALL update_topic_article_count(NEW.topic_id);
+        CALL update_source_article_count(OLD.source_id);
+        CALL update_source_article_count(NEW.source_id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_update_article_count
+AFTER DELETE OR INSERT OR UPDATE ON article
+FOR EACH ROW EXECUTE FUNCTION article_inserted_or_updated();

@@ -39,4 +39,6 @@ public class ArticleSourceBase extends EntityWithNameBase {
 	@Column(columnDefinition = "TEXT")
 	private String filterOut;
 
+	@Column(updatable = false, insertable = false)
+	private int articleCount = 0;
 }

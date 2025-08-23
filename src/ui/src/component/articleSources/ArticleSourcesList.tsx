@@ -13,6 +13,7 @@ const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'url', label: 'URL'},
 	{name: 'importType', label: 'Import Type'},
+	{name: 'articleCount', label: 'Articles'},
 	{name: 'lastImported', label: 'Last Imported'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
@@ -26,7 +27,8 @@ function ArticleSourcesList() {
 	const [data, setData] = useState<Page<ArticleSource> | null>(null);
 
 	const paging = useMemo(
-		() => PagingUtil.pagingRequestFromString(pagingString),
+		() => StringUtil.isBlank(pagingString) ? {page: 0, size: 100, sorting: [{name: 'name'}]}
+			: PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
 
@@ -117,6 +119,7 @@ function ArticleSourcesList() {
 													<td>{item.name}</td>
 													<td>{item.url}</td>
 													<td>{item.importType}</td>
+													<td>{item.articleCount}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastImported)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>

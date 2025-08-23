@@ -31,6 +31,7 @@ export default function ArticleSourceDetail() {
 					name: '',
 					url: '',
 					importType: 'Rss',
+					articleCount: 0,
 					realms: []
 				});
 				return;

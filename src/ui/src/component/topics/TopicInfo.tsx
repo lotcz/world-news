@@ -19,7 +19,7 @@ export default function TopicInfo({topicId}: TopicInfoProps) {
 		}
 	}, [topicId, restClient]);
 
-	if (!data) return <span>NULL</span>;
+	if (!data) return <span className="fst-italic">NULL</span>;
 
 	return <Link to={`/topics/detail/${topicId}`}>{data.name}</Link>
 }

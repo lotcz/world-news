@@ -7,6 +7,7 @@ export type ArticleSourceBase = EntityWithName & {
 	lastImported?: Date | null;
 	importType: string;
 	filterOut?: string | null;
+	articleCount: number;
 }
 
 export type ArticleSourceStub = ArticleSourceBase & {

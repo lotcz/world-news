@@ -35,6 +35,9 @@ create table language (
     code varchar(5)
 );
 
+create index idx_language_name
+    on language (name);
+
 create unique index idx_language_code
     on language (code);
 
@@ -52,14 +55,12 @@ create table article_source (
     language_id integer not null
     	constraint fk_article_source_language
        	references language,
-    filter_out text
+    filter_out text,
+    article_count int not null default 0
 );
 
-create index idx_article_source_url
-    on article_source (url);
-
-create index idx_language_name
-    on language (name);
+create index idx_article_last_imported
+    on article_source (last_imported);
 
 create table realm (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

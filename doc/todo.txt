@@ -1,19 +1,18 @@
-- better annotation queue
 - better import queue
-  - import more pages from rss feed
-- fotografie
-  - https://www.ctk.cz/sluzby/fotobanka/
-- move prompts to language table
-- define filter texts and elements on article source level
-- transform tags, define synonyms, search by tags
-- english
-  - bbc feeds - https://www.bbc.com/news/10628494
+	- import more pages from rss feed
 - deduplicate articles by rss guid and summary hash
 - some rss have content
+- move prompts to language table
+- define filter texts and elements on article source level
 
-Sources
+- fotografie
+  - https://www.ctk.cz/sluzby/fotobanka/
 
-https://www.denik.cz/rss/zpravy.html
+
+
+- transform tags, define synonyms, search by tags
+- multilanguage (english)
+
 
 Realms and websites
 
