@@ -36,6 +36,7 @@ public class ChatGpt extends HttpApiClientBase implements AiAssistantEngine {
 		params.getUserPrompt().forEach(up -> messages.add(new ChatGptMessage("user", up)));
 
 		ChatGptRequest request = ChatGptRequest.builder()
+			.responseFormat(new ChatGptResponseFormat("text"))
 			.maxTokens(10000)
 			.temperature(params.getTemperature() * 2)
 			.model(params.getModel())

@@ -1,7 +1,10 @@
 package eu.zavadil.wn.util;
 
+import com.rometools.rome.feed.synd.SyndContent;
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
+import eu.zavadil.java.util.StringUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.IOException;
@@ -14,7 +17,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-public class XmlReaderUtil {
+public class RssFeedUtil {
 
 	private static final int MAX_REDIRECTS = 5;
 
@@ -100,6 +103,26 @@ public class XmlReaderUtil {
 		} catch (Exception e) {
 			throw new RuntimeException("Error when reading feed: " + feedUrl, e);
 		}
+	}
+
+	public static String getBestContent(SyndEntry entry) {
+		String htmlCandidate = null;
+
+		if (entry.getContents() != null && !entry.getContents().isEmpty()) {
+			for (SyndContent content : entry.getContents()) {
+				if (StringUtils.notBlank(content.getValue())) {
+					String type = content.getType() != null ? content.getType().toLowerCase() : "";
+					if (type.contains("text/plain")) {
+						return content.getValue();
+					}
+					if (type.contains("html")) {
+						htmlCandidate = content.getValue();
+					}
+				}
+			}
+		}
+
+		return htmlCandidate;
 	}
 
 	public static SyndFeed readFeed(String feedUrl) {

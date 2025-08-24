@@ -38,7 +38,8 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	AiAssistantService aiAssistantService;
 
 	List<String> systemPrompt = List.of(
-		"Jsi redaktor v online časopise, který analyzuje články a jiné zpravodajské texty."
+		"Jsi redaktor v online časopise, který analyzuje články a jiné zpravodajské texty.",
+		"Odpovídej vždy jen jako čistý text."
 	);
 
 	List<String> createTitleUserPrompt = List.of(
@@ -46,13 +47,12 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	);
 
 	List<String> createSummaryUserPrompt = List.of(
-		"Napiš krátké shrnutí obsahu následujícího článku zhruba o délce jednoho odstavce:"
+		"Napiš krátké shrnutí obsahu o délce jednoho odstavce:"
 	);
 
 	List<String> findTagsUserPrompt = List.of(
-		"Najdi v textu nejdůležitější klíčová slova a vypíš je v 1. pádu oddělené čárkou.",
-		"Stačí jen pět těch opravdu nejdůležitějších - budou použity jako tagy pro kategorizaci obsahu.",
-		"Najdi nejdůležitější klíčová slova v následujícím textu:"
+		"Najdi nejdůležitější klíčová slova a vypíš je v 1. pádu oddělené čárkou.",
+		"Stačí jen pět těch opravdu nejdůležitějších - budou použity jako tagy pro kategorizaci obsahu."
 	);
 
 	@Autowired

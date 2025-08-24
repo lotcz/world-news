@@ -1,4 +1,3 @@
-- some rss have content
 - move prompts to language table
 - define filter texts and elements on article source level
 

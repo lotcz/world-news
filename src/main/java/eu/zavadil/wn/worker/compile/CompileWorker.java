@@ -40,7 +40,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	List<String> systemPrompt = List.of(
-		"Jsi redaktor v online časopise, který píše články a jiné zpravodajské texty."
+		"Jsi redaktor v online časopise, který píše články a jiné zpravodajské texty.",
+		"Odpovídej vždy jen jako čistý text."
 	);
 
 	List<String> compileUserPrompt = List.of(

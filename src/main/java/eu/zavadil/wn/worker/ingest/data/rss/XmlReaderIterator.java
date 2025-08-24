@@ -6,9 +6,11 @@ import com.rometools.rome.feed.synd.SyndLink;
 import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.util.ArticleScraper;
+import eu.zavadil.wn.util.RssFeedUtil;
 import eu.zavadil.wn.util.WnUtil;
-import eu.zavadil.wn.util.XmlReaderUtil;
 import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import org.apache.commons.text.StringEscapeUtils;
+import org.jsoup.Jsoup;
 
 import java.util.List;
 
@@ -24,8 +26,16 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 
 	private String nextPageUrl;
 
+	private String sanitizeText(String text) {
+		if (StringUtils.isBlank(text)) return null;
+
+		return WnUtil.normalizeAndClean(
+			Jsoup.parse(StringEscapeUtils.unescapeHtml4(text)).text()
+		);
+	}
+
 	private void loadNextPage(String url) {
-		SyndFeed feed = XmlReaderUtil.readFeed(url);
+		SyndFeed feed = RssFeedUtil.readFeed(url);
 		this.entries = feed.getEntries();
 		this.index = 0;
 		this.nextPageUrl = null;
@@ -65,12 +75,19 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		articleData.setOriginalUrl(entry.getLink());
 		articleData.setOriginalUid(entry.getUri());
 		articleData.setTitle(WnUtil.normalizeAndClean(entry.getTitle()));
-		articleData.setSummary((entry.getDescription() != null) ? WnUtil.normalizeAndClean(entry.getDescription().getValue()) : null);
+		articleData.setSummary((entry.getDescription() != null) ? this.sanitizeText(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 
-		String body = ArticleScraper.scrape(entry.getLink());
+		String body = RssFeedUtil.getBestContent(entry);
+
+		if (StringUtils.isBlank(body)) {
+			body = ArticleScraper.scrape(entry.getLink());
+		}
+
+		// todo: move to article source
 		body = StringUtils.safeReplace(body, "Článek si také můžete poslechnout v audioverzi.", "");
-		articleData.setBody(StringUtils.safeTrim(body));
+
+		articleData.setBody(this.sanitizeText(body));
 
 		return articleData;
 	}

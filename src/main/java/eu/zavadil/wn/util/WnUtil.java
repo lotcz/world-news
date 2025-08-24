@@ -2,6 +2,7 @@ package eu.zavadil.wn.util;
 
 import eu.zavadil.java.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 
 import java.text.Normalizer;
 
@@ -45,6 +46,11 @@ public class WnUtil {
 			return removeWrappingAsterisks(text.substring(1, text.length() - 1));
 		}
 		return text;
+	}
+
+	public static String HtmlToText(String html) {
+		if (StringUtils.isBlank(html)) return null;
+		return Jsoup.parse(html).text();
 	}
 
 }

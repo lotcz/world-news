@@ -19,4 +19,7 @@ public class ChatGptRequest {
 
 	private double temperature;
 
+	@JsonProperty("response_format")
+	private ChatGptResponseFormat responseFormat;
+	
 }
