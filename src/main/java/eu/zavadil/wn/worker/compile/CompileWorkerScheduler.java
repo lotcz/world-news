@@ -12,7 +12,7 @@ public class CompileWorkerScheduler {
 	@Autowired
 	CompileQueueProcessor compileWorker;
 
-	@Scheduled(fixedDelay = 10 * 1000)
+	@Scheduled(fixedDelay = 5 * 1000)
 	public void execute() {
 		this.compileWorker.process();
 	}

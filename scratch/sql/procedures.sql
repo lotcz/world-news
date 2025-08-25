@@ -39,10 +39,10 @@ $$;
 
 DO $$
 DECLARE
-    r topic%ROWTYPE;
+    ars article_source%ROWTYPE;
 BEGIN
-    FOR r IN SELECT id FROM article_source LOOP
-        CALL update_source_article_count(r.id);
+    FOR ars IN SELECT id FROM article_source LOOP
+        CALL update_source_article_count(ars.id);
     END LOOP;
 END;
 $$;

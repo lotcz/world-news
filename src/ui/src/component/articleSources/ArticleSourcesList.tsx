@@ -11,6 +11,7 @@ import RefreshIconButton from "../general/RefreshIconButton";
 const HEADER = [
 	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
+	{name: 'language.name', label: 'Language'},
 	{name: 'url', label: 'URL'},
 	{name: 'importType', label: 'Import Type'},
 	{name: 'articleCount', label: 'Articles'},
@@ -116,6 +117,7 @@ function ArticleSourcesList() {
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
 													<td>{item.name}</td>
+													<td>{item.language?.name}</td>
 													<td>{item.url}</td>
 													<td>{item.importType}</td>
 													<td>{item.articleCount}</td>

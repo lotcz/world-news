@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ArticleRepository extends EntityRepository<Article> {
@@ -18,10 +19,14 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 
+	List<Article> findAllByTopicId(@Param("topicId") int topicId);
+
 	Page<Article> findAllByTopicId(@Param("topicId") int topicId, PageRequest pr);
 
+	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, PageRequest pr);
+
 	Optional<Article> findFirstByOriginalUrl(String originalUrl);
-	
+
 	Optional<Article> findFirstByOriginalUid(String originalUid);
 
 	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);

@@ -15,6 +15,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ArticleService {
 
@@ -42,8 +44,16 @@ public class ArticleService {
 			: this.articleRepository.search(search, pr);
 	}
 
+	public List<Article> loadAllByTopicId(int topicId) {
+		return this.articleRepository.findAllByTopicId(topicId);
+	}
+
 	public Page<Article> loadByTopicId(int topicId, PageRequest pr) {
 		return this.articleRepository.findAllByTopicId(topicId, pr);
+	}
+
+	public Page<Article> loadBySourceId(int sourceId, PageRequest pr) {
+		return this.articleRepository.findAllBySourceId(sourceId, pr);
 	}
 
 	public ArticleStub loadById(int id) {
@@ -72,4 +82,5 @@ public class ArticleService {
 	public Embedding updateEmbedding(Article article) {
 		return this.articleEmbeddingsService.updateEmbedding(article.getId(), article.getSummary());
 	}
+
 }

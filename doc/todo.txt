@@ -1,35 +1,75 @@
-- move prompts to language table
-- define filter texts and elements on article source level
-
-- cookies/ad warning
-- fotografie
-  - https://www.ctk.cz/sluzby/fotobanka/
+- display tags
 - transform tags, define synonyms, search by tags
-- multilanguage (english)
 - UI - temporary error messages
 - integrate AI log (save operation and entity type/ID)
-- display tags
-- looks like sometimes compilation includes internal article
 - add "test drive" - search similar articles listing similarity/distance
+- assign topics to realms
+- multilanguage (english)
+- move prompts and model to language table
+- define filter texts and elements on article source level
+
+- fotografie
+  - https://www.ctk.cz/sluzby/fotobanka/
+
+- GDPR consent (research and implement correctly)
+- Privacy policy
+- Terms and Conditions
+
+- mimic normal traffic
+  - define min delay on article source to prevent error 429
+  - define max articles per minute and download new articles first
+
+- detect if body is damaged (e.g. there is only video or image)
+
+- sources with download problems (maybe only use summary?)
+  - require script or cookie (ad warning)
+    - https://servis.idnes.cz/rss.aspx?c=zpravodaj
+    - https://www.antiyoutuber.cz/rss
+
+
+Revenue sources
+- ads (google AdSense, Sklik)
+- affiliate
+  - https://affiliateport.eu
+  - https://www.partnerbox.cz/
+- dropshipping
 
 Realms and websites
 
-- World Politics
-- US Tabloid
-- American Sport
-- Video Games
-- Global Business
-- Science
-- Česká politika
-- český bulvár
-- Pecularities
-- Crime
-- Sci-fi
-- aviation accidents
+- Politics
+  - Česká politika
+  - Global Business
+- Science and Tech
+  - Ecology and global warming
+  - Linux and open source
+- Lifestyle
+  - Cars
+  - Hobby
+- Sport
+  - American Sport
+  - Fotbal
+- Business a podníkání
+  - právo a justice
+- Pop-culture
+  - tabloid
+    - US Tabloid
+    - český bulvár
+  - Video Games
+    - Baldurs Gate 3
+  - niches
+    - Labubu
+    - Taylor Swift
+  - Weird stuff and Pecularities
+    - Drunken stories (opilecké historky)
+  - Crime
+  - Sci-fi
+    - Star Trek
+    - Aliens
+    - Star Wars
+  - Horror
+  - aviation accidents
+  - consiracy theories
+- Satire and parody
+  - El poblitico
 - Nature
-- Dogs and animals
-- Cars
-- Ecology and global warming
-- consiracy theories
-- satire and parody
-- Linux and open source
+  - Dogs and animals

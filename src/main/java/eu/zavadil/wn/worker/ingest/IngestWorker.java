@@ -1,7 +1,7 @@
 package eu.zavadil.wn.worker.ingest;
 
 import eu.zavadil.java.iterators.BasicIterator;
-import eu.zavadil.java.spring.common.queues.SmartQueueProcessorBase;
+import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
@@ -102,6 +102,18 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 	@Async
 	public void ingestDataSourceAsync(ArticleSource articleSource) {
 		this.ingestDataSource(articleSource);
+	}
+
+	@Override
+	public void onBeforeProcessing() {
+		log.info("Starting ingestion...");
+	}
+
+	@Override
+	public void onAfterProcessing() {
+		// reset article source cache so article counts can be reloaded
+		this.articleSourceService.reset();
+		log.info("Ingestion finished");
 	}
 
 	@Override

@@ -6,10 +6,11 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleSource} from "../../types/ArticleSource";
-import {DateTimeInput} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput} from "zavadil-react-common";
 import ImportTypeSelect from "./ImportTypeSelect";
 import {LanguageSelect} from "../languages/LanguageSelect";
 import {BsBoxArrowUpRight} from "react-icons/bs";
+import ArticleSourceArticlesList from "./ArticleSourceArticlesList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -21,6 +22,7 @@ export default function ArticleSourceDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const confirmDialog = useContext(ConfirmDialogContext);
 	const [data, setData] = useState<ArticleSource>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -53,7 +55,7 @@ export default function ArticleSourceDetail() {
 				.then(
 					(f) => {
 						if (inserting) {
-							navigate(`/article-sources/detail/${f.id}`);
+							navigate(`/article-sources/detail/${f.id}`, {replace: true});
 						} else {
 							setData(f);
 						}
@@ -76,6 +78,26 @@ export default function ArticleSourceDetail() {
 		[restClient, data, userAlerts]
 	);
 
+	const deleteArticleSource = useCallback(
+		() => {
+			if (!data?.id) return;
+			confirmDialog.confirm(
+				'Confirm',
+				`All ${data.articleCount} articles will be deleted! Really delete this article source?`,
+				() => restClient
+					.articleSources
+					.delete(Number(data.id))
+					.then(
+						(f) => {
+							navigate(-1);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+			);
+		},
+		[restClient, data, userAlerts, navigate, confirmDialog]
+	);
+
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -95,7 +117,8 @@ export default function ArticleSourceDetail() {
 							<div>Save</div>
 						</div>
 					</Button>
-					<Button variant="primary" onClick={() => startIngestion()}>Ingest</Button>
+					<Button variant="primary" onClick={startIngestion}>Ingest</Button>
+					<Button variant="danger" onClick={deleteArticleSource}>Delete</Button>
 				</Stack>
 			</div>
 			<Form className="p-3">
@@ -192,6 +215,9 @@ export default function ArticleSourceDetail() {
 					</Row>
 				</Stack>
 			</Form>
+			{
+				data.id && <ArticleSourceArticlesList articleSourceId={data.id}/>
+			}
 		</div>
 	)
 }

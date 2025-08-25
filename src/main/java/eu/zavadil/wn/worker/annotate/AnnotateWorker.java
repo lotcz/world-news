@@ -1,9 +1,8 @@
 package eu.zavadil.wn.worker.annotate;
 
-import eu.zavadil.java.spring.common.queues.SmartQueueProcessorBase;
+import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
-import eu.zavadil.wn.data.ImportType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +38,8 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	AiAssistantService aiAssistantService;
 
 	List<String> systemPrompt = List.of(
-		"Jsi redaktor v online časopise, který analyzuje články a jiné zpravodajské texty.",
-		"Odpovídej vždy jen jako čistý text."
+		"Jsi redaktor v online časopise, který zpracovává články a jiné zpravodajské texty.",
+		"Odpovídej vždy přesně ve formě čistého textu."
 	);
 
 	List<String> createTitleUserPrompt = List.of(
@@ -47,7 +47,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	);
 
 	List<String> createSummaryUserPrompt = List.of(
-		"Napiš krátké shrnutí obsahu o délce jednoho odstavce:"
+		"Zkrať na jeden odstavec shrnující nejdůležitější informace v textu:"
 	);
 
 	List<String> findTagsUserPrompt = List.of(
@@ -166,6 +166,8 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	}
 
 	private Topic assignTopic(Article article, Embedding embedding) {
+		if (article.getTopic() != null && article.isInternal()) return null;
+
 		// todo: narrow search by searching by tags
 
 		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
@@ -190,30 +192,36 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		this.articleService.save(article);
 
 		Topic topic = null;
-		try {
-			this.updateTitle(article);
-			this.updateSummary(article);
-			this.updateTags(article);
-			Embedding embedding = this.updateEmbedding(article);
-			if (!article.getSource().getImportType().equals(ImportType.Internal)) {
-				topic = this.assignTopic(article, embedding);
+
+		this.updateTitle(article);
+		this.updateSummary(article);
+		this.updateTags(article);
+
+		Embedding embedding = this.updateEmbedding(article);
+		if (article.isInternal()) {
+			if (article.getPublishDate() == null) {
+				article.setPublishDate(Instant.now());
 			}
-			article.setProcessingState(ProcessingState.Done);
-		} catch (Exception e) {
-			log.error("Error during article annotation", e);
-			article.setProcessingState(ProcessingState.Error);
-		} finally {
-			this.articleService.save(article);
-			if (topic != null) {
-				// if topic was assigned, mark it for compilation now
-				topic.setProcessingState(ProcessingState.Waiting);
-				this.topicService.save(topic);
-			}
+		} else {
+			topic = this.assignTopic(article, embedding);
+		}
+
+		article.setProcessingState(ProcessingState.Done);
+		this.articleService.save(article);
+
+		if (topic != null) {
+			// if topic was assigned, mark it for compilation now
+			topic.setProcessingState(ProcessingState.Waiting);
+			this.topicService.save(topic);
 		}
 	}
 
 	@Override
 	public void processItem(Article a) {
-		this.annotateArticle(a);
+		try {
+			this.annotateArticle(a);
+		} catch (Exception e) {
+			log.error("Article annotation failed: {}", a, e);
+		}
 	}
 }

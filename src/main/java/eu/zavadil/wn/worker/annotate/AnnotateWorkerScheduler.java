@@ -12,7 +12,7 @@ public class AnnotateWorkerScheduler {
 	@Autowired
 	AnnotateQueueProcessor annotateWorker;
 
-	@Scheduled(fixedDelay = 10 * 1000)
+	@Scheduled(fixedDelay = 5 * 1000)
 	public void execute() {
 		this.annotateWorker.process();
 	}

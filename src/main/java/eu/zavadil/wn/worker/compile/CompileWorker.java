@@ -1,15 +1,12 @@
 package eu.zavadil.wn.worker.compile;
 
-import eu.zavadil.java.spring.common.queues.SmartQueueProcessorBase;
-import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,12 +47,10 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	);
 
 	public void compile(Topic topic) {
-		Page<Article> articles = this.articleService.loadByTopicId(topic.getId(), PageRequest.of(0, topic.getArticleCount()));
+		List<Article> articles = this.articleService.loadAllByTopicId(topic.getId());
 
 		Article compiled = articles.stream()
-			.filter(
-				a -> a.getSource().getImportType().equals(ImportType.Internal)
-			)
+			.filter(Article::isInternal)
 			.findFirst()
 			.orElseGet(
 				() -> {
@@ -69,7 +64,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 
 		List<String> userPrompt = new ArrayList<>(this.compileUserPrompt);
 		for (Article article : articles) {
-			if (!article.getSource().getImportType().equals(ImportType.Internal)) {
+			if (!article.isInternal()) {
 				compiled.getTags().addAll(article.getTags());
 				userPrompt.add(article.getBody());
 			}
@@ -89,7 +84,11 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 
 	@Override
 	public void processItem(Topic t) {
-		this.compile(t);
+		try {
+			this.compile(t);
+		} catch (Exception e) {
+			log.error("Topic compilation failed: {}", t, e);
+		}
 	}
 
 }

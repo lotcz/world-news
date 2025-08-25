@@ -80,7 +80,7 @@ function ArticlesList() {
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
 					<RefreshIconButton onClick={loadPageHandler}/>
-					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
+					<Button onClick={createNew} className="text-nowrap" disabled={true}>+ Add</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch} id="articles-search-form">
 							<TextInputWithReset

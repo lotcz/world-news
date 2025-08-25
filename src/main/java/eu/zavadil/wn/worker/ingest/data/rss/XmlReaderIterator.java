@@ -9,11 +9,13 @@ import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.RssFeedUtil;
 import eu.zavadil.wn.util.WnUtil;
 import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 
 import java.util.List;
 
+@Slf4j
 public class XmlReaderIterator implements BasicIterator<ArticleData> {
 
 	private final int maxReadItems = 100;
@@ -81,7 +83,11 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		String body = RssFeedUtil.getBestContent(entry);
 
 		if (StringUtils.isBlank(body)) {
-			body = ArticleScraper.scrape(entry.getLink());
+			try {
+				body = ArticleScraper.scrape(entry.getLink());
+			} catch (Exception e) {
+				log.error("Failed downloading article body from {}", entry.getLink(), e);
+			}
 		}
 
 		// todo: move to article source

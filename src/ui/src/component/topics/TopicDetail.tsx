@@ -9,6 +9,7 @@ import {TopicStub} from "../../types/Topic";
 import TopicArticlesList from "./TopicArticlesList";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
+import {LanguageIdSelect} from "../languages/LanguageSelect";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -97,6 +98,23 @@ export default function TopicDetail() {
 									value={data.processingState}
 									onChange={(e) => {
 										data.processingState = e;
+										setData({...data});
+										setChanged(true);
+									}}
+								/>
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Language:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<LanguageIdSelect
+									id={data.languageId}
+									onChange={(e) => {
+										data.languageId = e;
 										setData({...data});
 										setChanged(true);
 									}}

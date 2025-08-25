@@ -138,7 +138,8 @@ create table article (
         references language,
     source_id integer not null
         constraint fk76ghi213is4pqftv2cjg96box
-        references article_source,
+        references article_source
+        on delete cascade,
     topic_id integer
         constraint fk6x3cr4vpqhjktvuju4u1f77q1
         references topic

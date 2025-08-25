@@ -11,6 +11,7 @@ import RefreshIconButton from "../general/RefreshIconButton";
 const HEADER = [
 	{name: 'id', label: 'ID'},
 	{name: 'processingState', label: 'State'},
+	{name: 'language.name', label: 'Language'},
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
 	{name: 'realm.name', label: 'Realm'},
@@ -130,6 +131,7 @@ function TopicsList() {
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
 													<td>{item.processingState}</td>
+													<td>{item.language?.name}</td>
 													<td>{item.name}</td>
 													<td>{item.summary}</td>
 													<td>{item.realm?.name}</td>
