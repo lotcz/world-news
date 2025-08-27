@@ -1,33 +1,33 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Spinner, Stack} from 'react-bootstrap';
 import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {ArticleSource} from "../../types/ArticleSource";
 import RefreshIconButton from "../general/RefreshIconButton";
+import {Tag} from "../../types/Tag";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
-	{name: 'processingState', label: 'State'},
-	{name: 'language.name', label: 'Language'},
-	{name: 'url', label: 'URL'},
-	{name: 'importType', label: 'Import Type'},
+	{name: 'synonymOf.name', label: 'Synonym Of'},
 	{name: 'articleCount', label: 'Articles'},
-	{name: 'lastImported', label: 'Last Imported'}
+	{name: 'lastUpdatedOn', label: 'Updated'},
+	{name: 'createdOn', label: 'Created'}
 ];
 
-function ArticleSourcesList() {
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'name'}]};
+
+function TagsList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<ArticleSource> | null>(null);
+	const [data, setData] = useState<Page<Tag> | null>(null);
 
 	const paging = useMemo(
-		() => StringUtil.isBlank(pagingString) ? {page: 0, size: 100, sorting: [{name: 'name'}]}
+		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
 			: PagingUtil.pagingRequestFromString(pagingString),
 		[pagingString]
 	);
@@ -35,18 +35,18 @@ function ArticleSourcesList() {
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
-		navigate("/article-sources/detail/add")
+		navigate("/tags/detail/add")
 	};
 
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/article-sources/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/tags/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);
 
-	const navigateToDetail = (l: ArticleSource) => {
-		navigate(`/article-sources/detail/${l.id}`);
+	const navigateToDetail = (l: Tag) => {
+		navigate(`/tags/detail/${l.id}`);
 	}
 
 	const applySearch = useCallback(
@@ -61,9 +61,8 @@ function ArticleSourcesList() {
 
 	const loadPageHandler = useCallback(
 		() => {
-			setData(null);
 			restClient
-				.articleSources
+				.tags
 				.loadPage(paging)
 				.then(setData)
 				.catch((e: Error) => {
@@ -76,18 +75,31 @@ function ArticleSourcesList() {
 
 	useEffect(loadPageHandler, [paging]);
 
+	const reload = useCallback(
+		() => {
+			setData(null);
+			loadPageHandler();
+		},
+		[loadPageHandler]
+	);
+
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<RefreshIconButton onClick={loadPageHandler}/>
+					<RefreshIconButton onClick={reload}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
-						<Form onSubmit={applySearch}>
+						<Form onSubmit={applySearch} id="topics-search-form">
 							<TextInputWithReset
 								value={searchInput}
 								onChange={setSearchInput}
-								onReset={navigateToPage}
+								onReset={
+									() => {
+										setSearchInput('');
+										navigateToPage(DEFAULT_PAGING);
+									}
+								}
 							/>
 						</Form>
 					</div>
@@ -116,12 +128,10 @@ function ArticleSourcesList() {
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
 													<td>{item.name}</td>
-													<td>{item.processingState}</td>
-													<td>{item.language?.name}</td>
-													<td>{item.url}</td>
-													<td>{item.importType}</td>
+													<td>{item.synonymOf?.name}</td>
 													<td>{item.articleCount}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastImported)}</td>
+													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
+													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 												</tr>
 											);
 										})
@@ -134,4 +144,4 @@ function ArticleSourcesList() {
 	);
 }
 
-export default ArticleSourcesList;
+export default TagsList;

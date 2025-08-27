@@ -11,9 +11,11 @@ import ArticleSourcesList from "./articleSources/ArticleSourcesList";
 import ArticleSourceDetail from "./articleSources/ArticleSourceDetail";
 import ArticlesList from "./articles/ArticlesList";
 import ArticleDetail from "./articles/ArticleDetail";
+import TagsList from "./tags/TagsList";
+import TagDetail from "./tags/TagDetail";
+import AiLogList from "./ailog/AiLogList";
 import TopicsList from "./topics/TopicsList";
 import TopicDetail from "./topics/TopicDetail";
-import AiLogList from "./ailog/AiLogList";
 
 function Main() {
 	return (
@@ -34,6 +36,14 @@ function Main() {
 								<Route path=":id" element={<LanguageDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<LanguagesList/>}/>
+						</Route>
+						<Route path="tags">
+							<Route path="" element={<TagsList/>}/>
+							<Route path="detail">
+								<Route path="add" element={<TagDetail/>}/>
+								<Route path=":id" element={<TagDetail/>}/>
+							</Route>
+							<Route path=":pagingString" element={<TagsList/>}/>
 						</Route>
 						<Route path="realms">
 							<Route path="" element={<RealmsList/>}/>

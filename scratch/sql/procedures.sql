@@ -47,6 +47,30 @@ BEGIN
 END;
 $$;
 
+/* tag's article count */
+
+CREATE OR REPLACE PROCEDURE update_tag_article_count(p_tag_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE tag t
+    SET article_count = (
+        SELECT COUNT(*) FROM article_tag at WHERE at.tag_id = p_tag_id
+    )
+    WHERE t.id = p_tag_id;
+END;
+$$;
+
+DO $$
+DECLARE
+    t tag%ROWTYPE;
+BEGIN
+    FOR t IN SELECT id FROM tag LOOP
+        CALL update_tag_article_count(t.id);
+    END LOOP;
+END;
+$$;
+
 /* article changed trigger */
 
 CREATE OR REPLACE FUNCTION article_inserted_or_updated()
@@ -72,3 +96,25 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER trg_update_article_count
 AFTER DELETE OR INSERT OR UPDATE ON article
 FOR EACH ROW EXECUTE FUNCTION article_inserted_or_updated();
+
+/* article-tag changed trigger */
+
+CREATE OR REPLACE FUNCTION article_tag_inserted_or_updated()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF TG_OP = 'DELETE' THEN
+        CALL update_tag_article_count(OLD.tag_id);
+    ELSEIF TG_OP = 'INSERT' THEN
+        CALL update_tag_article_count(NEW.tag_id);
+    ELSIF (OLD.tag_id IS DISTINCT FROM NEW.tag_id) THEN
+        CALL update_tag_article_count(OLD.tag_id);
+        CALL update_tag_article_count(NEW.tag_id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_update_article_tag_count
+AFTER DELETE OR INSERT OR UPDATE ON article_tag
+FOR EACH ROW EXECUTE FUNCTION article_tag_inserted_or_updated();

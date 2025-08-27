@@ -37,7 +37,9 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 	}
 
 	public void ingestDataSource(ArticleSource articleSource) {
-		log.info("Starting ingestion from {}", articleSource.getUrl());
+		log.info("Ingesting from {}", articleSource.getUrl());
+		articleSource.setProcessingState(ProcessingState.Processing);
+		this.articleSourceService.set(articleSource);
 
 		ArticleDataSource articleDataSource = this.articleDataSourceContainer.get(articleSource.getImportType());
 
@@ -87,6 +89,7 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			this.articleService.save(article);
 		}
 
+		articleSource.setProcessingState(ProcessingState.Waiting);
 		articleSource.setLastImported(Instant.now());
 		this.articleSourceService.set(articleSource);
 
@@ -118,6 +121,10 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 
 	@Override
 	public void processItem(ArticleSource ars) {
-		this.ingestDataSource(ars);
+		try {
+			this.ingestDataSource(ars);
+		} catch (Exception e) {
+			log.error("Ingestion of source {} failed:", ars.getUrl(), e);
+		}
 	}
 }

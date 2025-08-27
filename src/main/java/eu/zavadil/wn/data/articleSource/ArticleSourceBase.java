@@ -2,6 +2,7 @@ package eu.zavadil.wn.data.articleSource;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.ProcessingState;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,9 @@ import java.time.Instant;
 @Data
 @MappedSuperclass
 public class ArticleSourceBase extends EntityWithNameBase {
+
+	@JdbcType(PostgreSQLEnumJdbcType.class)
+	private ProcessingState processingState = ProcessingState.NotReady;
 
 	private static final int URL_SIZE = 255;
 

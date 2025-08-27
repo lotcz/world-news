@@ -1,6 +1,5 @@
 package eu.zavadil.wn.data.tag;
 
-import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -18,7 +17,7 @@ import lombok.EqualsAndHashCode;
 		@Index(columnList = "synonymOfId"),
 	}
 )
-public class TagStub extends EntityWithNameBase {
+public class TagStub extends TagBase {
 
 	@Column(name = "synonym_of_id")
 	private Integer synonymOfId;

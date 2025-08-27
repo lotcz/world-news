@@ -86,7 +86,7 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 			try {
 				body = ArticleScraper.scrape(entry.getLink());
 			} catch (Exception e) {
-				log.error("Failed downloading article body from {}", entry.getLink(), e);
+				log.error("Failed downloading article body from {}: {}", entry.getLink(), e.getMessage());
 			}
 		}
 

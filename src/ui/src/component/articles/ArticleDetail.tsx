@@ -13,6 +13,7 @@ import RefreshIconButton from "../general/RefreshIconButton";
 import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
+import ArticleTagsList from "./ArticleTagsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -169,6 +170,16 @@ export default function ArticleDetail() {
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
 							<TopicInfo topicId={data.topicId}/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Tags:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							{
+								data.id && <ArticleTagsList articleId={data.id}/>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">

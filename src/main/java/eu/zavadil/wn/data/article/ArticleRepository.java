@@ -16,6 +16,8 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			select a
 			from Article a
 			where lower(a.title) LIKE %:search%
+				or lower(a.originalUrl) LIKE %:search%
+				or lower(a.originalUid) LIKE %:search%
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 
@@ -24,6 +26,14 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	Page<Article> findAllByTopicId(@Param("topicId") int topicId, PageRequest pr);
 
 	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, PageRequest pr);
+
+	@Query("""
+			select a
+			from ArticleTagStub ats
+			join Article a on (a.id = ats.id.articleId)
+			where ats.id.tagId = :tagId
+		""")
+	Page<Article> loadByTagId(int tagId, PageRequest pr);
 
 	Optional<Article> findFirstByOriginalUrl(String originalUrl);
 

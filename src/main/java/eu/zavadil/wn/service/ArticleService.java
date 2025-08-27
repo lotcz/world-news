@@ -56,6 +56,10 @@ public class ArticleService {
 		return this.articleRepository.findAllBySourceId(sourceId, pr);
 	}
 
+	public Page<Article> loadByTagId(int tagId, PageRequest pr) {
+		return this.articleRepository.loadByTagId(tagId, pr);
+	}
+
 	public ArticleStub loadById(int id) {
 		return this.articleStubRepository.findById(id).orElse(null);
 	}
@@ -65,9 +69,11 @@ public class ArticleService {
 	}
 
 	public Article loadByOriginalUrlOrUid(String originalUrl, String originalUid) {
-		return this.articleRepository.findFirstByOriginalUrl(originalUrl).orElseGet(
-			() -> StringUtils.isBlank(originalUid) ? null
-				: this.articleRepository.findFirstByOriginalUid(originalUid).orElse(null)
+		String url = Article.sanitizeUrl(originalUrl);
+		String uid = Article.sanitizeUid(originalUid);
+		return this.articleRepository.findFirstByOriginalUrl(url).orElseGet(
+			() -> StringUtils.isBlank(uid) ? null
+				: this.articleRepository.findFirstByOriginalUid(uid).orElse(null)
 		);
 	}
 

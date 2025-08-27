@@ -9,6 +9,7 @@ import {Topic, TopicStub} from "../types/Topic";
 import {EnumerationsClient} from "./EnumerationsClient";
 import {ArticlesClient} from "./ArticlesClient";
 import {AiLogClient} from "./AiLogClient";
+import {TagsClient} from "./TagsClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -22,6 +23,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public topics: EntityClientWithStub<Topic, TopicStub>;
 
+	public tags: TagsClient;
+
 	public articles: ArticlesClient;
 
 	public aiLog: AiLogClient;
@@ -34,6 +37,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.realms = new LookupClient<Realm>(this, 'realms');
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
 		this.topics = new EntityClientWithStub<Topic, TopicStub>(this, 'topics');
+		this.tags = new TagsClient(this);
 		this.articles = new ArticlesClient(this);
 		this.aiLog = new AiLogClient(this);
 	}

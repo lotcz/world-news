@@ -48,6 +48,7 @@ create table article_source (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    processing_state tp_processing_state not null default 'NotReady',
     name varchar(255),
     import_type tp_import_type not null,
     last_imported timestamp(6) with time zone,
@@ -89,6 +90,7 @@ create table tag (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255) not null,
+    article_count int not null default 0,
     synonym_of_id integer
         constraint fkqv68mmko7bkuu53wnoo57ou52
         references tag
@@ -174,6 +176,10 @@ create table article_tag (
         on delete cascade,
     primary key (article_id, tag_id)
 );
+
+create index idx_article_tag_tag_id
+    on article_tag (tag_id);
+
 
 create table image (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

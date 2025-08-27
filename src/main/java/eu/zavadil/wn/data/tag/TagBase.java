@@ -1,6 +1,7 @@
 package eu.zavadil.wn.data.tag;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,4 +11,7 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public class TagBase extends EntityWithNameBase {
 
+	@Column(updatable = false, insertable = false)
+	private int articleCount = 0;
+	
 }

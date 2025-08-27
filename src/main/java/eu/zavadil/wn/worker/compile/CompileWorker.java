@@ -47,6 +47,9 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	);
 
 	public void compile(Topic topic) {
+		topic.setProcessingState(ProcessingState.Processing);
+		this.topicService.save(topic);
+
 		List<Article> articles = this.articleService.loadAllByTopicId(topic.getId());
 
 		Article compiled = articles.stream()

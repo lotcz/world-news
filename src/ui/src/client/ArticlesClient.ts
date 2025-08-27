@@ -15,4 +15,7 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 		return this.client.getJson(`${this.name}/by-source/${sourceId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
+	loadByTag(tagId: number, pr: PagingRequest): Promise<Page<Article>> {
+		return this.client.getJson(`${this.name}/by-tag/${tagId}`, PagingUtil.pagingRequestToQueryParams(pr));
+	}
 }

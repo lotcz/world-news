@@ -3,6 +3,7 @@ import {Language} from "./Language";
 import {Realm} from "./Realm";
 
 export type ArticleSourceBase = EntityWithName & {
+	processingState?: string;
 	url?: string;
 	lastImported?: Date | null;
 	importType: string;

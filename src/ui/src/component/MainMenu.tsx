@@ -34,6 +34,9 @@ function MainMenu() {
 					<NavLink to="/languages">Languages</NavLink>
 				</div>
 				<div>
+					<NavLink to="/tags">Tags</NavLink>
+				</div>
+				<div>
 					<NavLink to="/realms">Realms</NavLink>
 				</div>
 				<div className="text-nowrap">
