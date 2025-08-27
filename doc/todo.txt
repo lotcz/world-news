@@ -1,5 +1,4 @@
-- transform tags, define synonyms, search by tags
-- UI - temporary error messages
+
 - integrate AI log (save operation and entity type/ID)
 - add "test drive" - search similar articles listing similarity/distance
 - assign topics to realms
@@ -24,6 +23,7 @@
   - https://www.nbcnews.com/video/epstein-accuser-s-family-blasts-ghislaine-maxwell-testimony-release-245668933770
   - <media:content, <media:player
 
+- UI - temporary error messages
 - sources with download problems (maybe only use summary?)
   - require script or cookie (ad warning)
     - https://servis.idnes.cz/rss.aspx?c=zpravodaj

@@ -11,4 +11,8 @@ export class TagsClient extends EntityClientWithStub<Tag, TagStub> {
 		return this.client.getJson(`${this.name}/by-article/${articleId}`);
 	}
 
+	loadSynonyms(tagId: number): Promise<Array<Tag>> {
+		return this.client.getJson(`${this.name}/synonyms-of/${tagId}`);
+	}
+
 }

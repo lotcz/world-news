@@ -172,7 +172,7 @@ export default function ArticleDetail() {
 							<TopicInfo topicId={data.topicId}/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
+					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Tags:</Form.Label>
 						</Col>

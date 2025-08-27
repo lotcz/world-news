@@ -5,11 +5,11 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Tag} from "../../types/Tag";
 
-export type ArticleTagsListProps = {
-	articleId: number;
+export type TagSynonymsListProps = {
+	tagId: number;
 }
 
-function ArticleTagsList({articleId}: ArticleTagsListProps) {
+function TagSynonymsList({tagId}: TagSynonymsListProps) {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [tags, setTags] = useState<Array<Tag> | null>(null);
@@ -18,24 +18,24 @@ function ArticleTagsList({articleId}: ArticleTagsListProps) {
 		() => {
 			restClient
 				.tags
-				.loadByArticle(articleId)
+				.loadSynonyms(tagId)
 				.then(setTags)
 				.catch((e: Error) => {
 					setTags(null);
 					userAlerts.err(e);
 				});
 		},
-		[articleId, restClient, userAlerts]
+		[tagId, restClient, userAlerts]
 	);
 
-	useEffect(load, [articleId]);
+	useEffect(load, [tagId]);
 
 	return (
-		<div className="d-flex gap-2 align-items-center flex-wrap">
+		<div className="d-flex gap-2 align-items-center flex-wrapp">
 			{
-				(tags === null) ? <Spinner/>
+				(tags === null) ? <Spinner size="sm"/>
 					: tags.map(
-						(t) => <div>
+						(t) => <div className="text-nowrap">
 							<Link to={`/tags/detail/${t.id}`}>{t.name}</Link>
 							&nbsp;({t.articleCount})
 						</div>
@@ -46,4 +46,4 @@ function ArticleTagsList({articleId}: ArticleTagsListProps) {
 	);
 }
 
-export default ArticleTagsList;
+export default TagSynonymsList;

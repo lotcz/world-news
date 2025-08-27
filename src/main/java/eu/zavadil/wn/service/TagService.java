@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,12 +26,21 @@ public class TagService {
 
 	@Transactional
 	public Tag save(Tag tag) {
+		if (tag.getSynonymOf() != null) {
+			Tag synonym = this.desynonymize(tag.getSynonymOf(), List.of(tag.getId()));
+			tag.setSynonymOf(synonym);
+		}
 		return this.tagRepository.save(tag);
 	}
 
 	@Transactional
-	public TagStub save(TagStub tag) {
-		return this.tagStubRepository.save(tag);
+	public TagStub save(TagStub stub) {
+		if (stub.getId() != null && stub.getSynonymOfId() != null) {
+			Tag synonymOf = this.tagRepository.findById(stub.getSynonymOfId()).orElseThrow();
+			Tag synonym = this.desynonymize(synonymOf, List.of(stub.getId()));
+			stub.setSynonymOfId(synonym.getId());
+		}
+		return this.tagStubRepository.save(stub);
 	}
 
 	public TagStub loadById(int id) {
@@ -50,13 +60,25 @@ public class TagService {
 		return this.tagRepository.loadByArticleId(articleId);
 	}
 
+	public List<Tag> loadSynonyms(int tagId) {
+		return this.tagRepository.findAllBySynonymOfId(tagId);
+	}
+
+	private Tag desynonymize(Tag tag, List<Integer> inChain) {
+		if (inChain.contains(tag.getId())) throw new RuntimeException("Tag synonyms form a circle!");
+		if (tag.getSynonymOf() == null) return tag;
+		List<Integer> nextChain = new ArrayList<>(inChain);
+		nextChain.add(tag.getId());
+		return this.desynonymize(tag.getSynonymOf(), nextChain);
+	}
+
 	/**
 	 * If the tag is a synonym of another one, return the main one.
 	 */
 	public Tag desynonymize(Tag tag) {
 		if (tag == null) return null;
-		if (tag.getSynonymOf() == null) return tag;
-		return this.desynonymize(tag.getSynonymOf());
+		if (tag.getId() == null || tag.getSynonymOf() == null) return tag;
+		return this.desynonymize(tag.getSynonymOf(), List.of(tag.getId()));
 	}
 
 	@Transactional

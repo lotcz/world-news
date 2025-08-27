@@ -1,6 +1,6 @@
 import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
-import {useNavigate, useParams} from "react-router";
-import {useCallback, useContext, useEffect, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -8,6 +8,9 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {TagStub} from "../../types/Tag";
 import TagArticlesList from "./TagArticlesList";
+import TagSelect from "./TagSelect";
+import {BsBoxArrowUpRight} from "react-icons/bs";
+import TagSynonymsList from "./TagSynonymsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -39,7 +42,7 @@ export default function TagDetail() {
 		[id, restClient, userAlerts]
 	);
 
-	useEffect(reload, []);
+	useEffect(reload, [id]);
 
 	const saveData = useCallback(
 		() => {
@@ -104,10 +107,29 @@ export default function TagDetail() {
 					</Row>
 					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Synonym:</Form.Label>
+							<Form.Label>Synonym Of:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<TagSelect
+								tagId={data.synonymOfId}
+								onChange={(tagId) => {
+									data.synonymOfId = tagId;
+									setData({...data});
+									setChanged(true);
+								}}/>
+							{
+								data.synonymOfId && <Link to={`/tags/detail/${data.synonymOfId}`}><BsBoxArrowUpRight/></Link>
+							}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Synonyms:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-
+							{
+								data.id && <TagSynonymsList tagId={data.id}/>
+							}
 						</Col>
 					</Row>
 				</Stack>

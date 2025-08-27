@@ -29,8 +29,8 @@ public interface ArticleRepository extends EntityRepository<Article> {
 
 	@Query("""
 			select a
-			from ArticleTagStub ats
-			join Article a on (a.id = ats.id.articleId)
+			from Article a
+			join ArticleTagStub ats on (a.id = ats.id.articleId)
 			where ats.id.tagId = :tagId
 		""")
 	Page<Article> loadByTagId(int tagId, PageRequest pr);

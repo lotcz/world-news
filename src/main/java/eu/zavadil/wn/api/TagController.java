@@ -35,6 +35,11 @@ public class TagController {
 		return this.tagService.loadByArticleId(articleId);
 	}
 
+	@GetMapping("synonyms-of/{tagId}")
+	public List<Tag> loadSynonyms(@PathVariable int tagId) {
+		return this.tagService.loadSynonyms(tagId);
+	}
+
 	@PostMapping("")
 	public TagStub insert(@RequestBody TagStub document) {
 		document.setId(null);
