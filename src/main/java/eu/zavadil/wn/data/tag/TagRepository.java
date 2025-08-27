@@ -32,4 +32,5 @@ public interface TagRepository extends EntityRepository<Tag> {
 
 	List<Tag> findAllBySynonymOfId(int tagId);
 
+	Page<Tag> findAllBySynonymOfNotNullAndArticleCountGreaterThan(int minArticleCount, PageRequest pr);
 }

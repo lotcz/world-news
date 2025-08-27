@@ -13,6 +13,7 @@ const HEADER = [
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
+	{name: 'topic.id', label: 'Topic ID'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
@@ -122,6 +123,7 @@ function ArticlesList() {
 													<td>{item.source?.name}</td>
 													<td>{item.processingState}</td>
 													<td>{item.title}</td>
+													<td>{item.topic?.id}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 												</tr>

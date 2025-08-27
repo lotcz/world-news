@@ -90,7 +90,7 @@ public class TagService {
 		return this.save(tag);
 	}
 
-	List<Tag> findSynonyms(Tag tag) {
-		return this.tagRepository.findAllBySynonymOf(tag);
+	public Page<Tag> loadSynonymsForCleanup() {
+		return this.tagRepository.findAllBySynonymOfNotNullAndArticleCountGreaterThan(0, PageRequest.of(0, 10));
 	}
 }
