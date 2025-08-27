@@ -1,6 +1,8 @@
 package eu.zavadil.wn.worker.compile;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
+import eu.zavadil.wn.data.AiOperation;
+import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.topic.Topic;
@@ -73,7 +75,13 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 			}
 		}
 
-		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
+		String response = this.aiAssistantService.ask(
+			this.systemPrompt,
+			userPrompt,
+			AiOperation.CompileArticles,
+			EntityType.Topic,
+			topic.getId()
+		);
 		compiled.setBody(response);
 
 		compiled.setTitle(null);

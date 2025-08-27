@@ -1,8 +1,14 @@
 create type tp_entity_type AS ENUM ('Article', 'Topic');
 create cast	(varchar AS tp_entity_type) WITH INOUT AS IMPLICIT;
 
-create type tp_operation AS ENUM ('CreateTitle', 'CreateSummary', 'MergeArticles');
+alter type tp_entity_type add value IF NOT EXISTS 'Realm';
+
+create type tp_operation AS ENUM ('CreateTitle', 'CreateSummary');
 create cast	(varchar AS tp_operation) WITH INOUT AS IMPLICIT;
+
+alter type tp_operation add value IF NOT EXISTS 'DetectTags';
+alter type tp_operation add value IF NOT EXISTS 'CompileArticles';
+alter type tp_operation add value IF NOT EXISTS 'DetectRealm';
 
 create table ai_log (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

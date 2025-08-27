@@ -3,6 +3,8 @@ package eu.zavadil.wn.worker.annotate;
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.data.AiOperation;
+import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
@@ -84,7 +86,13 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		List<String> userPrompt = new ArrayList<>(this.createTitleUserPrompt);
 		userPrompt.add(article.getBody());
 
-		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
+		String response = this.aiAssistantService.ask(
+			this.systemPrompt,
+			userPrompt,
+			AiOperation.CreateTitle,
+			EntityType.Article,
+			article.getId()
+		);
 		article.setTitle(this.cleanResponse(response));
 	}
 
@@ -107,7 +115,13 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		userPrompt.add(article.getTitle());
 		userPrompt.add(article.getBody());
 
-		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
+		String response = this.aiAssistantService.ask(
+			this.systemPrompt,
+			userPrompt,
+			AiOperation.CreateSummary,
+			EntityType.Article,
+			article.getId()
+		);
 		article.setSummary(this.cleanResponse(response));
 	}
 
@@ -130,7 +144,13 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		userPrompt.add(article.getTitle());
 		userPrompt.add(article.getSummary());
 
-		String response = this.aiAssistantService.ask(this.systemPrompt, userPrompt);
+		String response = this.aiAssistantService.ask(
+			this.systemPrompt,
+			userPrompt,
+			AiOperation.DetectTags,
+			EntityType.Article,
+			article.getId()
+		);
 		List<String> words = StringUtils.safeSplit(response, ",");
 
 		for (String raw : words) {

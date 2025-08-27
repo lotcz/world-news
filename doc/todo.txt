@@ -1,5 +1,3 @@
-
-- integrate AI log (save operation and entity type/ID)
 - add "test drive" - search similar articles listing similarity/distance
 - assign topics to realms
 - multilanguage (english)
@@ -7,6 +5,7 @@
 - define filter texts and elements on article source level
 - full-text search in summary and body
 - unique ID for internal articles
+- integrate embeddings into AI log? (we at least need to save costs)
 
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
@@ -66,6 +65,8 @@ Realms and websites
   - Weird stuff and Pecularities
     - Drunken stories (opilecké historky)
     - absolutegarbage.online (AI generated nonsense and satire)
+    - Interesting stories
+    - Interesting history
   - Crime
   - Sci-fi
     - Star Trek

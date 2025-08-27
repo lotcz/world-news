@@ -8,8 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
@@ -23,6 +22,9 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 		@Index(columnList = "operation, createdOn")
 	}
 )
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AiLog extends EntityBase {
 
 	@Column(columnDefinition = "TEXT")
@@ -38,7 +40,7 @@ public class AiLog extends EntityBase {
 	@Column(length = MODEL_SIZE)
 	@Size(max = MODEL_SIZE)
 	private String model;
-	
+
 	@Column(columnDefinition = "TEXT")
 	private String response;
 

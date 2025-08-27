@@ -1,6 +1,9 @@
 package eu.zavadil.wn.service;
 
 import eu.zavadil.wn.ai.assistant.AiAssistantParams;
+import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
+import eu.zavadil.wn.data.AiOperation;
+import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.aiLog.AiLog;
 import eu.zavadil.wn.data.aiLog.AiLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,23 +28,24 @@ public class AiLogService {
 		return this.aiLogRepository.save(log);
 	}
 
-	public AiLog log(String systemPrompt, String userPrompt, double temperature, String model, String response) {
-		AiLog log = new AiLog();
-		log.setSystemPrompt(systemPrompt);
-		log.setUserPrompt(userPrompt);
-		log.setTemperature(temperature);
-		log.setResponse(response);
-		log.setModel(model);
-		return this.log(log);
-	}
-
-	public AiLog log(AiAssistantParams params, String response) {
+	public AiLog log(
+		AiAssistantParams params,
+		AiAssistantResponse response,
+		AiOperation operation,
+		EntityType entityType,
+		Integer entityId
+	) {
 		return this.log(
-			params.getSystemPromptString(),
-			params.getUserPromptString(),
-			params.getTemperature(),
-			params.getModel(),
-			response
+			AiLog.builder()
+				.systemPrompt(params.getSystemPromptString())
+				.userPrompt(params.getUserPromptString())
+				.temperature(params.getTemperature())
+				.model(params.getModel())
+				.response(response.getResponse())
+				.operation(operation)
+				.entityType(entityType)
+				.entityId(entityId)
+				.build()
 		);
 	}
 }
