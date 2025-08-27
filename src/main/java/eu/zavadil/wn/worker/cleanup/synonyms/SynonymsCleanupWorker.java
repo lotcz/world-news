@@ -38,7 +38,6 @@ public class SynonymsCleanupWorker extends SmartQueueProcessorBase<Tag> implemen
 			article.getTags().add(synonym);
 			this.articleService.save(article);
 		}
-
 	}
 
 	@Override

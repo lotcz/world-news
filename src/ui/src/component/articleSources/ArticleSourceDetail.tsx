@@ -11,6 +11,8 @@ import ImportTypeSelect from "./ImportTypeSelect";
 import {LanguageSelect} from "../languages/LanguageSelect";
 import {BsBoxArrowUpRight} from "react-icons/bs";
 import ArticleSourceArticlesList from "./ArticleSourceArticlesList";
+import RefreshIconButton from "../general/RefreshIconButton";
+import ProcessingStateSelect from "../general/ProcessingStateSelect";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -26,7 +28,7 @@ export default function ArticleSourceDetail() {
 	const [data, setData] = useState<ArticleSource>();
 	const [changed, setChanged] = useState<boolean>(false);
 
-	useEffect(
+	const reload = useCallback(
 		() => {
 			if (!id) {
 				setData({
@@ -38,12 +40,15 @@ export default function ArticleSourceDetail() {
 				});
 				return;
 			}
+			setData(undefined);
 			restClient.articleSources.loadSingle(Number(id))
 				.then(setData)
 				.catch((e: Error) => userAlerts.err(e))
 		},
-		[id]
+		[id, restClient, userAlerts]
 	);
+
+	useEffect(reload, [id]);
 
 	const saveData = useCallback(
 		() => {
@@ -106,7 +111,8 @@ export default function ArticleSourceDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate('/article-sources')}>Back</Button>
+					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<RefreshIconButton onClick={reload}/>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -189,6 +195,23 @@ export default function ArticleSourceDetail() {
 								onChange={
 									(e) => {
 										data.language = e;
+										setData({...data});
+										setChanged(true);
+									}
+								}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>State:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<ProcessingStateSelect
+								value={data.processingState}
+								onChange={
+									(e) => {
+										data.processingState = StringUtil.getNonEmpty(e);
 										setData({...data});
 										setChanged(true);
 									}

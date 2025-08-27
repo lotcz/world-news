@@ -1,11 +1,13 @@
 - add "test drive" - search similar articles listing similarity/distance
 - assign topics to realms
 - multilanguage (english)
-- move prompts and model to language table
+  - move prompts and model to language table
+  - think about introducing virtual editor to do all the AI work
 - define filter texts and elements on article source level
 - full-text search in summary and body
 - unique ID for internal articles
 - integrate embeddings into AI log? (we at least need to save costs)
+- subscribe to newsletters and then import articles
 
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
@@ -23,6 +25,7 @@
   - <media:content, <media:player
 
 - UI - temporary error messages
+
 - sources with download problems (maybe only use summary?)
   - require script or cookie (ad warning)
     - https://servis.idnes.cz/rss.aspx?c=zpravodaj
@@ -39,6 +42,7 @@ Revenue sources
 Realms and websites
 
 "daily news" search on YT is almost empty
+https://pravesestalo.cz/ is free
 
 - Politics
   - Česká politika

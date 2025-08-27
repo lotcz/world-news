@@ -237,6 +237,16 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	}
 
 	@Override
+	public void onBeforeProcessing() {
+		log.info("Starting annotation...");
+	}
+
+	@Override
+	public void onAfterProcessing() {
+		log.info("Annotation finished");
+	}
+
+	@Override
 	public void processItem(Article a) {
 		try {
 			this.annotateArticle(a);

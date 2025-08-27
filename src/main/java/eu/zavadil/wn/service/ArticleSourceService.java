@@ -5,13 +5,17 @@ import eu.zavadil.java.spring.common.entity.cache.RepositoryLookupTableCache;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.articleSource.ArticleSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -57,4 +61,13 @@ public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSour
 		return this.internalArticleSource.get();
 	}
 
+	public Page<ArticleSource> loadStuckSources() {
+		Instant maxImported = Instant.now().minus(Duration.ofMinutes(10));
+		List<ArticleSource> filtered = this.all().stream().filter(
+			(ars) -> ars.getProcessingState().equals(ProcessingState.Processing)
+				&& ars.getLastImported() != null && ars.getLastImported().isBefore(maxImported)
+		).toList();
+
+		return PagingUtils.getPage(filtered, PageRequest.of(0, 10, Sort.by("lastImported")));
+	}
 }
