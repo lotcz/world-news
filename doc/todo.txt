@@ -16,7 +16,7 @@
 
 Ingestion
 
-- unique ID for internal articles (http://)
+- split ingestion to url gathering and body download so body can be only downloaded when article is updated
 - add option to not download body and only keep summary (NYT)
 - mimic normal traffic
   - define min delay on article source to prevent error 429
@@ -30,6 +30,7 @@ Ingestion
 
 - sources with download problems (maybe only use summary?)
   - require script or cookie (ad warning)
+    - https://servis.lidovky.cz/rss.aspx
     - https://servis.idnes.cz/rss.aspx?c=zpravodaj
     - https://www.antiyoutuber.cz/rss
 

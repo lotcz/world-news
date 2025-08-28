@@ -101,7 +101,9 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	@Override
 	public void onAfterProcessing() {
 		// reset article source cache so article counts can be reloaded
-		this.articleSourceService.reset();
+		if (this.getStats().getProcessed() > 0) {
+			this.articleSourceService.reset();
+		}
 		//log.info("Compilation finished");
 	}
 
