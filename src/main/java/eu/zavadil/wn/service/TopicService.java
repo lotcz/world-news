@@ -100,7 +100,7 @@ public class TopicService {
 	}
 
 	public Topic findMostSimilar(Embedding embedding) {
-		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 0.2F, 1);
+		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 0.26F, 1);
 		if (similar.isEmpty()) return null;
 		return similar.get(0).getEntity();
 	}

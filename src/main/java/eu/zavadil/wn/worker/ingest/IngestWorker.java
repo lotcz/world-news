@@ -69,12 +69,9 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			} else {
 				boolean titleIdentical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
 					|| StringUtils.isBlank(articleData.getTitle());
-				boolean summaryIdentical = StringUtils.safeEquals(article.getSummary(), articleData.getSummary())
-					|| StringUtils.isBlank(articleData.getSummary());
 				boolean bodyIdentical = StringUtils.safeEquals(article.getBody(), articleData.getBody())
 					|| StringUtils.isBlank(articleData.getBody());
-				boolean identical = titleIdentical && summaryIdentical && bodyIdentical;
-				if (identical) {
+				if (titleIdentical && bodyIdentical) {
 					continue;
 				}
 				updatedArticles++;
@@ -86,10 +83,11 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 
-			if (StringUtils.notBlank(articleData.getSummary())) {
-				article.setSummary(articleData.getSummary());
-			}
-			
+			// dont import summary, generate our own
+			//if (StringUtils.notBlank(articleData.getSummary())) {
+			//	article.setSummary(articleData.getSummary());
+			//}
+
 			if (StringUtils.notBlank(articleData.getBody())) {
 				article.setBody(articleData.getBody());
 			}
