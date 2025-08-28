@@ -37,6 +37,17 @@ public abstract class EmbeddingRepositoryBase {
 		return (rs, rowNum) -> new EmbeddingDistance(rs.getFloat("distance"), rs.getInt(idName));
 	}
 
+	public Embedding loadEmbedding(int entityId) {
+		String sql = String.format(
+			"SELECT embedding FROM %s WHERE %s = ?",
+			this.getTableName(),
+			this.getIdName()
+		);
+		List<Embedding> results = jdbcTemplate.query(sql, this.embeddingRowMapper, entityId);
+		if (results.isEmpty()) return null;
+		return results.get(0);
+	}
+
 	public Embedding loadEmbedding(String text) {
 		String sql = String.format(
 			"SELECT embedding FROM %s WHERE hash = ?",

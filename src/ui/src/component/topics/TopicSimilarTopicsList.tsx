@@ -3,38 +3,38 @@ import {Spinner, Table} from 'react-bootstrap';
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {ArticleEmbeddingDistance} from "../../types/EmbeddingDistance";
+import {TopicEmbeddingDistance} from "../../types/EmbeddingDistance";
 
-export type ArticleSimilarArticlesListProps = {
-	articleId: number;
+export type TopicSimilarTopicsListProps = {
+	topicId: number;
 }
 
-function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps) {
+function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Array<ArticleEmbeddingDistance>>();
+	const [data, setData] = useState<Array<TopicEmbeddingDistance>>();
 
-	const navigateToDetail = (d: ArticleEmbeddingDistance) => {
+	const navigateToDetail = (d: TopicEmbeddingDistance) => {
 		console.log(d.entityId);
-		navigate(`/articles/detail/${d.entityId}`);
+		navigate(`/topics/detail/${d.entityId}`);
 	}
 
 	const load = useCallback(
 		() => {
 			restClient
-				.articles
-				.loadSimilarToArticle(articleId)
+				.topics
+				.loadSimilarToTopic(topicId)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(undefined);
 					userAlerts.err(e);
 				});
 		},
-		[articleId, restClient, userAlerts]
+		[topicId, restClient, userAlerts]
 	);
 
-	useEffect(load, [articleId]);
+	useEffect(load, [topicId]);
 
 	if (!data) return <Spinner/>;
 
@@ -48,8 +48,7 @@ function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps
 					<thead>
 					<tr>
 						<th>Distance</th>
-						<th>Source</th>
-						<th>Title</th>
+						<th>Name</th>
 						<th>Summary</th>
 					</tr>
 					</thead>
@@ -62,9 +61,8 @@ function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps
 								return (
 									<tr key={index} role="button" onClick={() => navigateToDetail(ed)}>
 										<td>{ed.distance}</td>
-										<td>{ed.entity.source?.name}</td>
-										<td>{ed.entity.title}</td>
-										<td>{ed.entity.summary}</td>
+										<td>{ed.entity?.name}</td>
+										<td>{ed.entity?.summary}</td>
 									</tr>
 								);
 							})
@@ -76,4 +74,4 @@ function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps
 	);
 }
 
-export default ArticleSimilarArticlesList;
+export default TopicsSimilarTopicsList;

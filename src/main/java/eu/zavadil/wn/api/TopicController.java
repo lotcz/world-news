@@ -55,12 +55,19 @@ public class TopicController {
 		this.topicService.deleteById(id);
 	}
 
-	@GetMapping("similar/{id}")
-	public List<TopicEmbeddingDistance> loadSimilar(
-		@PathVariable int id,
+	@GetMapping("similar-to-topic/{topicId}")
+	public List<TopicEmbeddingDistance> loadSimilarToTopic(
+		@PathVariable int topicId,
 		@RequestParam(defaultValue = "10") int size
 	) {
-		return this.topicService.findSimilar(id, size);
+		return this.topicService.findSimilar(topicId, size);
 	}
 
+	@GetMapping("similar-to-article/{articleId}")
+	public List<TopicEmbeddingDistance> loadSimilarToArticle(
+		@PathVariable int articleId,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return this.topicService.findSimilarToArticle(articleId, size);
+	}
 }

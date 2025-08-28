@@ -4,6 +4,7 @@ import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
@@ -31,12 +32,19 @@ public class TopicService {
 	@Autowired
 	TopicEmbeddingsService topicEmbeddingsService;
 
-	private Embedding updateEmbedding(Topic topic) {
+	@Autowired
+	ArticleEmbeddingsService articleEmbeddingsService;
+
+	public Embedding updateEmbedding(Topic topic) {
 		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
 	}
 
 	private Embedding updateEmbedding(TopicStub topic) {
 		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
+	}
+
+	public Embedding loadEmbedding(int topicId) {
+		return this.topicEmbeddingsService.loadEmbedding(topicId);
 	}
 
 	@Transactional
@@ -84,6 +92,11 @@ public class TopicService {
 
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
 		return this.findSimilar(this.topicRepository.findById(topicId).orElseThrow(), limit);
+	}
+
+	public List<TopicEmbeddingDistance> findSimilarToArticle(int articleId, int limit) {
+		Embedding embedding = this.articleEmbeddingsService.loadEmbedding(articleId);
+		return this.findSimilar(embedding, limit);
 	}
 
 	public Topic findMostSimilar(Embedding embedding) {

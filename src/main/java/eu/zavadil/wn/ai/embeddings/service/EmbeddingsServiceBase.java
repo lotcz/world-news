@@ -45,6 +45,10 @@ public class EmbeddingsServiceBase {
 		return embedding;
 	}
 
+	public Embedding loadEmbedding(int entityId) {
+		return this.embeddingRepository.loadEmbedding(entityId);
+	}
+
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, float maxDistance, int limit) {
 		return this.embeddingRepository.searchSimilar(embedding, maxDistance, limit);
 	}

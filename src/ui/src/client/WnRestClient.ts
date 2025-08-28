@@ -1,15 +1,15 @@
 import {createContext} from "react";
 import conf from "../config/conf.json";
-import {EntityClientWithStub, LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
+import {LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
 import {Language} from "../types/Language";
 import {ClientStats, WnStats} from "../types/Stats";
 import {Realm} from "../types/Realm";
 import {ArticleSource} from "../types/ArticleSource";
-import {Topic, TopicStub} from "../types/Topic";
 import {EnumerationsClient} from "./EnumerationsClient";
 import {ArticlesClient} from "./ArticlesClient";
 import {AiLogClient} from "./AiLogClient";
 import {TagsClient} from "./TagsClient";
+import {TopicsClient} from "./TopicsClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -21,7 +21,7 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public articleSources: LookupClient<ArticleSource>;
 
-	public topics: EntityClientWithStub<Topic, TopicStub>;
+	public topics: TopicsClient;
 
 	public tags: TagsClient;
 
@@ -36,7 +36,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.languages = new LookupClient<Language>(this, 'languages');
 		this.realms = new LookupClient<Realm>(this, 'realms');
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
-		this.topics = new EntityClientWithStub<Topic, TopicStub>(this, 'topics');
+		this.topics = new TopicsClient(this);
 		this.tags = new TagsClient(this);
 		this.articles = new ArticlesClient(this);
 		this.aiLog = new AiLogClient(this);

@@ -5,11 +5,11 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleEmbeddingDistance} from "../../types/EmbeddingDistance";
 
-export type ArticleSimilarArticlesListProps = {
-	articleId: number;
+export type TopicSimilarArticlesListProps = {
+	topicId: number;
 }
 
-function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps) {
+function TopicSimilarArticlesList({topicId}: TopicSimilarArticlesListProps) {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -24,17 +24,17 @@ function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps
 		() => {
 			restClient
 				.articles
-				.loadSimilarToArticle(articleId)
+				.loadSimilarToTopic(topicId)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(undefined);
 					userAlerts.err(e);
 				});
 		},
-		[articleId, restClient, userAlerts]
+		[topicId, restClient, userAlerts]
 	);
 
-	useEffect(load, [articleId]);
+	useEffect(load, [topicId]);
 
 	if (!data) return <Spinner/>;
 
@@ -76,4 +76,4 @@ function ArticleSimilarArticlesList({articleId}: ArticleSimilarArticlesListProps
 	);
 }
 
-export default ArticleSimilarArticlesList;
+export default TopicSimilarArticlesList;

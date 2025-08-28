@@ -11,6 +11,8 @@ import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
 import TopicAiLogList from "./TopicAiLogList";
+import TopicSimilarTopicsList from "./TopicSimilarTopicsList";
+import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -170,6 +172,20 @@ export default function TopicDetail() {
 					<div className="px-3">
 						{
 							data.id && <TopicAiLogList topicId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab title="Similar Topics" eventKey="similarTopics">
+					<div className="px-3">
+						{
+							data.id && <TopicSimilarTopicsList topicId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab title="Similar Articles" eventKey="similarArticles">
+					<div className="px-3">
+						{
+							data.id && <TopicSimilarArticlesList topicId={data.id}/>
 						}
 					</div>
 				</Tab>

@@ -20,11 +20,12 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 		return this.client.getJson(`${this.name}/by-tag/${tagId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
-	loadSimilarArticles(articleId: number): Promise<Array<ArticleEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar/${articleId}`);
+	loadSimilarToArticle(articleId: number): Promise<Array<ArticleEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-article/${articleId}`);
 	}
 
-	loadSimilarTopics(articleId: number): Promise<Array<TopicEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar/topic/${articleId}`);
+	loadSimilarToTopic(topicId: number): Promise<Array<ArticleEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`);
 	}
+
 }

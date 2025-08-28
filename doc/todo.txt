@@ -1,4 +1,3 @@
-- add "test drive" - search similar articles listing similarity/distance
 - assign topics to realms
 - multilanguage (english)
   - move prompts and model to language table

@@ -16,6 +16,7 @@ import {LanguageIdSelect} from "../languages/LanguageSelect";
 import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
+import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -292,7 +293,9 @@ export default function ArticleDetail() {
 				</Tab>
 				<Tab eventKey="similarTopics" title="Similar Topics">
 					<div className="p-3">
-
+						{
+							data.id && <ArticleSimilarTopicsList articleId={data.id}/>
+						}
 					</div>
 				</Tab>
 			</Tabs>
