@@ -2,15 +2,15 @@ import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
-import {NumberUtil} from "zavadil-ts-common";
+import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Language} from "../../types/Language";
 
 const COL_1_MD = 3;
-const COL_2_MD = 5;
+const COL_2_MD = 7;
 const COL_1_LG = 1;
-const COL_2_LG = 3;
+const COL_2_LG = 5;
 
 export default function LanguageDetail() {
 	const {id} = useParams();
@@ -106,6 +106,91 @@ export default function LanguageDetail() {
 								value={data.code}
 								onChange={(e) => {
 									data.code = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>System Prompt:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.aiSystemPrompt)}
+								onChange={(e) => {
+									data.aiSystemPrompt = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Create Title Prompt:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.aiUserPromptCreateTitle)}
+								onChange={(e) => {
+									data.aiUserPromptCreateTitle = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Create Summary Prompt:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.aiUserPromptCreateSummary)}
+								onChange={(e) => {
+									data.aiUserPromptCreateSummary = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Detect Tags Prompt:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.aiUserPromptDetectTags)}
+								onChange={(e) => {
+									data.aiUserPromptDetectTags = e.target.value;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Compile Articles Prompt:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.aiUserPromptCompileArticles)}
+								onChange={(e) => {
+									data.aiUserPromptCompileArticles = e.target.value;
 									setData({...data});
 									setChanged(true);
 								}}

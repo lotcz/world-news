@@ -278,21 +278,21 @@ export default function ArticleDetail() {
 			</Form>
 			<Tabs defaultActiveKey="logs">
 				<Tab eventKey="logs" title="AI Log">
-					<div className="p-3">
+					<div className="px-3">
 						{
 							data.id && <ArticleAiLogList articleId={data.id}/>
 						}
 					</div>
 				</Tab>
 				<Tab eventKey="similarArticles" title="Similar Articles">
-					<div className="p-3">
+					<div className="px-3">
 						{
 							data.id && <ArticleSimilarArticlesList articleId={data.id}/>
 						}
 					</div>
 				</Tab>
 				<Tab eventKey="similarTopics" title="Similar Topics">
-					<div className="p-3">
+					<div className="px-3">
 						{
 							data.id && <ArticleSimilarTopicsList articleId={data.id}/>
 						}

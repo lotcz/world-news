@@ -10,11 +10,10 @@ import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
 	{name: 'createdOn', label: 'Created'},
-	{name: 'systemPrompt', label: 'systemPrompt'},
-	{name: 'userPrompt', label: 'userPrompt'},
-	{name: 'response', label: 'response'},
+	{name: 'operation', label: 'operation'},
 	{name: 'entityType', label: 'entityType'},
-	{name: 'operation', label: 'operation'}
+	{name: 'userPrompt', label: 'userPrompt'},
+	{name: 'response', label: 'response'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {
@@ -120,11 +119,10 @@ function AiLogList() {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
-													<td>{item.systemPrompt}</td>
+													<td>{item.operation}</td>
+													<td>{item.entityType}</td>
 													<td>{item.userPrompt}</td>
 													<td>{item.response}</td>
-													<td>{item.entityType}</td>
-													<td>{item.operation}</td>
 												</tr>
 											);
 										})

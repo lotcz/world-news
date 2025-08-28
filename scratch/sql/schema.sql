@@ -38,10 +38,15 @@ create table language (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255),
-    code varchar(5)
+    code varchar(5),
+    ai_system_prompt text,
+	ai_user_prompt_create_title text,
+	ai_user_prompt_create_summary text,
+	ai_user_prompt_detect_tags text,
+	ai_user_prompt_compile_articles text
 );
 
-create index idx_language_name
+create unique index idx_language_name
     on language (name);
 
 create unique index idx_language_code
@@ -85,7 +90,7 @@ create table article_source_realm (
     article_source_id integer not null
         constraint fkcp59ajplvu3i1n32fmegft0lf
         references article_source,
-    realm_id          integer not null
+    realm_id integer not null
         constraint fk3jhg2gwueixnef316q0q8q6k0
             references realm,
     primary key (article_source_id, realm_id)

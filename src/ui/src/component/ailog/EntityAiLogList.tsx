@@ -13,12 +13,10 @@ export type EntityAiLogListProps = {
 }
 
 const HEADER = [
-	{name: 'id', label: 'ID'},
-	{name: 'createdOn', label: 'Created'},
-	{name: 'systemPrompt', label: 'System Prompt'},
-	{name: 'userPrompt', label: 'User Prompt'},
-	{name: 'response', label: 'Response'},
+	{name: 'createdOn', label: 'Timestamp'},
 	{name: 'operation', label: 'Operation'},
+	{name: 'userPrompt', label: 'User Prompt'},
+	{name: 'response', label: 'Response'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'createdOn', desc: true}]}
@@ -71,12 +69,10 @@ function EntityAiLogList({entityId, entityName}: EntityAiLogListProps) {
 										logs.content.map((log, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(log)}>
-													<td>{log.id}</td>
 													<td>{DateUtil.formatDateTimeForHumans(log.createdOn)}</td>
-													<td>{log.systemPrompt}</td>
+													<td>{log.operation}</td>
 													<td>{log.userPrompt}</td>
 													<td>{log.response}</td>
-													<td>{log.operation}</td>
 												</tr>
 											);
 										})

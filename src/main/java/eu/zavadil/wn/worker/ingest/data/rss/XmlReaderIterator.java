@@ -7,7 +7,7 @@ import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.RssFeedUtil;
-import eu.zavadil.wn.util.WnUtil;
+import eu.zavadil.wn.util.WnStringUtil;
 import eu.zavadil.wn.worker.ingest.data.ArticleData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
@@ -31,7 +31,7 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 	private String sanitizeText(String text) {
 		if (StringUtils.isBlank(text)) return null;
 
-		return WnUtil.normalizeAndClean(
+		return WnStringUtil.normalizeAndClean(
 			Jsoup.parse(StringEscapeUtils.unescapeHtml4(text)).text()
 		);
 	}
@@ -76,7 +76,7 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		ArticleData articleData = new ArticleData();
 		articleData.setOriginalUrl(entry.getLink());
 		articleData.setOriginalUid(entry.getUri());
-		articleData.setTitle(WnUtil.normalizeAndClean(entry.getTitle()));
+		articleData.setTitle(WnStringUtil.normalizeAndClean(entry.getTitle()));
 		articleData.setSummary((entry.getDescription() != null) ? this.sanitizeText(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 

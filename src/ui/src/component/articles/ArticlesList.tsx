@@ -14,8 +14,7 @@ const HEADER = [
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'topic.id', label: 'Topic ID'},
-	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'}
+	{name: 'publishDate', label: 'Published'},
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'createdOn', desc: true}]}
@@ -124,8 +123,7 @@ function ArticlesList() {
 													<td>{item.processingState}</td>
 													<td>{item.title}</td>
 													<td>{item.topic?.id}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+													<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 												</tr>
 											);
 										})

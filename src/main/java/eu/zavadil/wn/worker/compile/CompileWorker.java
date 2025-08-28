@@ -38,16 +38,6 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		super(queue);
 	}
 
-	List<String> systemPrompt = List.of(
-		"Jsi redaktor v online časopise, který píše články a jiné zpravodajské texty.",
-		"Odpovídej vždy jen jako čistý text."
-	);
-
-	List<String> compileUserPrompt = List.of(
-		"Zde je několik článků na stejné téma. Napiš vlastními slovy úplně nový článek jejich sloučením.",
-		"Výsledný článek musí pokrývat všechny klíčové informace obsažené ve zdrojových článcích, ale používat vlastní formulace a vypadat jako úplně nový."
-	);
-
 	public void compile(Topic topic) {
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
@@ -67,7 +57,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				}
 			);
 
-		List<String> userPrompt = new ArrayList<>(this.compileUserPrompt);
+		List<String> userPrompt = new ArrayList<>(topic.getLanguage().getUserPromptCompileArticles());
 		for (Article article : articles) {
 			if (!article.isInternal()) {
 				compiled.getTags().addAll(article.getTags());
@@ -76,7 +66,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		}
 
 		String response = this.aiAssistantService.ask(
-			this.systemPrompt,
+			topic.getLanguage().getSystemPrompt(),
 			userPrompt,
 			AiOperation.CompileArticles,
 			EntityType.Topic,

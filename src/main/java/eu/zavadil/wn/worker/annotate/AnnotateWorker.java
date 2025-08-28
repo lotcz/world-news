@@ -13,7 +13,7 @@ import eu.zavadil.wn.service.AiAssistantService;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.TagService;
 import eu.zavadil.wn.service.TopicService;
-import eu.zavadil.wn.util.WnUtil;
+import eu.zavadil.wn.util.WnStringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,24 +39,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	@Autowired
 	AiAssistantService aiAssistantService;
 
-	List<String> systemPrompt = List.of(
-		"Jsi redaktor v online časopise, který zpracovává články a jiné zpravodajské texty.",
-		"Odpovídej vždy ve formě čistého textu."
-	);
-
-	List<String> createTitleUserPrompt = List.of(
-		"Vymysli titulek pro následující článek:"
-	);
-
-	List<String> createSummaryUserPrompt = List.of(
-		"Zkrať na jeden odstavec shrnující nejdůležitější informace v textu:"
-	);
-
-	List<String> findTagsUserPrompt = List.of(
-		"Najdi nejdůležitější klíčová slova a vypíš je v 1. pádu oddělené čárkou.",
-		"Stačí jen pět těch opravdu nejdůležitějších - budou použity jako tagy pro kategorizaci obsahu."
-	);
-
 	@Autowired
 	public AnnotateWorker(AnnotateArticleQueue queue) {
 		super(queue);
@@ -64,10 +46,10 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 	private String cleanResponse(String response) {
 		return StringUtils.blankToNull(
-			WnUtil.removeWrappingQuotes(
-				WnUtil.removeWrappingAsterisks(
-					WnUtil.removeWrappingQuotes(
-						WnUtil.normalizeAndClean(response)
+			WnStringUtil.removeWrappingQuotes(
+				WnStringUtil.removeWrappingAsterisks(
+					WnStringUtil.removeWrappingQuotes(
+						WnStringUtil.normalizeAndClean(response)
 					)
 				)
 			)
@@ -83,11 +65,11 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			);
 		}
 
-		List<String> userPrompt = new ArrayList<>(this.createTitleUserPrompt);
+		List<String> userPrompt = new ArrayList<>(article.getLanguage().getUserPromptCreateTitle());
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(
-			this.systemPrompt,
+			article.getLanguage().getSystemPrompt(),
 			userPrompt,
 			AiOperation.CreateTitle,
 			EntityType.Article,
@@ -111,12 +93,12 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			);
 		}
 
-		List<String> userPrompt = new ArrayList<>(this.createSummaryUserPrompt);
+		List<String> userPrompt = new ArrayList<>(article.getLanguage().getUserPromptCreateSummary());
 		userPrompt.add(article.getTitle());
 		userPrompt.add(article.getBody());
 
 		String response = this.aiAssistantService.ask(
-			this.systemPrompt,
+			article.getLanguage().getSystemPrompt(),
 			userPrompt,
 			AiOperation.CreateSummary,
 			EntityType.Article,
@@ -140,12 +122,12 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			);
 		}
 
-		List<String> userPrompt = new ArrayList<>(this.findTagsUserPrompt);
+		List<String> userPrompt = new ArrayList<>(article.getLanguage().getUserPromptDetectTags());
 		userPrompt.add(article.getTitle());
 		userPrompt.add(article.getSummary());
 
 		String response = this.aiAssistantService.ask(
-			this.systemPrompt,
+			article.getLanguage().getSystemPrompt(),
 			userPrompt,
 			AiOperation.DetectTags,
 			EntityType.Article,
@@ -154,7 +136,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		List<String> words = StringUtils.safeSplit(response, ",");
 
 		for (String raw : words) {
-			String word = WnUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
+			String word = WnStringUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
 			word = StringUtils.safeTrim(StringUtils.removeEnd(word, "."));
 			if (StringUtils.notBlank(word)) {
 				Tag tag = this.tagService.obtain(word);
@@ -188,8 +170,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 	private Topic assignTopic(Article article, Embedding embedding) {
 		if (article.getTopic() != null && article.isInternal()) return null;
-
-		// todo: narrow search by searching by tags
 
 		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
 

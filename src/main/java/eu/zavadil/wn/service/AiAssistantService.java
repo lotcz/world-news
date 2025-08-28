@@ -49,20 +49,4 @@ public class AiAssistantService {
 		);
 	}
 
-	public String ask(
-		String systemPrompt,
-		String userPrompt,
-		AiOperation operation,
-		EntityType entityType,
-		Integer entityId
-	) {
-		return this.ask(
-			List.of(systemPrompt),
-			List.of(userPrompt),
-			operation,
-			entityType,
-			entityId
-		);
-	}
-
 }

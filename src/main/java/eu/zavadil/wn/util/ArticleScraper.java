@@ -19,7 +19,7 @@ public class ArticleScraper {
 			Readability4J readability = new Readability4J(url, doc.html());
 			Article article = readability.parse();
 
-			return WnUtil.normalizeAndClean(article.getTextContent());
+			return WnStringUtil.normalizeAndClean(article.getTextContent());
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);

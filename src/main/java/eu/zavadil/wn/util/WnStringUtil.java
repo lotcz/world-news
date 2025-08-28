@@ -2,12 +2,13 @@ package eu.zavadil.wn.util;
 
 import eu.zavadil.java.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 
 import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
-public class WnUtil {
+public class WnStringUtil {
 
 	/**
 	 * Normalized bytes and spaces in content coming from external sources
@@ -48,9 +49,15 @@ public class WnUtil {
 		return text;
 	}
 
-	public static String HtmlToText(String html) {
-		if (StringUtils.isBlank(html)) return null;
-		return Jsoup.parse(html).text();
+	public static String listToText(List<String> strings) {
+		return String.join("\r\n", strings.stream().map(StringUtils::nullToEmpty).toList());
+	}
+
+	public static List<String> textToList(String text) {
+		if (StringUtils.isBlank(text)) {
+			return List.of();
+		}
+		return Arrays.asList(text.split("\\R"));
 	}
 
 }

@@ -1,21 +1,25 @@
-- assign topics to realms
 - multilanguage (english)
-  - move prompts and model to language table
-  - think about introducing virtual editor to do all the AI work
-- define filter texts and elements on article source level
+  - create internal articles for all available languages?
+
+Tags
+  - store tags as uppercase only
+  - tag groups - if certain set of tags occurs together, merge it into a single tag
+
+- assign topics to realms (realm will have description and then we use embeddings search)
+- introduce virtual editor to do all the AI work
 - full-text search in summary and body
 - UI - temporary error messages
 - generate UID for internal articles and make it unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
-- store tags as uppercase only
-- tag groups - if certain set of tags occurs together, merge it into a single tag
 
-- fotografie
-  - https://www.ctk.cz/sluzby/fotobanka/
-
+Media
+  - fotografie
+    - https://www.ctk.cz/sluzby/fotobanka/
+  - videa
 
 Ingestion
 
+- define filter texts and elements on article source level
 - split ingestion to url gathering and body download so body can be only downloaded when article is updated
 - add option to not download body and only keep summary (NYT)
 - mimic normal traffic
@@ -39,11 +43,12 @@ Websites
 
 
 Revenue sources
-- ads (google AdSense, Sklik)
+- ads (google AdSense, Sklik, own ad system)
 - affiliate
   - https://affiliateport.eu
   - https://www.partnerbox.cz/
 - dropshipping
+- sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
 
 Realms and websites
 
