@@ -5,6 +5,7 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import eu.zavadil.java.util.StringUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class RssFeedUtil {
 
 			byte[] data;
 			try (InputStream raw = conn.getInputStream();
-				 InputStream in = wrapStream(raw, conn.getContentEncoding())) {
+				 InputStream in = new BOMInputStream(wrapStream(raw, conn.getContentEncoding()), false)) {
 				data = in.readAllBytes();
 			}
 

@@ -14,7 +14,8 @@ public class IngestWorkerScheduler {
 
 	@Scheduled(fixedDelay = 5 * 60 * 1000)
 	public void execute() {
-		this.ingestWorker.process();
+		// stop processing temporarily to save money
+		//this.ingestWorker.process();
 	}
 
 }

@@ -32,7 +32,7 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		if (StringUtils.isBlank(text)) return null;
 
 		return WnStringUtil.normalizeAndClean(
-			Jsoup.parse(StringEscapeUtils.unescapeHtml4(text)).text()
+			Jsoup.parse(StringEscapeUtils.unescapeHtml4(text.replace("\0", ""))).text()
 		);
 	}
 

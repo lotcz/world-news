@@ -1,13 +1,19 @@
+- embeddings cache
+- delete embeddings when entity is deleted
+
 - multilanguage (english)
-  - create internal articles for all available languages?
+  - create internal articles only in the language of internal article source?
 
 Tags
   - store tags as uppercase only
+  - tag language
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
+Realms
 - assign topics to realms (realm will have description and then we use embeddings search)
-- introduce virtual editor to do all the AI work
-- full-text search in summary and body
+
+- introduce virtual editor to do the AI compilation work with flavor
+- full-text search in summary and body?
 - UI - temporary error messages
 - generate UID for internal articles and make it unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
