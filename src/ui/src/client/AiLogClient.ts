@@ -20,4 +20,8 @@ export class AiLogClient {
 		return this.client.getJson(`ai-log/by-entity/${entityType}/${entityId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
+	loadSingle(id: number): Promise<AiLog> {
+		return this.client.getJson(`ai-log/${id}`);
+	}
+
 }

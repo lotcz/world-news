@@ -44,4 +44,9 @@ public class AiLogController {
 		return JsonPageImpl.of(this.aiLogService.loadByEntity(entityType, entityId, PagingUtils.of(page, size, sorting)));
 	}
 
+	@GetMapping("{id}")
+	public AiLog loadSingle(@PathVariable int id) {
+		return this.aiLogService.loadSingle(id);
+	}
+	
 }

@@ -28,6 +28,10 @@ public class AiLogService {
 		return this.aiLogRepository.findAllByEntityTypeAndEntityId(entityType, entityId, pr);
 	}
 
+	public AiLog loadSingle(int id) {
+		return this.aiLogRepository.findById(id).orElse(null);
+	}
+
 	public AiLog log(AiLog log) {
 		return this.aiLogRepository.save(log);
 	}

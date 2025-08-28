@@ -16,6 +16,7 @@ import TagDetail from "./tags/TagDetail";
 import AiLogList from "./ailog/AiLogList";
 import TopicsList from "./topics/TopicsList";
 import TopicDetail from "./topics/TopicDetail";
+import AiLogDetail from "./ailog/AiLogDetail";
 
 function Main() {
 	return (
@@ -27,6 +28,9 @@ function Main() {
 						<Route path="/" element={<Dashboard/>}/>
 						<Route path="ai-log">
 							<Route path="" element={<AiLogList/>}/>
+							<Route path="detail">
+								<Route path=":id" element={<AiLogDetail/>}/>
+							</Route>
 							<Route path=":pagingString" element={<AiLogList/>}/>
 						</Route>
 						<Route path="languages">

@@ -85,9 +85,11 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			article.setOriginalUid(articleData.getOriginalUid());
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
+
 			if (StringUtils.notBlank(articleData.getSummary())) {
 				article.setSummary(articleData.getSummary());
 			}
+			
 			if (StringUtils.notBlank(articleData.getBody())) {
 				article.setBody(articleData.getBody());
 			}

@@ -41,7 +41,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 	List<String> systemPrompt = List.of(
 		"Jsi redaktor v online časopise, který zpracovává články a jiné zpravodajské texty.",
-		"Odpovídej vždy přesně ve formě čistého textu."
+		"Odpovídej vždy ve formě čistého textu."
 	);
 
 	List<String> createTitleUserPrompt = List.of(
@@ -155,6 +155,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 		for (String raw : words) {
 			String word = WnUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
+			word = StringUtils.safeTrim(StringUtils.removeEnd(word, "."));
 			if (StringUtils.notBlank(word)) {
 				Tag tag = this.tagService.obtain(word);
 				article.getTags().add(tag);

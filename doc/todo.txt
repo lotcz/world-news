@@ -1,14 +1,15 @@
-
+- add "test drive" - search similar articles listing similarity/distance
 - assign topics to realms
 - multilanguage (english)
   - move prompts and model to language table
   - think about introducing virtual editor to do all the AI work
 - define filter texts and elements on article source level
 - full-text search in summary and body
-
-- integrate embeddings into AI log? (we at least need to save costs)
-- subscribe to newsletters and then import articles
-- add "test drive" - search similar articles listing similarity/distance
+- UI - temporary error messages
+- generate UID for internal articles and make it unique
+- integrate embeddings into AI log? (we at least need to monitor costs)
+- store tags as uppercase only
+- tag groups - if certain set of tags occurs together, merge it into a single tag
 
 - fotografie
   - https://www.ctk.cz/sluzby/fotobanka/
@@ -21,13 +22,10 @@ Ingestion
 - mimic normal traffic
   - define min delay on article source to prevent error 429
   - define max articles per minute and download new articles first
-
+- subscribe to newsletters and then import articles
 - detect if body is damaged (e.g. there is only video or image)
   - https://www.nbcnews.com/video/epstein-accuser-s-family-blasts-ghislaine-maxwell-testimony-release-245668933770
   - <media:content, <media:player
-
-- UI - temporary error messages
-
 - sources with download problems (maybe only use summary?)
   - require script or cookie (ad warning)
     - https://servis.lidovky.cz/rss.aspx
@@ -89,8 +87,8 @@ https://pravesestalo.cz/ is free
     - Star Wars
   - Horror
   - aviation accidents
-  - consiracy theories
+  - conspiracy theories
 - Satire and parody
-  - El poblitico
+  - El poblitico (with merch)
 - Nature
   - Dogs and animals
