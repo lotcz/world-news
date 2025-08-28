@@ -1,7 +1,9 @@
 package eu.zavadil.wn.ai.embeddings.service;
 
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.cache.EmbeddingsCache;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
@@ -13,22 +15,26 @@ public class EmbeddingsServiceBase {
 
 	private final AiEmbeddingsEngine aiEngine;
 
+	private final EmbeddingsCache embeddingsCache;
+
 	private final EmbeddingRepositoryBase embeddingRepository;
 
 	public EmbeddingsServiceBase(
 		AiEmbeddingsEngine aiEngine,
+		EmbeddingsCache embeddingsCache,
 		EmbeddingRepositoryBase embeddingRepository
 	) {
 		this.aiEngine = aiEngine;
+		this.embeddingsCache = embeddingsCache;
 		this.embeddingRepository = embeddingRepository;
 	}
 
-	public Embedding createEmbedding(AiEmbeddingsParams params) {
+	private Embedding createEmbedding(AiEmbeddingsParams params) {
 		AiEmbeddingsResponse response = this.aiEngine.getEmbedding(params);
 		return response.getResult();
 	}
 
-	public Embedding createEmbedding(String text) {
+	private Embedding createEmbedding(String text) {
 		return this.createEmbedding(
 			AiEmbeddingsParams
 				.builder()
@@ -38,11 +44,17 @@ public class EmbeddingsServiceBase {
 	}
 
 	public Embedding updateEmbedding(int entityId, String text) {
-		Embedding existing = this.embeddingRepository.loadEmbedding(text);
-		if (existing != null) return existing;
-		Embedding embedding = this.createEmbedding(text);
-		this.embeddingRepository.updateEmbedding(entityId, text, embedding);
-		return embedding;
+		if (StringUtils.isBlank(text)) {
+			this.embeddingRepository.deleteEmbedding(entityId);
+			return null;
+		}
+		Embedding cached = this.embeddingsCache.loadEmbedding(text);
+		if (cached == null) {
+			cached = this.createEmbedding(text);
+			this.embeddingsCache.updateEmbedding(text, cached);
+		}
+		this.embeddingRepository.updateEmbedding(entityId, cached);
+		return cached;
 	}
 
 	public Embedding loadEmbedding(int entityId) {

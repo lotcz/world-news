@@ -38,12 +38,16 @@ public class ArticleService {
 
 	@Transactional
 	public Article save(Article article) {
-		return this.articleRepository.save(article);
+		Article saved = this.articleRepository.save(article);
+		this.articleEmbeddingsService.updateEmbedding(saved);
+		return saved;
 	}
 
 	@Transactional
 	public ArticleStub save(ArticleStub article) {
-		return this.articleStubRepository.save(article);
+		ArticleStub saved = this.articleStubRepository.save(article);
+		this.articleEmbeddingsService.updateEmbedding(saved);
+		return saved;
 	}
 
 	public Page<Article> search(@Param("search") String search, PageRequest pr) {
@@ -92,12 +96,12 @@ public class ArticleService {
 			);
 	}
 
-	public Embedding updateEmbedding(Article article) {
-		return this.articleEmbeddingsService.updateEmbedding(article.getId(), article.getSummary());
-	}
-
 	public Embedding loadEmbedding(int articleId) {
 		return this.articleEmbeddingsService.loadEmbedding(articleId);
+	}
+
+	public Embedding obtainEmbedding(Article article) {
+		return this.articleEmbeddingsService.updateEmbedding(article);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
@@ -110,7 +114,7 @@ public class ArticleService {
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
 		return this.findSimilar(embedding, 1, limit);
 	}
-	
+
 	public List<ArticleEmbeddingDistance> findSimilar(int articleId, int limit) {
 		return this.findSimilar(this.loadEmbedding(articleId), limit);
 	}

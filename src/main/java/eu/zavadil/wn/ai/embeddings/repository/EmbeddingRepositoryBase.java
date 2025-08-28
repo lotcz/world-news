@@ -1,7 +1,6 @@
 package eu.zavadil.wn.ai.embeddings.repository;
 
 import com.pgvector.PGvector;
-import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import org.postgresql.util.PGobject;
@@ -21,10 +20,6 @@ public abstract class EmbeddingRepositoryBase {
 	public abstract String getTableName();
 
 	public abstract String getIdName();
-
-	public String createHash(String text) {
-		return HashUtils.hashMd5(text);
-	}
 
 	private final RowMapper<Embedding> embeddingRowMapper = (rs, rowNum) -> {
 		PGobject po = (PGobject) rs.getObject("embedding");
@@ -48,16 +43,6 @@ public abstract class EmbeddingRepositoryBase {
 		return results.get(0);
 	}
 
-	public Embedding loadEmbedding(String text) {
-		String sql = String.format(
-			"SELECT embedding FROM %s WHERE hash = ?",
-			this.getTableName()
-		);
-		List<Embedding> results = jdbcTemplate.query(sql, this.embeddingRowMapper, this.createHash(text));
-		if (results.isEmpty()) return null;
-		return results.get(0);
-	}
-
 	public void deleteEmbedding(int entityId) {
 		String sql = String.format(
 			"DELETE FROM %s	WHERE %s = ?",
@@ -67,24 +52,25 @@ public abstract class EmbeddingRepositoryBase {
 		jdbcTemplate.update(sql, entityId);
 	}
 
-	public void updateEmbedding(int entityId, String text, Embedding embedding) {
+	public void updateEmbedding(int entityId, Embedding embedding) {
 		this.deleteEmbedding(entityId);
 		try {
 			String sql = String.format(
-				"INSERT INTO %s (%s, hash, embedding) VALUES (?, ?, ?)",
+				"INSERT INTO %s (%s, embedding) VALUES (?, ?)",
 				this.getTableName(),
 				this.getIdName()
 			);
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
 			vectorObj.setValue(embedding.toString());
-			jdbcTemplate.update(sql, entityId, this.createHash(text), vectorObj);
+			jdbcTemplate.update(sql, entityId, vectorObj);
 		} catch (Exception e) {
-			throw new RuntimeException("Error updating article embedding", e);
+			throw new RuntimeException("Error when updating embedding", e);
 		}
 	}
 
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, float maxDistance, int limit) {
+		if (embedding == null) return List.of();
 		try {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
@@ -110,7 +96,7 @@ public abstract class EmbeddingRepositoryBase {
 				rowMapper
 			);
 		} catch (Exception e) {
-			throw new RuntimeException("Error when searching similar articles", e);
+			throw new RuntimeException("Error when searching similar embeddings", e);
 		}
 	}
 

@@ -1,12 +1,7 @@
-- embeddings hash cache
-- delete embeddings when entity is deleted
-
 - multilanguage (english)
   - create internal articles only in the language of internal article source?
 
 Tags
-  - store tags as uppercase only
-  - tag language
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
 Realms

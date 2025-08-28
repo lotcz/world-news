@@ -35,30 +35,22 @@ public class TopicService {
 	@Autowired
 	ArticleEmbeddingsService articleEmbeddingsService;
 
-	public Embedding updateEmbedding(Topic topic) {
-		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
-	}
-
-	private Embedding updateEmbedding(TopicStub topic) {
-		return this.topicEmbeddingsService.updateEmbedding(topic.getId(), topic.getSummary());
-	}
-
 	public Embedding loadEmbedding(int topicId) {
 		return this.topicEmbeddingsService.loadEmbedding(topicId);
 	}
 
 	@Transactional
 	public Topic save(Topic topic) {
-		this.topicRepository.save(topic);
-		this.updateEmbedding(topic);
-		return topic;
+		Topic saved = this.topicRepository.save(topic);
+		this.topicEmbeddingsService.updateEmbedding(saved);
+		return saved;
 	}
 
 	@Transactional
 	public TopicStub save(TopicStub topic) {
-		this.topicStubRepository.save(topic);
-		this.updateEmbedding(topic);
-		return topic;
+		TopicStub saved = this.topicStubRepository.save(topic);
+		this.topicEmbeddingsService.updateEmbedding(saved);
+		return saved;
 	}
 
 	public Page<Topic> search(@Param("search") String search, PageRequest pr) {
@@ -85,13 +77,8 @@ public class TopicService {
 		return this.findSimilar(embedding, 1, limit);
 	}
 
-	public List<TopicEmbeddingDistance> findSimilar(Topic topic, int limit) {
-		Embedding embedding = this.updateEmbedding(topic);
-		return this.findSimilar(embedding, limit);
-	}
-
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
-		return this.findSimilar(this.topicRepository.findById(topicId).orElseThrow(), limit);
+		return this.findSimilar(this.topicEmbeddingsService.loadEmbedding(topicId), limit);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilarToArticle(int articleId, int limit) {

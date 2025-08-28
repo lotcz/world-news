@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -146,26 +145,13 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	}
 
 	private Embedding updateEmbedding(Article article) {
-		Set<Tag> tags = article.getTags();
-		if (tags.isEmpty()) {
-			throw new RuntimeException(
-				String.format("Article %s has no tags! Cannot detect topic.", article.toString())
-			);
-		}
-
-		if (StringUtils.isBlank(article.getTitle())) {
-			throw new RuntimeException(
-				String.format("Article %s has no title! Cannot create embedding.", article.toString())
-			);
-		}
-
-		if (StringUtils.isBlank(article.getBody())) {
+		if (StringUtils.isBlank(article.getSummary())) {
 			throw new RuntimeException(
 				String.format("Article %s has no body! Cannot create embedding.", article.toString())
 			);
 		}
 
-		return this.articleService.updateEmbedding(article);
+		return this.articleService.obtainEmbedding(article);
 	}
 
 	private Topic assignTopic(Article article, Embedding embedding) {
