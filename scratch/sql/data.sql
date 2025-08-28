@@ -40,11 +40,41 @@ update language set ai_user_prompt_compile_articles = 'Here are several articles
 The resulting article must cover all the key information contained in the source articles, but it may use your own phrasing and should look like a completely new one:'
 where code = 'en';
 
-INSERT INTO article_source (name, import_type, url, language_id)
-VALUES ('seznam', 'Rss', 'https://www.seznamzpravy.cz/rss', 1);
+/*
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Yahoo', 'Rss', 'https://www.yahoo.com/news/rss', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Politico.COM - politics', 'Rss', 'https://rss.politico.com/politics-news.xml', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('New York Times', 'Rss', 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Super.cz', 'Rss', 'http://super.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('ParlamentniListy', 'Rss', 'https://www.parlamentnilisty.cz/export/rss.aspx', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('ČT24', 'Rss', 'https://ct24.ceskatelevize.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Politico.EU', 'Rss', 'https://www.politico.eu/rss', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Deník N', 'Rss', 'https://denikn.cz/rss/', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Euronews', 'Rss', 'https://www.euronews.com/rss', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('ProŽeny.cz', 'Rss', 'https://prozeny.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Hospodářské noviny', 'Rss', 'https://hn.cz/?m=rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('iDNES', 'Rss', 'https://servis.idnes.cz/rss.aspx?c=zpravodaj', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Aktualne.cz', 'Rss', 'https://www.aktualne.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Echo24', 'Rss', 'https://www.echo24.cz/rss/s/homepage', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Blesk', 'Rss', 'https://www.blesk.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Seznam Zprávy', 'Rss', 'https://www.seznamzpravy.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Novinky.cz', 'Rss', 'https://www.novinky.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('CNN Prima', 'Rss', 'https://cnn.iprima.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Denik.cz', 'Rss', 'https://www.denik.cz/rss/zpravy.html', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('CNN.com', 'Rss', 'http://rss.cnn.com/rss/cnn_latest.rss', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Forum24', 'Rss', 'https://www.forum24.cz/feed', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Extra.cz', 'Rss', 'https://www.extra.cz/rss.xml', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Fox News', 'Rss', 'https://moxie.foxnews.com/google-publisher/latest.xml', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('NBC News', 'Rss', 'https://feeds.nbcnews.com/nbcnews/public/news', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('ČTK', 'Rss', 'https://www.protext.cz/rss/cz.php', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('LA Times', 'Rss', 'https://www.latimes.com/local/rss2.0.xml', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Internal', 'Internal', null, 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Rozhlas', 'Rss', 'https://www.irozhlas.cz/rss/irozhlas', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Drbna.cz', 'Rss', 'https://www.drbna.cz/rss.html', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('TN.cz', 'Rss', 'https://tn.nova.cz/rss', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('České noviny - domaci', 'Rss', 'https://www.ceskenoviny.cz/sluzby/rss/cr.php', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('České noviny - sport', 'Rss', 'https://www.ceskenoviny.cz/sluzby/rss/sport.php', 1);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('BBC', 'Rss', 'https://feeds.bbci.co.uk/news/rss.xml', 34);
+INSERT INTO public.article_source (name, import_type, url, language_id) VALUES ('Lidovky.cz', 'Rss', 'https://servis.lidovky.cz/rss.aspx', 1);
 
-INSERT INTO article_source (name, import_type, url, language_id)
-VALUES ('novinky', 'Rss', 'https://www.novinky.cz/rss', 1);
 
-INSERT INTO article_source (name, import_type, url, language_id)
-VALUES ('aktualne', 'Rss', 'https://www.aktualne.cz/rss', 1);
+ */
