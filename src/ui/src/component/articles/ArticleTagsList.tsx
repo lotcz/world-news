@@ -35,7 +35,7 @@ function ArticleTagsList({articleId}: ArticleTagsListProps) {
 			{
 				(tags === null) ? <Spinner/>
 					: tags.map(
-						(t) => <div>
+						(t) => <div key={t.id}>
 							<Link to={`/tags/detail/${t.id}`}>{t.name}</Link>
 							&nbsp;({t.articleCount})
 						</div>

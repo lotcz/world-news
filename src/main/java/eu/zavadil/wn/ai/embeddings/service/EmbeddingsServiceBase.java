@@ -1,6 +1,7 @@
 package eu.zavadil.wn.ai.embeddings.service;
 
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
@@ -44,7 +45,7 @@ public class EmbeddingsServiceBase {
 		return embedding;
 	}
 
-	public List<Integer> searchSimilar(Embedding embedding, float maxDistance, int limit) {
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, float maxDistance, int limit) {
 		return this.embeddingRepository.searchSimilar(embedding, maxDistance, limit);
 	}
 }

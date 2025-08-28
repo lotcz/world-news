@@ -1,4 +1,4 @@
-import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
+import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
@@ -15,6 +15,7 @@ import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
 import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
+import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -46,7 +47,7 @@ export default function ArticleDetail() {
 		[id, restClient, userAlerts]
 	);
 
-	useEffect(reload, []);
+	useEffect(reload, [id]);
 
 	const saveData = useCallback(
 		() => {
@@ -274,12 +275,28 @@ export default function ArticleDetail() {
 					</Row>
 				</Stack>
 			</Form>
-			<div className="p-3">
-				<h3>AI Log</h3>
-				{
-					data.id && <ArticleAiLogList articleId={data.id}/>
-				}
-			</div>
+			<Tabs defaultActiveKey="logs">
+				<Tab eventKey="logs" title="AI Log">
+					<div className="p-3">
+						{
+							data.id && <ArticleAiLogList articleId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab eventKey="similarArticles" title="Similar Articles">
+					<div className="p-3">
+						{
+							data.id && <ArticleSimilarArticlesList articleId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab eventKey="similarTopics" title="Similar Topics">
+					<div className="p-3">
+
+					</div>
+				</Tab>
+			</Tabs>
+
 		</div>
 	)
 }

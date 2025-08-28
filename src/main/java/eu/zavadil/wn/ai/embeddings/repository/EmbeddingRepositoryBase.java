@@ -3,6 +3,7 @@ package eu.zavadil.wn.ai.embeddings.repository;
 import com.pgvector.PGvector;
 import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,6 +31,11 @@ public abstract class EmbeddingRepositoryBase {
 		PGvector pv = new PGvector(po.getValue());
 		return new Embedding(pv.toArray());
 	};
+
+	private RowMapper<EmbeddingDistance> getEmbeddingDistanceRowMapper() {
+		String idName = this.getIdName();
+		return (rs, rowNum) -> new EmbeddingDistance(rs.getFloat("distance"), rs.getInt(idName));
+	}
 
 	public Embedding loadEmbedding(String text) {
 		String sql = String.format(
@@ -67,7 +73,7 @@ public abstract class EmbeddingRepositoryBase {
 		}
 	}
 
-	public List<Integer> searchSimilar(Embedding embedding, float maxDistance, int limit) {
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, float maxDistance, int limit) {
 		try {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
@@ -75,20 +81,22 @@ public abstract class EmbeddingRepositoryBase {
 
 			String sql = String.format(
 				"""
-						SELECT %s
+						SELECT %s, embedding <=> ? as distance
 						FROM %s
 						WHERE (embedding <=> ?) <= ?
-						ORDER BY embedding <=> ?
+						ORDER BY distance
 						LIMIT ?
 					""",
 				this.getIdName(),
 				this.getTableName()
 			);
 
+			RowMapper<EmbeddingDistance> rowMapper = this.getEmbeddingDistanceRowMapper();
+
 			return jdbcTemplate.query(
 				sql,
-				new Object[]{vectorObj, maxDistance, vectorObj, limit},
-				(rs, rowNum) -> rs.getInt(this.getIdName())
+				new Object[]{vectorObj, vectorObj, maxDistance, limit},
+				rowMapper
 			);
 		} catch (Exception e) {
 			throw new RuntimeException("Error when searching similar articles", e);

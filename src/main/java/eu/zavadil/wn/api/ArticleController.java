@@ -3,6 +3,8 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
+import eu.zavadil.wn.ai.embeddings.ArticleEmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleStub;
 import eu.zavadil.wn.service.ArticleService;
@@ -10,6 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("${api.base-url}/articles")
@@ -82,4 +86,19 @@ public class ArticleController {
 		this.articleService.deleteById(id);
 	}
 
+	@GetMapping("similar/{id}")
+	public List<ArticleEmbeddingDistance> loadSimilar(
+		@PathVariable int id,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return this.articleService.findSimilar(id, size);
+	}
+
+	@GetMapping("similar/topic/{id}")
+	public List<TopicEmbeddingDistance> loadSimilarTopics(
+		@PathVariable int id,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return this.articleService.findSimilarTopics(id, size);
+	}
 }

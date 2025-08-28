@@ -1,7 +1,10 @@
 package eu.zavadil.wn.service;
 
 import eu.zavadil.java.util.StringUtils;
+import eu.zavadil.wn.ai.embeddings.ArticleEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
@@ -30,6 +33,9 @@ public class ArticleService {
 
 	@Autowired
 	ArticleEmbeddingsService articleEmbeddingsService;
+
+	@Autowired
+	TopicService topicService;
 
 	@Transactional
 	public Article save(Article article) {
@@ -89,6 +95,32 @@ public class ArticleService {
 
 	public Embedding updateEmbedding(Article article) {
 		return this.articleEmbeddingsService.updateEmbedding(article.getId(), article.getSummary());
+	}
+
+	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
+		List<EmbeddingDistance> similar = this.articleEmbeddingsService.searchSimilar(embedding, maxDistance, limit);
+		return similar.stream().map(
+			(ed) -> new ArticleEmbeddingDistance(ed, this.articleRepository.findById(ed.getEntityId()).orElse(null))
+		).toList();
+	}
+
+	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
+		return this.findSimilar(embedding, 1, limit);
+	}
+
+	public List<ArticleEmbeddingDistance> findSimilar(Article article, int limit) {
+		Embedding embedding = this.updateEmbedding(article);
+		return this.findSimilar(embedding, limit);
+	}
+
+	public List<ArticleEmbeddingDistance> findSimilar(int articleId, int limit) {
+		return this.findSimilar(this.articleRepository.findById(articleId).orElseThrow(), limit);
+	}
+
+	public List<TopicEmbeddingDistance> findSimilarTopics(int articleId, int limit) {
+		Article article = this.articleRepository.findById(articleId).orElseThrow();
+		Embedding embedding = this.updateEmbedding(article);
+		return this.topicService.findSimilar(embedding, limit);
 	}
 
 	public Page<Article> loadStuckArticles() {

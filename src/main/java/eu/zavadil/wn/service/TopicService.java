@@ -2,6 +2,8 @@ package eu.zavadil.wn.service;
 
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
@@ -64,16 +66,30 @@ public class TopicService {
 		this.topicRepository.deleteById(id);
 	}
 
-	public Topic findMostSimilar(Embedding embedding) {
-		List<Integer> similar = this.topicEmbeddingsService.searchSimilar(embedding, 0.2F, 1);
-		if (similar.isEmpty()) return null;
-		int topicId = similar.get(0);
-		return this.topicRepository.findById(topicId).orElse(null);
+	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
+		List<EmbeddingDistance> similar = this.topicEmbeddingsService.searchSimilar(embedding, maxDistance, limit);
+		return similar.stream().map(
+			(ed) -> new TopicEmbeddingDistance(ed, this.topicRepository.findById(ed.getEntityId()).orElse(null))
+		).toList();
 	}
 
-	public Topic findMostSimilar(String summary) {
-		Embedding embedding = this.topicEmbeddingsService.createEmbedding(summary);
-		return this.findMostSimilar(embedding);
+	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
+		return this.findSimilar(embedding, 1, limit);
+	}
+
+	public List<TopicEmbeddingDistance> findSimilar(Topic topic, int limit) {
+		Embedding embedding = this.updateEmbedding(topic);
+		return this.findSimilar(embedding, limit);
+	}
+
+	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
+		return this.findSimilar(this.topicRepository.findById(topicId).orElseThrow(), limit);
+	}
+
+	public Topic findMostSimilar(Embedding embedding) {
+		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 0.2F, 1);
+		if (similar.isEmpty()) return null;
+		return similar.get(0).getEntity();
 	}
 
 	public Page<Topic> loadTopicsForCompilation() {
