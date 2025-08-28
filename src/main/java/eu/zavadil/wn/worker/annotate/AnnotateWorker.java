@@ -213,37 +213,42 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 		Topic topic = null;
 
-		this.updateTitle(article);
-		this.updateSummary(article);
-		this.updateTags(article);
+		try {
+			this.updateTitle(article);
+			this.updateSummary(article);
+			this.updateTags(article);
 
-		Embedding embedding = this.updateEmbedding(article);
-		if (article.isInternal()) {
-			if (article.getPublishDate() == null) {
-				article.setPublishDate(Instant.now());
+			Embedding embedding = this.updateEmbedding(article);
+			if (article.isInternal()) {
+				if (article.getPublishDate() == null) {
+					article.setPublishDate(Instant.now());
+				}
+			} else {
+				topic = this.assignTopic(article, embedding);
 			}
-		} else {
-			topic = this.assignTopic(article, embedding);
-		}
 
-		article.setProcessingState(ProcessingState.Done);
-		this.articleService.save(article);
+			article.setProcessingState(ProcessingState.Done);
 
-		if (topic != null) {
-			// if topic was assigned, mark it for compilation now
-			topic.setProcessingState(ProcessingState.Waiting);
-			this.topicService.save(topic);
+			if (topic != null) {
+				// if topic was assigned, mark it for compilation now
+				topic.setProcessingState(ProcessingState.Waiting);
+				this.topicService.save(topic);
+			}
+		} catch (Exception e) {
+			article.setProcessingState(ProcessingState.Error);
+		} finally {
+			this.articleService.save(article);
 		}
 	}
 
 	@Override
 	public void onBeforeProcessing() {
-		log.info("Starting annotation...");
+		//log.info("Starting annotation...");
 	}
 
 	@Override
 	public void onAfterProcessing() {
-		log.info("Annotation finished");
+		//log.info("Annotation finished");
 	}
 
 	@Override

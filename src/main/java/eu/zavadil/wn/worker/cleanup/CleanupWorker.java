@@ -1,5 +1,6 @@
 package eu.zavadil.wn.worker.cleanup;
 
+import eu.zavadil.wn.worker.cleanup.annotating.AnnotatingCleanupQueueProcessor;
 import eu.zavadil.wn.worker.cleanup.ingesting.IngestingCleanupQueueProcessor;
 import eu.zavadil.wn.worker.cleanup.synonyms.SynonymsCleanupQueueProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,13 @@ public class CleanupWorker {
 	@Autowired
 	IngestingCleanupQueueProcessor ingestingCleanupWorker;
 
+	@Autowired
+	AnnotatingCleanupQueueProcessor annotatingCleanupWorker;
+
 	public void cleanup() {
 		this.synonymsCleanupWorker.process();
 		this.ingestingCleanupWorker.process();
+		this.annotatingCleanupWorker.process();
 	}
 
 }

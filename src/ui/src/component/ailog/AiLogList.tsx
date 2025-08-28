@@ -53,15 +53,6 @@ function AiLogList() {
 		navigate(`/ai-log/detail/${l.id}`);
 	}
 
-	const applySearch = useCallback(
-		(e: FormEvent) => {
-			e.preventDefault();
-			paging.page = 0;
-			navigateToPage(paging);
-		},
-		[paging, navigateToPage]
-	);
-
 	const loadPageHandler = useCallback(
 		() => {
 			setData(undefined);
@@ -78,6 +69,16 @@ function AiLogList() {
 	);
 
 	useEffect(loadPageHandler, [paging]);
+
+	const applySearch = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			paging.page = 0;
+			navigateToPage(paging);
+			loadPageHandler();
+		},
+		[paging, navigateToPage, loadPageHandler]
+	);
 
 	return (
 		<div>

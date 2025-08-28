@@ -95,14 +95,14 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 
 	@Override
 	public void onBeforeProcessing() {
-		log.info("Starting compilation...");
+		//log.info("Starting compilation...");
 	}
 
 	@Override
 	public void onAfterProcessing() {
 		// reset article source cache so article counts can be reloaded
 		this.articleSourceService.reset();
-		log.info("Compilation finished");
+		//log.info("Compilation finished");
 	}
 
 	@Override

@@ -25,13 +25,13 @@ create table ai_log (
 );
 
 create index idx_ai_log_created_on
-    on ai_log (created_on);
+    on ai_log (created_on desc);
 
 create index idx_ai_log_entity
-    on ai_log (entity_type, entity_id, created_on);
+    on ai_log (entity_type, entity_id, created_on desc);
 
 create index idx_ai_log_operation
-    on ai_log (operation, created_on);
+    on ai_log (operation, created_on desc);
 
 create table language (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

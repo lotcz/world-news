@@ -67,9 +67,13 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 				newArticles++;
 				article = new Article();
 			} else {
-				boolean identical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
-					&& StringUtils.safeEquals(article.getSummary(), articleData.getSummary())
-					&& StringUtils.safeEquals(article.getBody(), articleData.getBody());
+				boolean titleIdentical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
+					|| StringUtils.isBlank(articleData.getTitle());
+				boolean summaryIdentical = StringUtils.safeEquals(article.getSummary(), articleData.getSummary())
+					|| StringUtils.isBlank(articleData.getSummary());
+				boolean bodyIdentical = StringUtils.safeEquals(article.getBody(), articleData.getBody())
+					|| StringUtils.isBlank(articleData.getBody());
+				boolean identical = titleIdentical && summaryIdentical && bodyIdentical;
 				if (identical) {
 					continue;
 				}
@@ -81,11 +85,20 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			article.setOriginalUid(articleData.getOriginalUid());
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
-			article.setSummary(articleData.getSummary());
-			article.setBody(articleData.getBody());
-			article.setPublishDate(articleData.getPublishDate());
-			article.setProcessingState(ProcessingState.Waiting);
+			if (StringUtils.notBlank(articleData.getSummary())) {
+				article.setSummary(articleData.getSummary());
+			}
+			if (StringUtils.notBlank(articleData.getBody())) {
+				article.setBody(articleData.getBody());
+			}
 
+			if (articleData.getPublishDate() != null) {
+				article.setPublishDate(articleData.getPublishDate());
+			} else if (article.getPublishDate() == null) {
+				article.setPublishDate(Instant.now());
+			}
+
+			article.setProcessingState(ProcessingState.Waiting);
 			this.articleService.save(article);
 		}
 
@@ -109,14 +122,13 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 
 	@Override
 	public void onBeforeProcessing() {
-		log.info("Starting ingestion...");
+
 	}
 
 	@Override
 	public void onAfterProcessing() {
 		// reset article source cache so article counts can be reloaded
 		this.articleSourceService.reset();
-		log.info("Ingestion finished");
 	}
 
 	@Override

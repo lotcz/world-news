@@ -24,6 +24,10 @@ public class AiLogService {
 			: this.aiLogRepository.filter(fromDate, toDate, pr);
 	}
 
+	public Page<AiLog> loadByEntity(EntityType entityType, int entityId, PageRequest pr) {
+		return this.aiLogRepository.findAllByEntityTypeAndEntityId(entityType, entityId, pr);
+	}
+
 	public AiLog log(AiLog log) {
 		return this.aiLogRepository.save(log);
 	}

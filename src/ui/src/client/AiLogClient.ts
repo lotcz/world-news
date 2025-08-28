@@ -11,9 +11,13 @@ export class AiLogClient {
 
 	filter(pr: PagingRequest, from?: Date | null, to?: Date | null): Promise<Page<AiLog>> {
 		const params = PagingUtil.pagingRequestToQueryParams(pr);
-		params.from = from;
-		params.to = to;
+		params.from = from?.toISOString();
+		params.to = to?.toISOString();
 		return this.client.getJson(`ai-log`, params);
+	}
+
+	loadByEntity(entityType: string, entityId: number, pr: PagingRequest): Promise<Page<AiLog>> {
+		return this.client.getJson(`ai-log/by-entity/${entityType}/${entityId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
 }

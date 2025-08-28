@@ -15,6 +15,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -87,6 +89,16 @@ public class ArticleService {
 
 	public Embedding updateEmbedding(Article article) {
 		return this.articleEmbeddingsService.updateEmbedding(article.getId(), article.getSummary());
+	}
+
+	public Page<Article> loadStuckArticles() {
+		Instant maxUpdated = Instant.now().minus(Duration.ofMinutes(10));
+		return this.articleRepository
+			.findAllByProcessingStateAndLastUpdatedOnLessThanOrderByLastUpdatedOnAsc(
+				ProcessingState.Processing,
+				maxUpdated,
+				PageRequest.of(0, 10)
+			);
 	}
 
 }

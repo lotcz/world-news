@@ -14,6 +14,7 @@ import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
 import ArticleTagsList from "./ArticleTagsList";
+import ArticleAiLogList from "./ArticleAiLogList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -273,6 +274,12 @@ export default function ArticleDetail() {
 					</Row>
 				</Stack>
 			</Form>
+			<div className="p-3">
+				<h3>AI Log</h3>
+				{
+					data.id && <ArticleAiLogList articleId={data.id}/>
+				}
+			</div>
 		</div>
 	)
 }

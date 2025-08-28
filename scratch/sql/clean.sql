@@ -9,6 +9,9 @@ UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiti
 /* delete topics with no articles */
 DELETE FROM topic WHERE article_count = 0;
 
+/* set article publish date */
+UPDATE article SET publish_date = '2025-08-01 00:00:00' WHERE publish_date IS NULL;
+
 /* delete duplicate articles */
 DELETE FROM article
 WHERE id IN (

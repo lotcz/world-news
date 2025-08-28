@@ -1,4 +1,4 @@
-import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
+import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
@@ -10,6 +10,7 @@ import TopicArticlesList from "./TopicArticlesList";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
+import TopicAiLogList from "./TopicAiLogList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -157,11 +158,23 @@ export default function TopicDetail() {
 					</Row>
 				</Stack>
 			</Form>
-			<div className="p-3">
-				{
-					data.id && <TopicArticlesList topicId={data.id}/>
-				}
-			</div>
+			<Tabs defaultActiveKey="articles">
+				<Tab title="Articles" eventKey="articles">
+					<div className="px-3">
+						{
+							data.id && <TopicArticlesList topicId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab title="AI Log" eventKey="logs">
+					<div className="px-3">
+						{
+							data.id && <TopicAiLogList topicId={data.id}/>
+						}
+					</div>
+				</Tab>
+			</Tabs>
+
 		</div>
 	)
 }

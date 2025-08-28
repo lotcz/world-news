@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,5 +41,11 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	Optional<Article> findFirstByOriginalUid(String originalUid);
 
 	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);
+
+	Page<Article> findAllByProcessingStateAndLastUpdatedOnLessThanOrderByLastUpdatedOnAsc(
+		ProcessingState state,
+		Instant lastUpdatedOn,
+		PageRequest pr
+	);
 
 }
