@@ -102,13 +102,16 @@ create table tag (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255) not null,
     article_count int not null default 0,
+    language_id integer not null
+    	constraint fk_tag_language
+       	references language,
     synonym_of_id integer
         constraint fkqv68mmko7bkuu53wnoo57ou52
         references tag
 );
 
 create unique index idx_tag_name
-    on tag (name);
+    on tag (language_id, name);
 
 create index idx_tag_synonym
     on tag (synonym_of_id);

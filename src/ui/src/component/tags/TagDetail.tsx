@@ -11,6 +11,8 @@ import TagArticlesList from "./TagArticlesList";
 import TagSelect from "./TagSelect";
 import {BsBoxArrowUpRight} from "react-icons/bs";
 import TagSynonymsList from "./TagSynonymsList";
+import {LanguageIdSelect} from "../languages/LanguageSelect";
+import {ConfirmDialogContext} from "zavadil-react-common";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -22,6 +24,7 @@ export default function TagDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const confirmDialog = useContext(ConfirmDialogContext);
 	const [data, setData] = useState<TagStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -54,7 +57,7 @@ export default function TagDetail() {
 				.then(
 					(f) => {
 						if (inserting) {
-							navigate(`/topics/detail/${f.id}`, {replace: true});
+							navigate(`/tags/detail/${f.id}`, {replace: true});
 						} else {
 							setData(f);
 						}
@@ -63,6 +66,25 @@ export default function TagDetail() {
 				.catch((e: Error) => userAlerts.err(e))
 		},
 		[restClient, data, userAlerts, navigate]
+	);
+
+	const deleteTag = useCallback(
+		() => {
+			if (!data?.id) return;
+			confirmDialog.confirm(
+				'Confirm',
+				'Really delete this tag?',
+				() => restClient
+					.tags
+					.delete(Number(data.id))
+					.then(
+						(f) => {
+							navigate(-1);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+			);
+		},
+		[restClient, data, userAlerts, navigate, confirmDialog]
 	);
 
 	if (!data) {
@@ -85,6 +107,7 @@ export default function TagDetail() {
 							<div>Save</div>
 						</div>
 					</Button>
+					<Button variant="danger" onClick={deleteTag}>Delete</Button>
 				</Stack>
 			</div>
 			<Form className="p-3">
@@ -103,6 +126,23 @@ export default function TagDetail() {
 									setChanged(true);
 								}}
 							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Language:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<LanguageIdSelect
+									id={data.languageId}
+									onChange={(e) => {
+										data.languageId = e;
+										setData({...data});
+										setChanged(true);
+									}}
+								/>
+							</div>
 						</Col>
 					</Row>
 					<Row className="align-items-start">

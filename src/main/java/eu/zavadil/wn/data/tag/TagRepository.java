@@ -1,6 +1,7 @@
 package eu.zavadil.wn.data.tag;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
+import eu.zavadil.java.util.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +15,13 @@ public interface TagRepository extends EntityRepository<Tag> {
 	@Query("""
 				select t
 				from Tag t
-				where lower(t.name) LIKE %:search%
+				where t.name LIKE %:search%
 		""")
-	Page<Tag> search(@Param("search") String search, PageRequest pr);
+	Page<Tag> searchInternal(@Param("search") String search, PageRequest pr);
+
+	default Page<Tag> search(String search, PageRequest pr) {
+		return this.searchInternal(StringUtils.safeUpperCase(search), pr);
+	}
 
 	@Query("""
 			select t
@@ -26,7 +31,7 @@ public interface TagRepository extends EntityRepository<Tag> {
 		""")
 	List<Tag> loadByArticleId(int articleId);
 
-	Optional<Tag> findFirstByName(String name);
+	Optional<Tag> findFirstByLanguageIdAndName(int languageId, String name);
 
 	List<Tag> findAllBySynonymOf(Tag tag);
 

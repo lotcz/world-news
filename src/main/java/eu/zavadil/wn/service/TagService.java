@@ -24,6 +24,9 @@ public class TagService {
 	@Autowired
 	TagStubRepository tagStubRepository;
 
+	@Autowired
+	LanguageService languageService;
+
 	@Transactional
 	public Tag save(Tag tag) {
 		if (tag.getSynonymOf() != null) {
@@ -38,6 +41,9 @@ public class TagService {
 		if (stub.getId() != null && stub.getSynonymOfId() != null) {
 			Tag synonymOf = this.tagRepository.findById(stub.getSynonymOfId()).orElseThrow();
 			Tag synonym = this.desynonymize(synonymOf, List.of(stub.getId()));
+			if (synonym.getLanguage().getId() != stub.getLanguageId()) {
+				synonym = this.obtain(stub.getLanguageId(), synonym.getName());
+			}
 			stub.setSynonymOfId(synonym.getId());
 		}
 		return this.tagStubRepository.save(stub);
@@ -82,11 +88,13 @@ public class TagService {
 	}
 
 	@Transactional
-	public Tag obtain(String name) {
-		Tag tag = this.tagRepository.findFirstByName(name).orElse(null);
+	public Tag obtain(int languageId, String name) {
+		name = StringUtils.safeUpperCase(name);
+		Tag tag = this.tagRepository.findFirstByLanguageIdAndName(languageId, name).orElse(null);
 		if (tag != null) return this.desynonymize(tag);
 		tag = new Tag();
 		tag.setName(name);
+		tag.setLanguage(this.languageService.get(languageId));
 		return this.save(tag);
 	}
 

@@ -11,6 +11,7 @@ import {Tag} from "../../types/Tag";
 const HEADER = [
 	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
+	{name: 'language.name', label: 'Language'},
 	{name: 'synonymOf.name', label: 'Synonym Of'},
 	{name: 'articleCount', label: 'Articles'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
@@ -128,6 +129,7 @@ function TagsList() {
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 													<td>{item.id}</td>
 													<td>{item.name}</td>
+													<td>{item.language?.name}</td>
 													<td>{item.synonymOf?.name}</td>
 													<td>{item.articleCount}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>

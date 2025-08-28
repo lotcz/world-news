@@ -19,6 +19,9 @@ import lombok.EqualsAndHashCode;
 )
 public class TagStub extends TagBase {
 
+	@Column(name = "language_id", nullable = false)
+	private int languageId;
+
 	@Column(name = "synonym_of_id")
 	private Integer synonymOfId;
 

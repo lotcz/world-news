@@ -139,7 +139,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			String word = WnStringUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
 			word = StringUtils.safeTrim(StringUtils.removeEnd(word, "."));
 			if (StringUtils.notBlank(word)) {
-				Tag tag = this.tagService.obtain(word);
+				Tag tag = this.tagService.obtain(article.getLanguage().getId(), word);
 				article.getTags().add(tag);
 			}
 		}
