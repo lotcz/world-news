@@ -76,7 +76,7 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		ArticleData articleData = new ArticleData();
 		articleData.setOriginalUrl(entry.getLink());
 		articleData.setOriginalUid(entry.getUri());
-		articleData.setTitle(WnStringUtil.normalizeAndClean(entry.getTitle()));
+		articleData.setTitle(this.sanitizeText(entry.getTitle()));
 		articleData.setSummary((entry.getDescription() != null) ? this.sanitizeText(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 

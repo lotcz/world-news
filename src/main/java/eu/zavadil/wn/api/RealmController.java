@@ -3,6 +3,7 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
+import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.service.RealmService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +40,7 @@ public class RealmController {
 	@PostMapping("")
 	public Realm insert(@RequestBody Realm document) {
 		document.setId(null);
-		return this.realmService.set(document);
+		return this.realmService.save(document);
 	}
 
 	@GetMapping("{id}")
@@ -50,7 +51,7 @@ public class RealmController {
 	@PutMapping("{id}")
 	public Realm update(@PathVariable int id, @RequestBody Realm document) {
 		document.setId(id);
-		return this.realmService.set(document);
+		return this.realmService.save(document);
 	}
 
 	@DeleteMapping("{id}")
@@ -58,4 +59,11 @@ public class RealmController {
 		this.realmService.deleteById(id);
 	}
 
+	@GetMapping("similar-to-topic/{topicId}")
+	public List<RealmEmbeddingDistance> loadSimilarToTopic(
+		@PathVariable int topicId,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return this.realmService.findSimilarToTopic(topicId, size);
+	}
 }

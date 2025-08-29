@@ -3,12 +3,14 @@ package eu.zavadil.wn.ai.embeddings.repository;
 import com.pgvector.PGvector;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
+import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.util.List;
 
+@Slf4j
 public abstract class EmbeddingRepositoryBase {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -69,12 +71,21 @@ public abstract class EmbeddingRepositoryBase {
 		}
 	}
 
+	// todo: remove maxDistance and apply it programatically later
+	// problem with vector index search
+	// Claude knew :-D
+	//
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, float maxDistance, int limit) {
-		if (embedding == null) return List.of();
+		if (embedding == null) {
+			log.warn("Cannot search for similar in {}. Empty embedding! Returning empty result set...", this.getTableName());
+			return List.of();
+		}
 		try {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
 			vectorObj.setValue(embedding.toString());
+
+			log.trace("embedding card.: {}, dist: {}, limit: {}", embedding.size(), maxDistance, limit);
 
 			String sql = String.format(
 				"""
@@ -92,8 +103,8 @@ public abstract class EmbeddingRepositoryBase {
 
 			return jdbcTemplate.query(
 				sql,
-				new Object[]{vectorObj, vectorObj, maxDistance, limit},
-				rowMapper
+				rowMapper,
+				vectorObj, vectorObj, maxDistance, limit
 			);
 		} catch (Exception e) {
 			throw new RuntimeException("Error when searching similar embeddings", e);

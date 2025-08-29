@@ -5,6 +5,7 @@ import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
+import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
@@ -34,6 +35,9 @@ public class TopicService {
 
 	@Autowired
 	ArticleEmbeddingsService articleEmbeddingsService;
+
+	@Autowired
+	RealmEmbeddingsService realmEmbeddingsService;
 
 	public Embedding loadEmbedding(int topicId) {
 		return this.topicEmbeddingsService.loadEmbedding(topicId);
@@ -74,7 +78,7 @@ public class TopicService {
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, 1, limit);
+		return this.findSimilar(embedding, 2.0F, limit);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
@@ -83,6 +87,11 @@ public class TopicService {
 
 	public List<TopicEmbeddingDistance> findSimilarToArticle(int articleId, int limit) {
 		Embedding embedding = this.articleEmbeddingsService.loadEmbedding(articleId);
+		return this.findSimilar(embedding, limit);
+	}
+
+	public List<TopicEmbeddingDistance> findSimilarToRealm(int realmId, int limit) {
+		Embedding embedding = this.realmEmbeddingsService.loadEmbedding(realmId);
 		return this.findSimilar(embedding, limit);
 	}
 

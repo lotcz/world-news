@@ -1,5 +1,6 @@
 import {Topic} from "./Topic";
 import {Article} from "./Article";
+import {Realm} from "./Realm";
 
 export type EmbeddingDistance = {
 	distance: number;
@@ -12,4 +13,8 @@ export type ArticleEmbeddingDistance = EmbeddingDistance & {
 
 export type TopicEmbeddingDistance = EmbeddingDistance & {
 	entity: Topic;
+}
+
+export type RealmEmbeddingDistance = EmbeddingDistance & {
+	entity: Realm;
 }

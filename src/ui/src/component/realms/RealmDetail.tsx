@@ -7,11 +7,12 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
 import {Switch} from "zavadil-react-common";
+import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 1;
-const COL_2_LG = 3;
+const COL_2_LG = 5;
 
 export default function RealmDetail() {
 	const {id} = useParams();
@@ -133,9 +134,11 @@ export default function RealmDetail() {
 							/>
 						</Col>
 					</Row>
-
 				</Stack>
 			</Form>
+			{
+				data.id && <RealmSimilarTopicsList realmId={data.id}/>
+			}
 		</div>
 	)
 }

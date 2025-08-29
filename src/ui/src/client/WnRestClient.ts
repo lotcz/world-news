@@ -3,13 +3,13 @@ import conf from "../config/conf.json";
 import {LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
 import {Language} from "../types/Language";
 import {ClientStats, WnStats} from "../types/Stats";
-import {Realm} from "../types/Realm";
 import {ArticleSource} from "../types/ArticleSource";
 import {EnumerationsClient} from "./EnumerationsClient";
 import {ArticlesClient} from "./ArticlesClient";
 import {AiLogClient} from "./AiLogClient";
 import {TagsClient} from "./TagsClient";
 import {TopicsClient} from "./TopicsClient";
+import {RealmsClient} from "./RealmsClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -17,7 +17,7 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public languages: LookupClient<Language>;
 
-	public realms: LookupClient<Realm>;
+	public realms: RealmsClient;
 
 	public articleSources: LookupClient<ArticleSource>;
 
@@ -34,7 +34,7 @@ export class WnRestClient extends RestClientWithOAuth {
 
 		this.enumerations = new EnumerationsClient(this);
 		this.languages = new LookupClient<Language>(this, 'languages');
-		this.realms = new LookupClient<Realm>(this, 'realms');
+		this.realms = new RealmsClient(this);
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
 		this.topics = new TopicsClient(this);
 		this.tags = new TagsClient(this);

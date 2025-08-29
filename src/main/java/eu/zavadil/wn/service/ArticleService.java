@@ -112,7 +112,7 @@ public class ArticleService {
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, 1, limit);
+		return this.findSimilar(embedding, 2.0F, limit);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(int articleId, int limit) {

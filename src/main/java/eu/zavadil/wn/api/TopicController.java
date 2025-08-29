@@ -70,4 +70,12 @@ public class TopicController {
 	) {
 		return this.topicService.findSimilarToArticle(articleId, size);
 	}
+
+	@GetMapping("similar-to-realm/{realmId}")
+	public List<TopicEmbeddingDistance> loadSimilarToRealm(
+		@PathVariable int realmId,
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return this.topicService.findSimilarToRealm(realmId, size);
+	}
 }

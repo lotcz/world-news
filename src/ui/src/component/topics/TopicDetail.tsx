@@ -13,6 +13,7 @@ import {LanguageIdSelect} from "../languages/LanguageSelect";
 import TopicAiLogList from "./TopicAiLogList";
 import TopicSimilarTopicsList from "./TopicSimilarTopicsList";
 import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
+import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -44,7 +45,7 @@ export default function TopicDetail() {
 		[id, restClient, userAlerts]
 	);
 
-	useEffect(reload, []);
+	useEffect(reload, [id]);
 
 	const saveData = useCallback(
 		() => {
@@ -186,6 +187,13 @@ export default function TopicDetail() {
 					<div className="px-3">
 						{
 							data.id && <TopicSimilarArticlesList topicId={data.id}/>
+						}
+					</div>
+				</Tab>
+				<Tab title="Similar Realms" eventKey="similarRealms">
+					<div className="px-3">
+						{
+							data.id && <TopicSimilarRealmsList topicId={data.id}/>
 						}
 					</div>
 				</Tab>

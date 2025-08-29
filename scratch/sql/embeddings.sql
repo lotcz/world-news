@@ -41,3 +41,20 @@ CREATE INDEX topic_embeddings_vector_ix
 	ON topic_embeddings
 		USING ivfflat (embedding vector_cosine_ops)
 	WITH (lists = 100);
+
+DROP TABLE IF EXISTS realm_embeddings;
+
+CREATE TABLE realm_embeddings (
+	realm_id integer not null primary key
+    	constraint fk_realm_embeddings_realm
+        references realm
+        on delete cascade,
+	embedding vector(1536) not null
+);
+
+DROP INDEX IF EXISTS realm_embeddings_vector_ix;
+
+CREATE INDEX realm_embeddings_vector_ix
+	ON realm_embeddings
+		USING ivfflat (embedding vector_cosine_ops)
+	WITH (lists = 100);

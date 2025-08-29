@@ -16,4 +16,8 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`);
 	}
 
+	loadSimilarToRealm(realmId: number): Promise<Array<TopicEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-realm/${realmId}`);
+	}
+
 }

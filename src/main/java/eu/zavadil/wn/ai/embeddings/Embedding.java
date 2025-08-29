@@ -20,4 +20,9 @@ public class Embedding extends ArrayList<Float> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return super.toString().replaceAll("\\s+", "");
+	}
+
 }
