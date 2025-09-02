@@ -56,5 +56,4 @@ DROP INDEX IF EXISTS realm_embeddings_vector_ix;
 
 CREATE INDEX realm_embeddings_vector_ix
 	ON realm_embeddings
-		USING ivfflat (embedding vector_cosine_ops)
-	WITH (lists = 100);
+		USING hnsw (embedding vector_cosine_ops);
