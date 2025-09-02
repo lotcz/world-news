@@ -136,6 +136,7 @@ export default function RealmDetail() {
 					</Row>
 				</Stack>
 			</Form>
+			<h3>Similar Topics</h3>
 			{
 				data.id && <RealmSimilarTopicsList realmId={data.id}/>
 			}

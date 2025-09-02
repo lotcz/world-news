@@ -35,15 +35,16 @@ public class RealmService extends RepositoryNamedLookupCache<Realm> {
 		return saved;
 	}
 
-	public List<RealmEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
-		List<EmbeddingDistance> similar = this.realmEmbeddingsService.searchSimilar(embedding, maxDistance, limit);
+	public List<RealmEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
+		List<EmbeddingDistance> similar = (maxDistance == null) ? this.realmEmbeddingsService.searchSimilar(embedding, limit)
+			: this.realmEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
 		return similar.stream().map(
 			(ed) -> new RealmEmbeddingDistance(ed, this.get(ed.getEntityId()))
 		).toList();
 	}
 
 	public List<RealmEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, 2.0F, limit);
+		return this.findSimilar(embedding, limit, null);
 	}
 
 	public List<RealmEmbeddingDistance> findSimilarToTopic(int topicId, int limit) {

@@ -70,15 +70,16 @@ public class TopicService {
 		this.topicRepository.deleteById(id);
 	}
 
-	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
-		List<EmbeddingDistance> similar = this.topicEmbeddingsService.searchSimilar(embedding, maxDistance, limit);
+	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
+		List<EmbeddingDistance> similar = (maxDistance == null) ? this.topicEmbeddingsService.searchSimilar(embedding, limit)
+			: this.topicEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
 		return similar.stream().map(
 			(ed) -> new TopicEmbeddingDistance(ed, this.topicRepository.findById(ed.getEntityId()).orElse(null))
 		).toList();
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, 2.0F, limit);
+		return this.findSimilar(embedding, limit, null);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
@@ -96,7 +97,7 @@ public class TopicService {
 	}
 
 	public Topic findMostSimilar(Embedding embedding) {
-		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 0.26F, 1);
+		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.26F);
 		if (similar.isEmpty()) return null;
 		return similar.get(0).getEntity();
 	}

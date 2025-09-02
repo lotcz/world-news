@@ -104,15 +104,15 @@ public class ArticleService {
 		return this.articleEmbeddingsService.updateEmbedding(article);
 	}
 
-	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, float maxDistance, int limit) {
-		List<EmbeddingDistance> similar = this.articleEmbeddingsService.searchSimilar(embedding, maxDistance, limit);
+	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit, float maxDistance) {
+		List<EmbeddingDistance> similar = this.articleEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
 		return similar.stream().map(
 			(ed) -> new ArticleEmbeddingDistance(ed, this.articleRepository.findById(ed.getEntityId()).orElse(null))
 		).toList();
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, 2.0F, limit);
+		return this.findSimilar(embedding, limit, 2.0F);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(int articleId, int limit) {
