@@ -12,7 +12,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 	@Query("""
 				select t
 				from Topic t
-				where lower(t.name) LIKE %:search%
+				where t.name LIKE %:search%
 		""")
 	Page<Topic> search(@Param("search") String search, PageRequest pr);
 

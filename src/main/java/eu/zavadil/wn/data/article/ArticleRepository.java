@@ -16,9 +16,9 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	@Query("""
 			select a
 			from Article a
-			where lower(a.title) LIKE %:search%
-				or lower(a.originalUrl) LIKE %:search%
-				or lower(a.originalUid) LIKE %:search%
+			where a.title LIKE %:search%
+				or a.originalUrl LIKE %:search%
+				or a.originalUid LIKE %:search%
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 

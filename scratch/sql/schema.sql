@@ -46,6 +46,9 @@ create table language (
 	ai_user_prompt_compile_articles text
 );
 
+ALTER TABLE language
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
 create unique index idx_language_name
     on language (name);
 
@@ -71,6 +74,9 @@ create table article_source (
     article_count int not null default 0
 );
 
+ALTER TABLE article_source
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
 create index idx_article_last_imported
     on article_source (last_imported);
 
@@ -82,6 +88,9 @@ create table realm (
     approved boolean not null default false,
     summary text
 );
+
+ALTER TABLE realm
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create index idx_realm_name
     on realm (name);
@@ -110,6 +119,9 @@ create table tag (
         references tag
 );
 
+ALTER TABLE tag
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
 create unique index idx_tag_name
     on tag (language_id, name);
 
@@ -134,6 +146,9 @@ create table topic (
     summary text,
     article_count int not null default 0
 );
+
+ALTER TABLE topic
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create index idx_topic_processing_state
     on topic (processing_state, article_count);
@@ -160,6 +175,9 @@ create table article (
         constraint fk6x3cr4vpqhjktvuju4u1f77q1
         references topic
 );
+
+ALTER TABLE article
+ALTER COLUMN title TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create index idx_article_created_on
     on article (created_on desc);

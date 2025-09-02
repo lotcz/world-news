@@ -1,5 +1,6 @@
 - multilanguage (english)
-  - create internal articles only in the language of internal article source?
+  - create internal articles only in the language of internal article source
+
 - article search, change collation to avoid using lower function
 
 Tags
