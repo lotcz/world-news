@@ -5,6 +5,7 @@ import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
+import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				}
 			);
 
-		List<String> userPrompt = new ArrayList<>(topic.getLanguage().getUserPromptCompileArticles());
+		Language language = this.articleSourceService.getInternalArticleSource().getLanguage();
+		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {
 			if (!article.isInternal()) {
 				compiled.getTags().addAll(article.getTags());
@@ -66,7 +68,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		}
 
 		String response = this.aiAssistantService.ask(
-			topic.getLanguage().getSystemPrompt(),
+			language.getSystemPrompt(),
 			userPrompt,
 			AiOperation.CompileArticles,
 			EntityType.Topic,

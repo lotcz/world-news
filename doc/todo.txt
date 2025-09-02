@@ -1,14 +1,11 @@
-- multilanguage (english)
-  - create internal articles only in the language of internal article source
+Realms
+- realms structuted as tree
+- assign topics to realms
 
-- article search, change collation to avoid using lower function
 
 Tags
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
-Realms
-- assign topics to realms
-- realms structuted as tree
 
 - UI - temporary error messages
 - generate UID for internal articles and make it non-null and unique
