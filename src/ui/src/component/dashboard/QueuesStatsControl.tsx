@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, Stack} from "react-bootstrap";
 import {QueueStatsControl} from "zavadil-react-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnStats} from "../../types/Stats";
@@ -39,8 +39,12 @@ function QueuesStatsControl() {
 				<Card.Title>Queues</Card.Title>
 			</Card.Header>
 			<Card.Body>
-				<QueueStatsControl name="Ingestion" stats={stats?.ingestQueue}/>
-				<Button size="sm" onClick={startIngestion} disabled={stats?.ingestQueue.state !== 'Idle'}>Start</Button>
+				<Stack direction="horizontal" gap={2}>
+					<div className="flex-grow-1">
+						<QueueStatsControl name="Ingestion" stats={stats?.ingestQueue}/>
+					</div>
+					<Button size="sm" onClick={startIngestion} disabled={stats?.ingestQueue.state !== 'Idle'}>Start</Button>
+				</Stack>
 				<QueueStatsControl name="Annotation" stats={stats?.annotateQueue}/>
 				<QueueStatsControl name="Compilation" stats={stats?.compileQueue}/>
 			</Card.Body>
