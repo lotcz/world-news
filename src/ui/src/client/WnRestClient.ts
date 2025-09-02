@@ -56,7 +56,11 @@ export class WnRestClient extends RestClientWithOAuth {
 		}
 	}
 
-	startIngestion(sourceId: number): Promise<Response> {
+	startIngestion(): Promise<Response> {
+		return this.post('queues/ingest/start');
+	}
+	
+	startIngestionBySource(sourceId: number): Promise<Response> {
 		return this.post(`queues/ingest/start/${sourceId}`);
 	}
 

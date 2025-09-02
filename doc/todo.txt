@@ -1,3 +1,4 @@
+- wrap embeddings search
 - multilanguage (english)
   - create internal articles only in the language of internal article source?
 
@@ -5,18 +6,16 @@ Tags
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
 Realms
-- assign topics to realms (realm will have description and then we use embeddings search)
+- assign topics to realms
+- realms structuted as tree
 
-- introduce virtual editor to do the AI compilation work with flavor
-- full-text search in summary and body?
 - UI - temporary error messages
-- generate UID for internal articles and make it unique
+- generate UID for internal articles and make it non-null and unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
 
 Media
   - fotografie
     - https://www.ctk.cz/sluzby/fotobanka/
-  - videa
 
 Ingestion
 
@@ -41,7 +40,7 @@ Websites
 - GDPR consent (research and implement correctly)
 - Privacy policy
 - Terms and Conditions
-
+- monitor which realms or tags is user interested in then offer him to be notified about it
 
 Revenue sources
 - ads (google AdSense, Sklik, own ad system)
@@ -55,6 +54,10 @@ Realms and websites
 
 "daily news" search on YT is almost empty
 https://pravesestalo.cz/ is free
+ - stalo se tento den... (historicke okenko)
+ - get some inspiration from publico.cz
+justhappening.eu or justhappened.eu
+kocovka .today nebo .online nebo .news
 
 - Politics
   - Česká politika
@@ -63,6 +66,7 @@ https://pravesestalo.cz/ is free
   - Ecology and global warming
   - Linux and open source
   - AI and LLMs
+  - space exploration/race
 - Lifestyle
   - Cars
   - Hobby
@@ -95,5 +99,20 @@ https://pravesestalo.cz/ is free
   - conspiracy theories
 - Satire and parody
   - El poblitico (with merch)
+  - Karel Politico
 - Nature
   - Dogs and animals
+
+
+2.0
+===
+
+- introduce virtual writer to do the AI compilation work with flavor
+- full-text search in summary and body
+- semantic search in summary and body
+- import videos
+
+Timelines
+  - create timelines of long-running stories
+  - turn into separate articles
+  - make podcast and later videos of them

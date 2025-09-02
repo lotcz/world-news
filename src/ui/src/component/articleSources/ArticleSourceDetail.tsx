@@ -76,7 +76,7 @@ export default function ArticleSourceDetail() {
 			const id = data?.id;
 			if (!id) return;
 			restClient
-				.startIngestion(id)
+				.startIngestionBySource(id)
 				.then((f) => userAlerts.info("Ingestion started"))
 				.catch((e: Error) => userAlerts.err(e))
 		},

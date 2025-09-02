@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {Card, Placeholder} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import {QueueStatsControl} from "zavadil-react-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnStats} from "../../types/Stats";
@@ -19,6 +19,14 @@ function QueuesStatsControl() {
 		[restClient, userAlerts]
 	);
 
+	const startIngestion = useCallback(
+		() => {
+			restClient.startIngestion()
+				.catch((e) => userAlerts.err(e))
+		},
+		[restClient, userAlerts]
+	);
+
 	useEffect(() => {
 		loadStats();
 		const h = setInterval(loadStats, 2000);
@@ -31,24 +39,10 @@ function QueuesStatsControl() {
 				<Card.Title>Queues</Card.Title>
 			</Card.Header>
 			<Card.Body>
-				{
-					stats ? <QueueStatsControl name="Ingestion" stats={stats.ingestQueue}/>
-						: <Placeholder className="w-100" as="p" animation="glow">
-							<Placeholder className="w-100"/>
-						</Placeholder>
-				}
-				{
-					stats ? <QueueStatsControl name="Annotation" stats={stats.annotateQueue}/>
-						: <Placeholder className="w-100" as="p" animation="glow">
-							<Placeholder className="w-100"/>
-						</Placeholder>
-				}
-				{
-					stats ? <QueueStatsControl name="Compilation" stats={stats.compileQueue}/>
-						: <Placeholder className="w-100" as="p" animation="glow">
-							<Placeholder className="w-100"/>
-						</Placeholder>
-				}
+				<QueueStatsControl name="Ingestion" stats={stats?.ingestQueue}/>
+				<Button size="sm" onClick={startIngestion} disabled={stats?.ingestQueue.state !== 'Idle'}>Start</Button>
+				<QueueStatsControl name="Annotation" stats={stats?.annotateQueue}/>
+				<QueueStatsControl name="Compilation" stats={stats?.compileQueue}/>
 			</Card.Body>
 		</Card>
 	);

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("${api.base-url}/queues")
-@Tag(name = "Ingest")
+@Tag(name = "Queues")
 @Slf4j
 public class QueuesController {
 
@@ -23,9 +24,16 @@ public class QueuesController {
 	@Autowired
 	ArticleSourceService articleSourceService;
 
-	@PostMapping("ingest/start/{articleSourceId}")
+	@PostMapping("ingest/start")
 	@Operation(summary = "Start ingestion")
-	public void start(@PathVariable int articleSourceId) {
+	@Async
+	public void startIngestion() {
+		this.ingestWorker.process();
+	}
+
+	@PostMapping("ingest/start/{articleSourceId}")
+	@Operation(summary = "Start ingestion by source")
+	public void startIngestionBySource(@PathVariable int articleSourceId) {
 		this.ingestWorker.ingestDataSourceAsync(this.articleSourceService.get(articleSourceId));
 	}
 
