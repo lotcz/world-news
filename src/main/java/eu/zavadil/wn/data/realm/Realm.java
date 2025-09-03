@@ -18,6 +18,9 @@ import lombok.EqualsAndHashCode;
 )
 public class Realm extends EntityWithNameBase {
 
+	@Column(name = "parent_id")
+	private Integer parentId;
+
 	@Column(columnDefinition = "text")
 	private String summary;
 

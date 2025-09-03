@@ -84,6 +84,9 @@ create table realm (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    parent_id integer
+    	constraint fk_realm_parent
+       	references realm,
     name varchar(255),
     approved boolean not null default false,
     summary text

@@ -1,15 +1,15 @@
 Realms
-- realms structuted as tree
+- realms structuted as tree, prevent circles
 - assign topics to realms
 
 
 Tags
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
-
-- UI - temporary error messages
+- add obtainEmbedding() function to prevent missing embedding problems
 - generate UID for internal articles and make it non-null and unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
+- annotation is suspiciously slow, investigate
 
 Media
   - fotografie
