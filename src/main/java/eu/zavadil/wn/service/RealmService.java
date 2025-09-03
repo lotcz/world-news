@@ -1,5 +1,6 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.caching.Lazy;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
@@ -7,6 +8,7 @@ import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.realm.RealmCache;
+import eu.zavadil.wn.data.realm.RealmTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +29,20 @@ public class RealmService {
 	@Autowired
 	RealmCache realmCache;
 
+	private Lazy<RealmTree> realmTree = new Lazy<>(
+		() -> RealmTree.of(null, this.realmCache.all())
+	);
+
 	public Realm loadById(int realmId) {
 		return this.realmCache.get(realmId);
 	}
 
 	public List<Realm> loadAll() {
 		return this.realmCache.all();
+	}
+
+	public RealmTree getTree() {
+		return this.realmTree.get();
 	}
 
 	public Page<Realm> search(String search, PageRequest pr) {
@@ -42,6 +52,7 @@ public class RealmService {
 	@Transactional
 	public Realm save(Realm realm) {
 		Realm saved = this.realmCache.set(realm);
+		this.realmTree.reset();
 		this.realmEmbeddingsService.updateEmbedding(saved);
 		return saved;
 	}

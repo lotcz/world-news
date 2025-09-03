@@ -95,6 +95,10 @@ kocovka .today nebo .online nebo .news
   - Horror
   - aviation accidents
   - conspiracy theories
+    - Russian dezinformation
+    - monitoring dezinformacnich webu
+    - debunking
+
 - Satire and parody
   - El poblitico (with merch)
   - Karel Politico

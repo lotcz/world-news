@@ -1,6 +1,6 @@
 import {LookupClient, RestClient} from "zavadil-ts-common";
 import {RealmEmbeddingDistance} from "../types/EmbeddingDistance";
-import {Realm} from "../types/Realm";
+import {Realm, RealmTree} from "../types/Realm";
 
 export class RealmsClient extends LookupClient<Realm> {
 
@@ -12,4 +12,7 @@ export class RealmsClient extends LookupClient<Realm> {
 		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`);
 	}
 
+	loadTree(): Promise<RealmTree> {
+		return this.client.getJson(`${this.name}/tree`);
+	}
 }

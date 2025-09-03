@@ -24,5 +24,4 @@ public class Realm extends EntityWithNameBase {
 	@Column(columnDefinition = "text")
 	private String summary;
 
-	private boolean approved = false;
 }

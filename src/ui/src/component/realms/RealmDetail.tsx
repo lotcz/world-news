@@ -6,8 +6,8 @@ import {NumberUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
-import {Switch} from "zavadil-react-common";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
+import RealmSelect from "./RealmSelect";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -86,14 +86,14 @@ export default function RealmDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Approved:</Form.Label>
+							<Form.Label>Parent:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<Switch
-								checked={data.approved}
+							<RealmSelect
+								realmId={data.parentId}
 								onChange={
 									(e) => {
-										data.approved = e;
+										data.parentId = e;
 										setData({...data});
 										setChanged(true);
 									}

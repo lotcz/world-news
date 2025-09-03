@@ -88,7 +88,6 @@ create table realm (
     	constraint fk_realm_parent
        	references realm,
     name varchar(255),
-    approved boolean not null default false,
     summary text
 );
 
@@ -97,16 +96,6 @@ ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create index idx_realm_name
     on realm (name);
-
-create table article_source_realm (
-    article_source_id integer not null
-        constraint fkcp59ajplvu3i1n32fmegft0lf
-        references article_source,
-    realm_id integer not null
-        constraint fk3jhg2gwueixnef316q0q8q6k0
-            references realm,
-    primary key (article_source_id, realm_id)
-);
 
 create table tag (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

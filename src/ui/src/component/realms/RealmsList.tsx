@@ -1,33 +1,18 @@
-import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import React, {FormEvent, useCallback, useState} from 'react';
+import {Button, Form, Stack, Tab, Tabs} from 'react-bootstrap';
+import {TextInputWithReset} from "zavadil-react-common";
+import {PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
-import {WnRestClientContext} from "../../client/WnRestClient";
-import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
-
-const HEADER = [
-	{name: 'id', label: 'ID'},
-	{name: 'name', label: 'Name'},
-	{name: 'summary', label: 'Summary'},
-	{name: 'approved', label: 'Approved'},
-	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'}
-];
+import RealmsTree from "./RealmsTree";
+import RealmsTable from "./RealmsTable";
+import RefreshIconButton from "../general/RefreshIconButton";
 
 function RealmsList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
-	const restClient = useContext(WnRestClientContext);
-	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<Realm> | null>(null);
-
-	const paging = useMemo(
-		() => PagingUtil.pagingRequestFromString(pagingString),
-		[pagingString]
-	);
-
+	const [activeTab, setActiveTab] = useState<string>("tree");
+	const [paging, setPaging] = useState<PagingRequest>(PagingUtil.pagingRequestFromString(pagingString));
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
@@ -55,26 +40,18 @@ function RealmsList() {
 		[paging, searchInput, navigateToPage]
 	);
 
-	const loadPageHandler = useCallback(
+	const reload = useCallback(
 		() => {
-			restClient
-				.realms
-				.loadPage(paging)
-				.then(setData)
-				.catch((e: Error) => {
-					setData(null);
-					userAlerts.err(e);
-				});
+			setPaging({...paging});
 		},
-		[paging, restClient, userAlerts]
+		[paging, searchInput, navigateToPage]
 	);
-
-	useEffect(loadPageHandler, [paging]);
 
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
+					<RefreshIconButton onClick={reload}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch}>
@@ -89,37 +66,15 @@ function RealmsList() {
 				</Stack>
 			</div>
 
-			<div className="d-flex pt-2 px-3 gap-3">
+			<div className="pt-2 px-3">
+				<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(String(key))}>
+					<Tab title="Tree" eventKey="tree"/>
+					<Tab title="Table" eventKey="table"/>
+				</Tabs>
 				{
-					(data === null) ? <span><Spinner/></span>
-						: (
-							<AdvancedTable
-								header={HEADER}
-								paging={paging}
-								totalItems={data.totalItems}
-								onPagingChanged={navigateToPage}
-								hover={true}
-								striped={true}
-							>
-								{
-									(data.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>Nothing here...</td>
-										</tr> :
-										data.content.map((item, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{item.id}</td>
-													<td>{item.name}</td>
-													<td>{item.summary}</td>
-													<td>{item.approved ? 'Yes' : 'No'}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
-												</tr>
-											);
-										})
-								}
-							</AdvancedTable>
-						)
+					activeTab === 'tree'
+						? <RealmsTree paging={paging} onItemSelected={navigateToDetail} onPageRequested={navigateToPage}/>
+						: <RealmsTable paging={paging} onItemSelected={navigateToDetail} onPageRequested={navigateToPage}/>
 				}
 			</div>
 		</div>

@@ -5,6 +5,7 @@ import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
 import eu.zavadil.wn.data.realm.Realm;
+import eu.zavadil.wn.data.realm.RealmTree;
 import eu.zavadil.wn.service.RealmService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,11 @@ public class RealmController {
 	@GetMapping("{id}")
 	public Realm load(@PathVariable int id) {
 		return this.realmService.loadById(id);
+	}
+
+	@GetMapping("tree")
+	public RealmTree loadTree() {
+		return this.realmService.getTree();
 	}
 
 	@PutMapping("{id}")
