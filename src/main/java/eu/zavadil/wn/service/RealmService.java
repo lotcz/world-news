@@ -1,21 +1,22 @@
 package eu.zavadil.wn.service;
 
-import eu.zavadil.java.spring.common.entity.cache.RepositoryNamedLookupCache;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.realm.Realm;
-import eu.zavadil.wn.data.realm.RealmRepository;
+import eu.zavadil.wn.data.realm.RealmCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class RealmService extends RepositoryNamedLookupCache<Realm> {
+public class RealmService {
 
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
@@ -24,22 +25,36 @@ public class RealmService extends RepositoryNamedLookupCache<Realm> {
 	TopicEmbeddingsService topicEmbeddingsService;
 
 	@Autowired
-	public RealmService(RealmRepository repository) {
-		super(repository, Realm::new);
+	RealmCache realmCache;
+
+	public Realm loadById(int realmId) {
+		return this.realmCache.get(realmId);
+	}
+
+	public List<Realm> loadAll() {
+		return this.realmCache.all();
+	}
+
+	public Page<Realm> search(String search, PageRequest pr) {
+		return this.realmCache.search(search, pr);
 	}
 
 	@Transactional
 	public Realm save(Realm realm) {
-		Realm saved = this.set(realm);
+		Realm saved = this.realmCache.set(realm);
 		this.realmEmbeddingsService.updateEmbedding(saved);
 		return saved;
+	}
+
+	public void deleteById(int realmId) {
+		this.realmCache.deleteById(realmId);
 	}
 
 	public List<RealmEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
 		List<EmbeddingDistance> similar = (maxDistance == null) ? this.realmEmbeddingsService.searchSimilar(embedding, limit)
 			: this.realmEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
 		return similar.stream().map(
-			(ed) -> new RealmEmbeddingDistance(ed, this.get(ed.getEntityId()))
+			(ed) -> new RealmEmbeddingDistance(ed, this.realmCache.get(ed.getEntityId()))
 		).toList();
 	}
 
@@ -48,7 +63,7 @@ public class RealmService extends RepositoryNamedLookupCache<Realm> {
 	}
 
 	public List<RealmEmbeddingDistance> findSimilarToTopic(int topicId, int limit) {
-		Embedding embedding = this.topicEmbeddingsService.loadEmbedding(topicId);
+		Embedding embedding = this.topicEmbeddingsService.obtainEmbedding(topicId);
 		return this.findSimilar(embedding, limit);
 	}
 }

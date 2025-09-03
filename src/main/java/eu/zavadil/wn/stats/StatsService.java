@@ -1,8 +1,8 @@
 package eu.zavadil.wn.stats;
 
+import eu.zavadil.wn.data.realm.RealmCache;
 import eu.zavadil.wn.service.ArticleSourceService;
 import eu.zavadil.wn.service.LanguageService;
-import eu.zavadil.wn.service.RealmService;
 import eu.zavadil.wn.worker.annotate.AnnotateQueueProcessor;
 import eu.zavadil.wn.worker.compile.CompileQueueProcessor;
 import eu.zavadil.wn.worker.ingest.IngestQueueProcessor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class StatsService {
 
 	@Autowired
-	RealmService realmService;
+	RealmCache realmCache;
 
 	@Autowired
 	LanguageService languageService;
@@ -34,7 +34,7 @@ public class StatsService {
 		final WnStats stats = new WnStats();
 
 		// cache
-		stats.setRealmCache(this.realmService.getStats());
+		stats.setRealmCache(this.realmCache.getStats());
 		stats.setLanguageCache(this.languageService.getStats());
 		stats.setArticleSourceCache(this.articleSourceService.getStats());
 

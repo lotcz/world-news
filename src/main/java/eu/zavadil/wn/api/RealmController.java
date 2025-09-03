@@ -24,7 +24,7 @@ public class RealmController {
 
 	@GetMapping("all")
 	public List<Realm> loadAll() {
-		return this.realmService.all();
+		return this.realmService.loadAll();
 	}
 
 	@GetMapping("")
@@ -45,7 +45,7 @@ public class RealmController {
 
 	@GetMapping("{id}")
 	public Realm load(@PathVariable int id) {
-		return this.realmService.get(id);
+		return this.realmService.loadById(id);
 	}
 
 	@PutMapping("{id}")

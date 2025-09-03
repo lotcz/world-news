@@ -5,6 +5,7 @@ import eu.zavadil.wn.ai.embeddings.ArticleEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
+import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleRepository;
@@ -34,7 +35,7 @@ public class ArticleService {
 	ArticleEmbeddingsService articleEmbeddingsService;
 
 	@Autowired
-	TopicService topicService;
+	TopicEmbeddingsService topicEmbeddingsService;
 
 	@Transactional
 	public Article save(Article article) {
@@ -120,7 +121,7 @@ public class ArticleService {
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilarToTopic(int topicId, int limit) {
-		Embedding embedding = this.topicService.loadEmbedding(topicId);
+		Embedding embedding = this.topicEmbeddingsService.obtainEmbedding(topicId);
 		return this.findSimilar(embedding, limit);
 	}
 

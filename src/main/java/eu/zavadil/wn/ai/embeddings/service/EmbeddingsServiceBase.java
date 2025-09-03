@@ -1,5 +1,6 @@
 package eu.zavadil.wn.ai.embeddings.service;
 
+import eu.zavadil.java.spring.common.entity.EntityBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
@@ -11,23 +12,13 @@ import eu.zavadil.wn.ai.embeddings.repository.EmbeddingRepositoryBase;
 
 import java.util.List;
 
-public class EmbeddingsServiceBase {
+public abstract class EmbeddingsServiceBase<T extends EntityBase> {
 
 	private final AiEmbeddingsEngine aiEngine;
 
 	private final EmbeddingsCache embeddingsCache;
 
 	private final EmbeddingRepositoryBase embeddingRepository;
-
-	public EmbeddingsServiceBase(
-		AiEmbeddingsEngine aiEngine,
-		EmbeddingsCache embeddingsCache,
-		EmbeddingRepositoryBase embeddingRepository
-	) {
-		this.aiEngine = aiEngine;
-		this.embeddingsCache = embeddingsCache;
-		this.embeddingRepository = embeddingRepository;
-	}
 
 	private Embedding createEmbedding(AiEmbeddingsParams params) {
 		AiEmbeddingsResponse response = this.aiEngine.getEmbedding(params);
@@ -42,6 +33,20 @@ public class EmbeddingsServiceBase {
 				.build()
 		);
 	}
+
+	public EmbeddingsServiceBase(
+		AiEmbeddingsEngine aiEngine,
+		EmbeddingsCache embeddingsCache,
+		EmbeddingRepositoryBase embeddingRepository
+	) {
+		this.aiEngine = aiEngine;
+		this.embeddingsCache = embeddingsCache;
+		this.embeddingRepository = embeddingRepository;
+	}
+
+	public abstract Embedding updateEmbedding(T entity);
+
+	public abstract T loadEntity(int id);
 
 	public Embedding updateEmbedding(int entityId, String text) {
 		if (StringUtils.isBlank(text)) {
@@ -59,6 +64,13 @@ public class EmbeddingsServiceBase {
 
 	public Embedding loadEmbedding(int entityId) {
 		return this.embeddingRepository.loadEmbedding(entityId);
+	}
+
+	public Embedding obtainEmbedding(int entityId) {
+		Embedding embedding = this.loadEmbedding(entityId);
+		if (embedding != null) return embedding;
+		T entity = this.loadEntity(entityId);
+		return this.updateEmbedding(entity);
 	}
 
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, float maxDistance) {

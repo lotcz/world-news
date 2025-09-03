@@ -83,16 +83,16 @@ public class TopicService {
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
-		return this.findSimilar(this.topicEmbeddingsService.loadEmbedding(topicId), limit);
+		return this.findSimilar(this.topicEmbeddingsService.obtainEmbedding(topicId), limit);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilarToArticle(int articleId, int limit) {
-		Embedding embedding = this.articleEmbeddingsService.loadEmbedding(articleId);
+		Embedding embedding = this.articleEmbeddingsService.obtainEmbedding(articleId);
 		return this.findSimilar(embedding, limit);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilarToRealm(int realmId, int limit) {
-		Embedding embedding = this.realmEmbeddingsService.loadEmbedding(realmId);
+		Embedding embedding = this.realmEmbeddingsService.obtainEmbedding(realmId);
 		return this.findSimilar(embedding, limit);
 	}
 
