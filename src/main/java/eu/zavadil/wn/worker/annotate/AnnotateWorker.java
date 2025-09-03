@@ -151,7 +151,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			);
 		}
 
-		return this.articleService.obtainEmbedding(article);
+		return this.articleService.updateEmbedding(article);
 	}
 
 	private Topic assignTopic(Article article, Embedding embedding) {

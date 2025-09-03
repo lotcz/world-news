@@ -8,7 +8,6 @@ Tags
 
 - generate UID for internal articles and make it non-null and unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
-- annotation is suspiciously slow, investigate
 
 Media
   - fotografie

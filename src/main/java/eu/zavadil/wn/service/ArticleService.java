@@ -97,27 +97,24 @@ public class ArticleService {
 			);
 	}
 
-	public Embedding loadEmbedding(int articleId) {
-		return this.articleEmbeddingsService.loadEmbedding(articleId);
-	}
-
-	public Embedding obtainEmbedding(Article article) {
+	public Embedding updateEmbedding(Article article) {
 		return this.articleEmbeddingsService.updateEmbedding(article);
 	}
 
-	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit, float maxDistance) {
-		List<EmbeddingDistance> similar = this.articleEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
+	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
+		List<EmbeddingDistance> similar = maxDistance == null ? this.articleEmbeddingsService.searchSimilar(embedding, limit)
+			: this.articleEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
 		return similar.stream().map(
 			(ed) -> new ArticleEmbeddingDistance(ed, this.articleRepository.findById(ed.getEntityId()).orElse(null))
 		).toList();
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, limit, 2.0F);
+		return this.findSimilar(embedding, limit, null);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(int articleId, int limit) {
-		return this.findSimilar(this.loadEmbedding(articleId), limit);
+		return this.findSimilar(this.articleEmbeddingsService.obtainEmbedding(articleId), limit);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilarToTopic(int topicId, int limit) {

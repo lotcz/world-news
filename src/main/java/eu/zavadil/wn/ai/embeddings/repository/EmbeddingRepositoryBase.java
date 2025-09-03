@@ -121,7 +121,7 @@ public abstract class EmbeddingRepositoryBase {
 			EmbeddingDistance dist;
 			while (result.size() < limit && pageIndex < pageResult.size()) {
 				dist = pageResult.get(pageIndex);
-				if (dist.getDistance() > maxDistance) break;
+				if (dist.getDistance() > maxDistance) return result;
 				result.add(dist);
 				pageIndex++;
 			}
