@@ -6,7 +6,7 @@ import {NumberUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
-import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
+import RealmChildrenList from "./RealmChildrenList";
 import RealmSelect from "./RealmSelect";
 
 const COL_1_MD = 3;
@@ -136,9 +136,9 @@ export default function RealmDetail() {
 					</Row>
 				</Stack>
 			</Form>
-			<h3>Similar Topics</h3>
+			<h4>Children</h4>
 			{
-				data.id && <RealmSimilarTopicsList realmId={data.id}/>
+				data.id && <RealmChildrenList realmId={data.id}/>
 			}
 		</div>
 	)

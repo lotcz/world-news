@@ -15,4 +15,8 @@ export class RealmsClient extends LookupClient<Realm> {
 	loadTree(): Promise<RealmTree> {
 		return this.client.getJson(`${this.name}/tree`);
 	}
+
+	loadChildren(realmId: number): Promise<Array<Realm>> {
+		return this.client.getJson(`${this.name}/${realmId}/children`);
+	}
 }

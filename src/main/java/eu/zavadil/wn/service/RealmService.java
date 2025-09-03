@@ -41,6 +41,10 @@ public class RealmService {
 		return this.realmCache.all();
 	}
 
+	public List<Realm> loadChildren(int id) {
+		return RealmTree.childrenOf(id, this.loadAll());
+	}
+
 	public RealmTree getTree() {
 		return this.realmTree.get();
 	}

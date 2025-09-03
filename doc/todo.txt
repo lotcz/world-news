@@ -1,5 +1,4 @@
 Realms
-- realms structuted as tree, prevent circles
 - assign topics to realms
 
 

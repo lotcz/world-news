@@ -3,28 +3,27 @@ import {Spinner, Table} from 'react-bootstrap';
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {TopicEmbeddingDistance} from "../../types/EmbeddingDistance";
+import {Realm} from "../../types/Realm";
 
 export type RealmSimilarTopicsListProps = {
 	realmId: number;
 }
 
-function RealmSimilarTopicsList({realmId}: RealmSimilarTopicsListProps) {
+function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Array<TopicEmbeddingDistance>>();
+	const [data, setData] = useState<Array<Realm>>();
 
-	const navigateToDetail = (d: TopicEmbeddingDistance) => {
-		console.log(d.entityId);
-		navigate(`/topics/detail/${d.entityId}`);
+	const navigateToDetail = (d: Realm) => {
+		navigate(`/realms/detail/${d.id}`);
 	}
 
 	const load = useCallback(
 		() => {
 			restClient
-				.topics
-				.loadSimilarToRealm(realmId)
+				.realms
+				.loadChildren(realmId)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(undefined);
@@ -47,7 +46,7 @@ function RealmSimilarTopicsList({realmId}: RealmSimilarTopicsListProps) {
 				>
 					<thead>
 					<tr>
-						<th>Distance</th>
+						<th>ID</th>
 						<th>Name</th>
 						<th>Summary</th>
 					</tr>
@@ -57,12 +56,12 @@ function RealmSimilarTopicsList({realmId}: RealmSimilarTopicsListProps) {
 						(data.length === 0) ? <tr>
 								<td colSpan={4}>Nothing.</td>
 							</tr> :
-							data.map((ed, index) => {
+							data.map((r, index) => {
 								return (
-									<tr key={index} role="button" onClick={() => navigateToDetail(ed)}>
-										<td>{ed.distance}</td>
-										<td>{ed.entity?.name}</td>
-										<td>{ed.entity?.summary}</td>
+									<tr key={index} role="button" onClick={() => navigateToDetail(r)}>
+										<td>{r.id}</td>
+										<td>{r.name}</td>
+										<td>{r.summary}</td>
 									</tr>
 								);
 							})
@@ -74,4 +73,4 @@ function RealmSimilarTopicsList({realmId}: RealmSimilarTopicsListProps) {
 	);
 }
 
-export default RealmSimilarTopicsList;
+export default RealmChildrenList;

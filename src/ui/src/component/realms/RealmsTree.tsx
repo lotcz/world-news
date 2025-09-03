@@ -54,7 +54,6 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 						>
 							<thead>
 							<tr>
-								<th></th>
 								{
 									HEADER.map(h => <th>{h.label}</th>)
 								}

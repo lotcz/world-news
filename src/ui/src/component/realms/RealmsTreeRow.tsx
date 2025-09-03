@@ -3,6 +3,7 @@ import {DateUtil} from "zavadil-ts-common";
 import {Realm, RealmTree} from "../../types/Realm";
 import {IconButton} from "zavadil-react-common";
 import {BiSolidMinusSquare, BiSolidPlusSquare, BiSquare} from "react-icons/bi";
+import {Stack} from "react-bootstrap";
 
 export type RealmsTreeRowProps = {
 	level: number;
@@ -18,41 +19,49 @@ function RealmsTreeRow({level, tree, onItemSelected}: RealmsTreeRowProps) {
 		[tree]
 	);
 
-	const collapsed = useMemo(
-		() => data.collapsed !== false,
-		[data]
+	const expanded = useMemo(
+		() => data.collapsed === false || realm === null,
+		[data, realm]
 	);
 
-	const toggleCollapsed = useCallback(
+	const toggleExpanded = useCallback(
 		() => {
-			data.collapsed = !collapsed;
+			data.collapsed = expanded;
 			setData({...data});
 		},
-		[collapsed, data]
+		[expanded, data]
 	);
 
 	return (
 		<>
 			{
 				realm && <tr role="button" onClick={() => onItemSelected(realm)}>
-					<td style={{cursor: 'default', paddingLeft: (level - 1) * 20}} onClick={(e) => e.stopPropagation()}>
-						{
-							data.children.length > 0 ? <IconButton
-									variant="link"
-									onClick={toggleCollapsed}
-									icon={collapsed ? <BiSolidMinusSquare/> : <BiSolidPlusSquare/>}
-								/>
-								: <IconButton variant="link" disabled={true} icon={<BiSquare/>} onClick={() => null}/>
-						}
+					<td>
+						<Stack direction="horizontal" gap={2}>
+							<div
+								style={{paddingLeft: (level - 1) * 20}}
+								onClick={(e) => e.stopPropagation()}
+								className="cursor-default"
+							>
+								{
+									data.children.length > 0 ? <IconButton
+											variant="link"
+											onClick={toggleExpanded}
+											icon={expanded ? <BiSolidMinusSquare/> : <BiSolidPlusSquare/>}
+										/>
+										: <IconButton variant="link" disabled={true} icon={<BiSquare/>} onClick={() => null}/>
+								}
+							</div>
+							<div>{realm.name}</div>
+						</Stack>
 					</td>
-					<td>{realm.name}</td>
 					<td>{realm.summary}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.lastUpdatedOn)}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.createdOn)}</td>
 				</tr>
 			}
 			{
-				collapsed && data.children.map(
+				expanded && data.children.map(
 					r => <RealmsTreeRow level={level + 1} tree={r} onItemSelected={onItemSelected}/>
 				)
 			}

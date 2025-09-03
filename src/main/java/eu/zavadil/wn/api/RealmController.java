@@ -49,6 +49,11 @@ public class RealmController {
 		return this.realmService.loadById(id);
 	}
 
+	@GetMapping("{id}/children")
+	public List<Realm> loadChildren(@PathVariable int id) {
+		return this.realmService.loadChildren(id);
+	}
+
 	@GetMapping("tree")
 	public RealmTree loadTree() {
 		return this.realmService.getTree();
