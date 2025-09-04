@@ -8,7 +8,6 @@ import eu.zavadil.wn.service.ArticleSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,11 +27,14 @@ public class IngestArticleSourceQueue extends PagedSmartQueue<ArticleSource> {
 				(ArticleSource ars) -> (ars.getImportType() != ImportType.Internal)
 					&& ars.getProcessingState().equals(ProcessingState.Waiting))
 			.toList();
+		return new PageImpl<>(sources);
+		/*
 		return new PageImpl<>(
 			sources,
 			PageRequest.of(0, sources.size()),
 			sources.size()
 		);
+		 */
 	}
 
 }

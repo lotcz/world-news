@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -102,9 +104,12 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			this.articleService.save(article);
 		}
 
-		articleSource.setProcessingState(ProcessingState.Waiting);
+		articleSource.setProcessingState(ProcessingState.Done);
 		articleSource.setLastImported(Instant.now());
 		this.articleSourceService.set(articleSource);
+
+		// reset article source cache so article counts can be reloaded
+		this.articleSourceService.reset();
 
 		log.info(
 			"Loaded {} articles from {} - {} new, {} updated",
@@ -115,20 +120,35 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 		);
 	}
 
-	@Async
-	public void ingestDataSourceAsync(ArticleSource articleSource) {
-		this.ingestDataSource(articleSource);
-	}
-
 	@Override
 	public void onBeforeProcessing() {
-
+		// revive stuck sources (happens when killing the process)
+		Instant maxImported = Instant.now().minus(Duration.ofMinutes(10));
+		List<ArticleSource> stuck = this.articleSourceService.all()
+			.stream()
+			.filter(
+				(ars) -> ars.getProcessingState().equals(ProcessingState.Processing)
+					&& ars.getLastImported() != null && ars.getLastImported().isBefore(maxImported)
+			).toList();
+		stuck.forEach(
+			ars -> {
+				ars.setProcessingState(ProcessingState.Waiting);
+				this.articleSourceService.set(ars);
+			}
+		);
 	}
 
 	@Override
 	public void onAfterProcessing() {
-		// reset article source cache so article counts can be reloaded
-		this.articleSourceService.reset();
+		// reschedule ingestion
+		List<ArticleSource> sources = this.articleSourceService.all()
+			.stream()
+			.filter(ars -> ars.getProcessingState().equals(ProcessingState.Done))
+			.toList();
+		sources.forEach(ars -> {
+			ars.setProcessingState(ProcessingState.Waiting);
+			this.articleSourceService.set(ars);
+		});
 	}
 
 	@Override
@@ -136,7 +156,20 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 		try {
 			this.ingestDataSource(ars);
 		} catch (Exception e) {
+			ars.setProcessingState(ProcessingState.Error);
+			this.articleSourceService.set(ars);
 			log.error("Ingestion of source {} failed:", ars.getUrl(), e);
 		}
 	}
+
+	@Async
+	public void ingestDataSourceAsync(ArticleSource articleSource) {
+		this.ingestDataSource(articleSource);
+	}
+
+	@Async
+	public void ingestAsync() {
+		this.process();
+	}
+
 }

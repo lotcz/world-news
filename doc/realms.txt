@@ -1,0 +1,47 @@
+
+- Politics
+  - Česká politika
+  - Global Business
+- Science and Tech
+  - Ecology and global warming
+  - Linux and open source
+  - AI and LLMs
+  - space exploration/race
+- Lifestyle
+  - Cars
+  - Hobby
+- Sport
+  - American Sport
+  - Fotbal
+- Business a podníkání
+  - právo a justice
+- Pop-culture
+  - tabloid
+    - US Tabloid
+    - český bulvár
+
+  - niches
+    - Labubu
+    - Taylor Swift
+  - Weird stuff and Pecularities
+    - Drunken stories (opilecké historky)
+    - absolutegarbage.online (AI generated nonsense and satire)
+    - Interesting stories
+    - Interesting history
+  - Crime
+  - Sci-fi
+    - Star Trek
+    - Aliens
+    - Star Wars
+  - Horror
+  - aviation accidents
+  - conspiracy theories
+    - Russian disinformation
+    - monitoring dezinformacnich webu
+    - debunking
+
+- Satire and parody
+  - El poblitico (with merch)
+  - Karel Politico
+- Nature
+  - Dogs and animals

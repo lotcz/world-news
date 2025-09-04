@@ -2,12 +2,13 @@ import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
-import {NumberUtil} from "zavadil-ts-common";
+import {NumberUtil, ObjectUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
 import RealmChildrenList from "./RealmChildrenList";
 import RealmSelect from "./RealmSelect";
+import RefreshIconButton from "../general/RefreshIconButton";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -22,7 +23,7 @@ export default function RealmDetail() {
 	const [data, setData] = useState<Realm>();
 	const [changed, setChanged] = useState<boolean>(false);
 
-	useEffect(
+	const reload = useCallback(
 		() => {
 			if (!id) {
 				setData({
@@ -33,12 +34,16 @@ export default function RealmDetail() {
 				});
 				return;
 			}
-			restClient.realms.loadSingle(Number(id))
-				.then(setData)
+			setData(undefined);
+			restClient.realms
+				.loadSingle(Number(id))
+				.then((r) => setData(ObjectUtil.clone(r)))
 				.catch((e: Error) => userAlerts.err(e))
 		},
-		[id]
+		[id, restClient, userAlerts]
 	);
+
+	useEffect(reload, [id]);
 
 	const saveData = useCallback(
 		() => {
@@ -70,6 +75,7 @@ export default function RealmDetail() {
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
 					<Button variant="link" onClick={() => navigate('/realms')}>Back</Button>
+					<RefreshIconButton onClick={reload}/>
 					<Button
 						disabled={!changed}
 						onClick={saveData}
@@ -117,7 +123,7 @@ export default function RealmDetail() {
 							/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
+					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Summary:</Form.Label>
 						</Col>

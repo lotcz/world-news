@@ -1,11 +1,12 @@
 Realms
 - assign topics to realms
 
+- store total number of 3rd party articles for topic
 
 Tags
   - tag groups - if certain set of tags occurs together, merge it into a single tag
 
-
+- queues must reset before going over again, ingest queue is not stopping
 - generate UID for internal articles and make it non-null and unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
 
@@ -53,55 +54,7 @@ https://pravesestalo.cz/ is free
  - stalo se tento den... (historicke okenko)
  - get some inspiration from publico.cz
 justhappening.eu or justhappened.eu
-kocovka .today nebo .online nebo .news
-
-- Politics
-  - Česká politika
-  - Global Business
-- Science and Tech
-  - Ecology and global warming
-  - Linux and open source
-  - AI and LLMs
-  - space exploration/race
-- Lifestyle
-  - Cars
-  - Hobby
-- Sport
-  - American Sport
-  - Fotbal
-- Business a podníkání
-  - právo a justice
-- Pop-culture
-  - tabloid
-    - US Tabloid
-    - český bulvár
-  - Video Games
-    - Baldurs Gate 3
-  - niches
-    - Labubu
-    - Taylor Swift
-  - Weird stuff and Pecularities
-    - Drunken stories (opilecké historky)
-    - absolutegarbage.online (AI generated nonsense and satire)
-    - Interesting stories
-    - Interesting history
-  - Crime
-  - Sci-fi
-    - Star Trek
-    - Aliens
-    - Star Wars
-  - Horror
-  - aviation accidents
-  - conspiracy theories
-    - Russian dezinformation
-    - monitoring dezinformacnich webu
-    - debunking
-
-- Satire and parody
-  - El poblitico (with merch)
-  - Karel Politico
-- Nature
-  - Dogs and animals
+koncovka .today nebo .online nebo .news
 
 
 2.0

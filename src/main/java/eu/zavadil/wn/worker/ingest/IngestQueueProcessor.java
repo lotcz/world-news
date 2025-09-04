@@ -7,4 +7,6 @@ public interface IngestQueueProcessor extends SmartQueueProcessor<ArticleSource>
 
 	void ingestDataSourceAsync(ArticleSource articleSource);
 
+	void ingestAsync();
+	
 }

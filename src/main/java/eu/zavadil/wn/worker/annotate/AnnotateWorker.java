@@ -147,7 +147,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	private Embedding updateEmbedding(Article article) {
 		if (StringUtils.isBlank(article.getSummary())) {
 			throw new RuntimeException(
-				String.format("Article %s has no body! Cannot create embedding.", article.toString())
+				String.format("Article %s has no summary! Cannot create embedding.", article.toString())
 			);
 		}
 

@@ -28,7 +28,7 @@ public class QueuesController {
 	@Operation(summary = "Start ingestion")
 	@Async
 	public void startIngestion() {
-		this.ingestWorker.process();
+		this.ingestWorker.ingestAsync();
 	}
 
 	@PostMapping("ingest/start/{articleSourceId}")
