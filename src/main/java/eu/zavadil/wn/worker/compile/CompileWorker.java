@@ -8,6 +8,7 @@ import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.*;
+import eu.zavadil.wn.worker.annotate.AnnotateWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	AiAssistantService aiAssistantService;
 
 	@Autowired
+	AnnotateWorker annotateWorker;
+
+	@Autowired
 	public CompileWorker(CompileTopicQueue queue) {
 		super(queue);
 	}
@@ -43,6 +47,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
 
+		Language language = this.articleSourceService.getInternalArticleSource().getLanguage();
 		List<Article> articles = this.articleService.loadAllByTopicId(topic.getId());
 
 		Article compiled = articles.stream()
@@ -52,13 +57,12 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				() -> {
 					Article article = new Article();
 					article.setTopic(topic);
-					article.setLanguage(topic.getLanguage());
+					article.setLanguage(language);
 					article.setSource(this.articleSourceService.getInternalArticleSource());
 					return article;
 				}
 			);
 
-		Language language = this.articleSourceService.getInternalArticleSource().getLanguage();
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {
 			if (!article.isInternal()) {
@@ -76,10 +80,19 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		);
 		compiled.setBody(response);
 
+		// annotate new article
 		compiled.setTitle(null);
 		compiled.setSummary(null);
-		compiled.setProcessingState(ProcessingState.Waiting);
+		compiled.getTags().clear();
+		this.annotateWorker.updateTitle(compiled);
+		this.annotateWorker.updateSummary(compiled);
+		this.annotateWorker.updateTags(compiled);
+		compiled.setProcessingState(ProcessingState.Done);
 		this.articleService.save(compiled);
+
+		// update topic with title and summary from new article
+		topic.setName(compiled.getTitle());
+		topic.setSummary(compiled.getSummary());
 
 		topic.setProcessingState(ProcessingState.Done);
 		this.topicService.save(topic);

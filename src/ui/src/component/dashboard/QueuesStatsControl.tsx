@@ -41,12 +41,12 @@ function QueuesStatsControl() {
 			<Card.Body>
 				<Stack direction="horizontal" gap={2}>
 					<div className="flex-grow-1">
-						<QueueStatsControl name="Ingestion" stats={stats?.ingestQueue}/>
+						<QueueStatsControl name="Source Ingestion" stats={stats?.ingestQueue}/>
 					</div>
 					<Button size="sm" onClick={startIngestion} disabled={stats?.ingestQueue.state !== 'Idle'}>Start</Button>
 				</Stack>
-				<QueueStatsControl name="Annotation" stats={stats?.annotateQueue}/>
-				<QueueStatsControl name="Compilation" stats={stats?.compileQueue}/>
+				<QueueStatsControl name="Article Annotation" stats={stats?.annotateQueue}/>
+				<QueueStatsControl name="Topic Compilation" stats={stats?.compileQueue}/>
 			</Card.Body>
 		</Card>
 	);

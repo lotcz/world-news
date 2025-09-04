@@ -55,7 +55,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		);
 	}
 
-	private void updateTitle(Article article) {
+	public void updateTitle(Article article) {
 		if (StringUtils.notBlank(article.getTitle())) return;
 
 		if (StringUtils.isBlank(article.getBody())) {
@@ -77,7 +77,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		article.setTitle(this.cleanResponse(response));
 	}
 
-	private void updateSummary(Article article) {
+	public void updateSummary(Article article) {
 		if (StringUtils.notBlank(article.getSummary())) return;
 
 		if (StringUtils.isBlank(article.getTitle())) {
@@ -106,7 +106,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		article.setSummary(this.cleanResponse(response));
 	}
 
-	private void updateTags(Article article) {
+	public void updateTags(Article article) {
 		if (!(article.isInternal() && article.getTags().isEmpty())) return;
 
 		if (StringUtils.isBlank(article.getTitle())) {
@@ -163,7 +163,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			mostSimilar = new Topic();
 			mostSimilar.setName(article.getTitle());
 			mostSimilar.setSummary(article.getSummary());
-			mostSimilar.setLanguage(article.getLanguage());
 		}
 
 		// save topic, but don't mark it ready for compilation until article is not saved

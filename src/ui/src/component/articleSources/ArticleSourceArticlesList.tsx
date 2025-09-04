@@ -17,6 +17,7 @@ const HEADER = [
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
+	{name: 'source.articleCountExternal', label: 'Siblings'},
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
@@ -74,6 +75,7 @@ function ArticleSourceArticlesList({articleSourceId}: ArticleSourceArticlesListP
 													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
+													<td>{article.topic ? article.topic.articleCountExternal - 1 : 0}</td>
 												</tr>
 											);
 										})

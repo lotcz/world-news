@@ -21,7 +21,4 @@ public class TopicStub extends TopicBase {
 	@Column(name = "realm_id")
 	private Integer realmId;
 
-	@Column(name = "language_id")
-	private int languageId;
-
 }

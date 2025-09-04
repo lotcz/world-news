@@ -131,9 +131,6 @@ create table topic (
     realm_id integer
         constraint fk2c5koqvpw2aylwd4yhrr9cjer
         references realm,
-	language_id integer not null
-        constraint fk_topic_language
-        references language,
     processing_state tp_processing_state not null default 'NotReady',
     summary text,
     article_count int not null default 0,
