@@ -107,7 +107,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	}
 
 	private void updateTags(Article article) {
-		if (!article.getTags().isEmpty()) return;
+		if (!(article.isInternal() && article.getTags().isEmpty())) return;
 
 		if (StringUtils.isBlank(article.getTitle())) {
 			throw new RuntimeException(

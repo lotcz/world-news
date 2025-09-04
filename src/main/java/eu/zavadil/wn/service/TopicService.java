@@ -38,11 +38,7 @@ public class TopicService {
 
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
-
-	public Embedding loadEmbedding(int topicId) {
-		return this.topicEmbeddingsService.loadEmbedding(topicId);
-	}
-
+	
 	@Transactional
 	public Topic save(Topic topic) {
 		Topic saved = this.topicRepository.save(topic);
@@ -103,7 +99,7 @@ public class TopicService {
 	}
 
 	public Page<Topic> loadTopicsForCompilation() {
-		return this.topicRepository.findAllByProcessingStateAndArticleCountGreaterThan(
+		return this.topicRepository.findAllByProcessingStateAndArticleCountExternalGreaterThan(
 			ProcessingState.Waiting,
 			1,
 			PageRequest.of(0, 10)

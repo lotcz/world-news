@@ -136,14 +136,18 @@ create table topic (
         references language,
     processing_state tp_processing_state not null default 'NotReady',
     summary text,
-    article_count int not null default 0
+    article_count int not null default 0,
+    article_count_external int not null default 0
 );
 
 ALTER TABLE topic
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
-create index idx_topic_processing_state
-    on topic (processing_state, article_count);
+create index idx_topic_processing_state_article_count
+    on topic (processing_state, article_count_external);
+
+create index idx_topic_realm
+    on topic (realm_id);
 
 create table article (
     id integer primary key GENERATED ALWAYS AS IDENTITY,

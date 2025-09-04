@@ -16,6 +16,7 @@ const HEADER = [
 	{name: 'summary', label: 'Summary'},
 	{name: 'realm.name', label: 'Realm'},
 	{name: 'articleCount', label: 'Articles'},
+	{name: 'articleCountExternal', label: 'External'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
@@ -136,6 +137,7 @@ function TopicsList() {
 													<td>{item.summary}</td>
 													<td>{item.realm?.name}</td>
 													<td>{item.articleCount}</td>
+													<td>{item.articleCountExternal}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 												</tr>

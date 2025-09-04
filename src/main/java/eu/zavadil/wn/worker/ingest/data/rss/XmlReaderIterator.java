@@ -80,9 +80,9 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 		articleData.setSummary((entry.getDescription() != null) ? this.sanitizeText(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 
-		String body = RssFeedUtil.getBestContent(entry);
+		String body = this.sanitizeText(RssFeedUtil.getBestContent(entry));
 
-		if (StringUtils.isBlank(body)) {
+		if (StringUtils.isBlank(body) || body.length() < 255) {
 			try {
 				body = ArticleScraper.scrape(entry.getLink());
 			} catch (Exception e) {

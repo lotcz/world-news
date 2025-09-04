@@ -7,11 +7,16 @@ BEGIN
     UPDATE topic t
     SET article_count = (
         SELECT COUNT(*) FROM article a WHERE a.topic_id = p_topic_id
+    ),
+    article_count_external = (
+        SELECT COUNT(*)
+        FROM article a
+        WHERE a.source_id NOT IN (select id from article_source where import_type = 'Internal')
+        	AND a.topic_id = p_topic_id
     )
     WHERE t.id = p_topic_id;
 END;
 $$;
-
 
 DO $$
 DECLARE

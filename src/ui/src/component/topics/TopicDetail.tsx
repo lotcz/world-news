@@ -33,7 +33,8 @@ export default function TopicDetail() {
 			if (!id) {
 				setData({
 					name: '',
-					articleCount: 0
+					articleCount: 0,
+					articleCountExternal: 0
 				});
 				return;
 			}
