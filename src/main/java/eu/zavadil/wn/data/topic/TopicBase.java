@@ -21,8 +21,11 @@ public class TopicBase extends EntityWithNameBase {
 	private ProcessingState processingState = ProcessingState.NotReady;
 
 	@Column(updatable = false, insertable = false)
-	private int articleCount = 0;
+	private int articleCountInternal = 0;
 
 	@Column(updatable = false, insertable = false)
 	private int articleCountExternal = 0;
+
+	@Column(updatable = false, insertable = false)
+	private int articleCount = 0;
 }

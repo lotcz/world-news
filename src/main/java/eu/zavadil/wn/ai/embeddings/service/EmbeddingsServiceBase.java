@@ -66,6 +66,12 @@ public abstract class EmbeddingsServiceBase<T extends EntityBase> {
 		return this.embeddingRepository.loadEmbedding(entityId);
 	}
 
+	public Embedding obtainEmbedding(T entity) {
+		Embedding embedding = this.loadEmbedding(entity.getId());
+		if (embedding != null) return embedding;
+		return this.updateEmbedding(entity);
+	}
+
 	public Embedding obtainEmbedding(int entityId) {
 		Embedding embedding = this.loadEmbedding(entityId);
 		if (embedding != null) return embedding;

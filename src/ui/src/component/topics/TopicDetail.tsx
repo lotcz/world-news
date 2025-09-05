@@ -1,6 +1,6 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
-import {useNavigate, useParams} from "react-router";
-import {useCallback, useContext, useEffect, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -13,6 +13,8 @@ import TopicAiLogList from "./TopicAiLogList";
 import TopicSimilarTopicsList from "./TopicSimilarTopicsList";
 import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
+import RealmSelect from "../realms/RealmSelect";
+import {BsArrowRightSquare} from "react-icons/bs";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -33,6 +35,7 @@ export default function TopicDetail() {
 				setData({
 					name: '',
 					articleCount: 0,
+					articleCountInternal: 0,
 					articleCountExternal: 0
 				});
 				return;
@@ -92,6 +95,26 @@ export default function TopicDetail() {
 			</div>
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Realm:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<RealmSelect
+								realmId={data.realmId}
+								onChange={
+									(e) => {
+										data.realmId = e;
+										setData({...data});
+										setChanged(true);
+									}
+								}
+							/>
+							{
+								data.realmId && <Link to={`/realms/detail/${data.realmId}`}><BsArrowRightSquare/></Link>
+							}
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>State:</Form.Label>

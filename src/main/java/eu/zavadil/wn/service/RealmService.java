@@ -1,6 +1,7 @@
 package eu.zavadil.wn.service;
 
 import eu.zavadil.java.caching.Lazy;
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
@@ -10,6 +11,7 @@ import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.realm.RealmCache;
 import eu.zavadil.wn.data.realm.RealmTree;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Service
 public class RealmService {
+
+	@Value("${default.realm.name}")
+	String defaultRealmName;
 
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
@@ -30,8 +35,33 @@ public class RealmService {
 	RealmCache realmCache;
 
 	private Lazy<RealmTree> realmTree = new Lazy<>(
-		() -> RealmTree.of(null, this.realmCache.all())
+		() -> RealmTree.of(null, this.loadAll())
 	);
+
+	private Lazy<Realm> defaultRealm = new Lazy<>(
+		() -> this.loadAll().stream()
+			.filter(r -> StringUtils.safeEquals(r.getName(), this.defaultRealmName))
+			.findFirst()
+			.orElseGet(
+				() -> {
+					Realm realm = new Realm();
+					realm.setName(this.defaultRealmName);
+					return this.save(realm);
+				}
+			)
+	);
+
+	public void resetCache() {
+		this.realmCache.reset();
+	}
+
+	public void resetCache(int realmId) {
+		this.realmCache.reset(realmId);
+	}
+
+	public Realm getDefaultRealm() {
+		return this.defaultRealm.get();
+	}
 
 	public Realm loadById(int realmId) {
 		return this.realmCache.get(realmId);
@@ -63,6 +93,7 @@ public class RealmService {
 
 	public void deleteById(int realmId) {
 		this.realmCache.deleteById(realmId);
+		this.realmTree.reset();
 	}
 
 	public List<RealmEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
@@ -80,5 +111,11 @@ public class RealmService {
 	public List<RealmEmbeddingDistance> findSimilarToTopic(int topicId, int limit) {
 		Embedding embedding = this.topicEmbeddingsService.obtainEmbedding(topicId);
 		return this.findSimilar(embedding, limit);
+	}
+
+	public Realm findMostSimilar(Embedding embedding) {
+		List<RealmEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.7F);
+		if (similar.isEmpty()) return null;
+		return similar.get(0).getEntity();
 	}
 }

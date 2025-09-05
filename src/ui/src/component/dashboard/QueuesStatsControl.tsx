@@ -47,6 +47,7 @@ function QueuesStatsControl() {
 				</Stack>
 				<QueueStatsControl name="Article Annotation" stats={stats?.annotateQueue}/>
 				<QueueStatsControl name="Topic Compilation" stats={stats?.compileQueue}/>
+				<QueueStatsControl name="Topic Categorization" stats={stats?.categorizeQueue}/>
 			</Card.Body>
 		</Card>
 	);

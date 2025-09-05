@@ -8,6 +8,7 @@ export type WnStats = {
 	ingestQueue: QueueStats;
 	compileQueue: QueueStats;
 	annotateQueue: QueueStats;
+	categorizeQueue: QueueStats;
 };
 
 export type ClientStats = {

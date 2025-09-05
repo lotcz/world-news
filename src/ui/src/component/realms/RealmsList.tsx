@@ -1,4 +1,4 @@
-import React, {FormEvent, useCallback, useState} from 'react';
+import React, {FormEvent, useCallback, useContext, useEffect, useState} from 'react';
 import {Button, Form, Stack, Tab, Tabs} from 'react-bootstrap';
 import {TextInputWithReset} from "zavadil-react-common";
 import {PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
@@ -7,13 +7,15 @@ import {Realm} from "../../types/Realm";
 import RealmsTree from "./RealmsTree";
 import RealmsTable from "./RealmsTable";
 import RefreshIconButton from "../general/RefreshIconButton";
+import {WnRestClientContext} from "../../client/WnRestClient";
 
 function RealmsList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
+	const restClient = useContext(WnRestClientContext);
 	const [activeTab, setActiveTab] = useState<string>("tree");
 	const [paging, setPaging] = useState<PagingRequest>(PagingUtil.pagingRequestFromString(pagingString));
-	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const createNew = () => {
 		navigate("/realms/detail/add")
@@ -42,9 +44,24 @@ function RealmsList() {
 
 	const reload = useCallback(
 		() => {
+			restClient.realms.reset();
 			setPaging({...paging});
 		},
-		[paging, searchInput, navigateToPage]
+		[paging, restClient]
+	);
+
+	useEffect(
+		() => {
+			setPaging(PagingUtil.pagingRequestFromString(pagingString));
+		},
+		[pagingString]
+	);
+
+	useEffect(
+		() => {
+			setSearchInput(StringUtil.getNonEmpty(paging?.search))
+		},
+		[paging]
 	);
 
 	return (

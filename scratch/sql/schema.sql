@@ -88,7 +88,8 @@ create table realm (
     	constraint fk_realm_parent
        	references realm,
     name varchar(255),
-    summary text
+    summary text,
+    topic_count int not null default 0
 );
 
 ALTER TABLE realm
@@ -133,15 +134,22 @@ create table topic (
         references realm,
     processing_state tp_processing_state not null default 'NotReady',
     summary text,
-    article_count int not null default 0,
-    article_count_external int not null default 0
+    article_count_internal int not null default 0,
+    article_count_external int not null default 0,
+    article_count int GENERATED ALWAYS AS (article_count_internal + article_count_external) STORED
 );
 
 ALTER TABLE topic
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
-create index idx_topic_processing_state_article_count
+create index idx_topic_processing_state_realm_article_count_internal
+    on topic (processing_state, realm_id, article_count_internal);
+
+create index idx_topic_processing_state_article_count_external
     on topic (processing_state, article_count_external);
+
+create index idx_topic_article_count_last_updated
+    on topic (article_count, last_updated_on);
 
 create index idx_topic_realm
     on topic (realm_id);

@@ -9,6 +9,7 @@ import RealmsTreeRow from "./RealmsTreeRow";
 const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
+	{name: 'topicCount', label: 'Topics'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
@@ -38,10 +39,10 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 
 			// todo: filter using paging.search
 		},
-		[restClient, userAlerts, paging]
+		[restClient, userAlerts]
 	);
 
-	useEffect(loadPageHandler, [paging]);
+	useEffect(loadPageHandler, [paging, loadPageHandler]);
 
 	return (
 		<div>
@@ -55,7 +56,7 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 							<thead>
 							<tr>
 								{
-									HEADER.map(h => <th>{h.label}</th>)
+									HEADER.map((h, index) => <th key={index}>{h.label}</th>)
 								}
 							</tr>
 							</thead>

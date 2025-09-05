@@ -53,6 +53,7 @@ function Main() {
 							<Route path="" element={<RealmsList/>}/>
 							<Route path="detail">
 								<Route path="add" element={<RealmDetail/>}/>
+								<Route path="add/:parentId" element={<RealmDetail/>}/>
 								<Route path=":id" element={<RealmDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<RealmsList/>}/>

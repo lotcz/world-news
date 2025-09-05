@@ -1,11 +1,10 @@
 Realms
-- assign topics to realms
+  - realm's total topic count (including children realms)
+  - show realm similar articles again (tabs)
+  - assign topics to realms
 
-- store total number of 3rd party articles for topic
-
-Tags
-  - tag groups - if certain set of tags occurs together, merge it into a single tag
-
+- lock article to prevent updates
+- lock topic to prevent further compilation
 - generate UID for internal articles and make it non-null and unique
 - integrate embeddings into AI log? (we at least need to monitor costs)
 
@@ -46,14 +45,6 @@ Revenue sources
 - dropshipping
 - sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
 
-Realms and websites
-
-"daily news" search on YT is almost empty
-https://pravesestalo.cz/ is free
- - stalo se tento den... (historicke okenko)
- - get some inspiration from publico.cz
-justhappening.eu or justhappened.eu
-koncovka .today nebo .online nebo .news
 
 
 2.0
@@ -63,6 +54,9 @@ koncovka .today nebo .online nebo .news
 - full-text search in summary and body
 - semantic search in summary and body
 - import videos
+- tag groups - if certain set of tags occurs together, merge it into a single tag
+- rethink tags
+- community grammar nazi contest
 
 Timelines
   - create timelines of long-running stories

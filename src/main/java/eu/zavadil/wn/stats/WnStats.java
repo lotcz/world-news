@@ -22,4 +22,6 @@ public class WnStats {
 
 	private SmartQueueProcessorStats annotateQueue;
 
+	private SmartQueueProcessorStats categorizeQueue;
+
 }

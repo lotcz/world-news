@@ -24,4 +24,6 @@ public class Realm extends EntityWithNameBase {
 	@Column(columnDefinition = "text")
 	private String summary;
 
+	@Column(updatable = false, insertable = false)
+	private int topicCount = 0;
 }

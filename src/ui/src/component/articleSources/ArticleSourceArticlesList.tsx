@@ -75,7 +75,7 @@ function ArticleSourceArticlesList({articleSourceId}: ArticleSourceArticlesListP
 													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
-													<td>{article.topic ? article.topic.articleCountExternal - 1 : 0}</td>
+													<td>{article.topic ? article.topic.articleCount - 1 : 0}</td>
 												</tr>
 											);
 										})

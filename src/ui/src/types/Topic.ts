@@ -5,6 +5,7 @@ export type TopicBase = EntityWithName & {
 	summary?: string;
 	processingState?: string | null;
 	articleCount: number;
+	articleCountInternal: number;
 	articleCountExternal: number;
 }
 

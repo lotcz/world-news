@@ -5,8 +5,11 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE topic t
-    SET article_count = (
-        SELECT COUNT(*) FROM article a WHERE a.topic_id = p_topic_id
+    SET article_count_internal = (
+        SELECT COUNT(*)
+        FROM article a
+        WHERE a.source_id IN (select id from article_source where import_type = 'Internal')
+        	AND a.topic_id = p_topic_id
     ),
     article_count_external = (
         SELECT COUNT(*)
@@ -123,3 +126,49 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE TRIGGER trg_update_article_tag_count
 AFTER DELETE OR INSERT OR UPDATE ON article_tag
 FOR EACH ROW EXECUTE FUNCTION article_tag_inserted_or_updated();
+
+/* realm's topic count */
+
+CREATE OR REPLACE PROCEDURE update_realm_topic_count(p_realm_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE realm r
+    SET topic_count = (
+        SELECT COUNT(*) FROM topic t WHERE t.realm_id = p_realm_id
+    )
+    WHERE r.id = p_realm_id;
+END;
+$$;
+
+DO $$
+DECLARE
+    r realm%ROWTYPE;
+BEGIN
+    FOR r IN SELECT id FROM realm LOOP
+        CALL update_realm_topic_count(r.id);
+    END LOOP;
+END;
+$$;
+
+/* topic changed trigger */
+
+CREATE OR REPLACE FUNCTION topic_inserted_or_updated()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF TG_OP = 'DELETE' AND OLD.realm_id IS NOT NULL THEN
+        CALL update_realm_topic_count(OLD.realm_id);
+    ELSEIF TG_OP = 'INSERT' AND NEW.realm_id IS NOT NULL THEN
+        CALL update_realm_topic_count(NEW.realm_id);
+    ELSIF (OLD.realm_id IS DISTINCT FROM NEW.realm_id) THEN
+        CALL update_realm_topic_count(OLD.realm_id);
+        CALL update_realm_topic_count(NEW.realm_id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_update_realm_topic_count
+AFTER DELETE OR INSERT OR UPDATE ON topic
+FOR EACH ROW EXECUTE FUNCTION topic_inserted_or_updated();

@@ -10,6 +10,7 @@ const HEADER = [
 	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
+	{name: 'topicCount', label: 'Topics'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
 	{name: 'createdOn', label: 'Created'}
 ];
@@ -65,6 +66,7 @@ function RealmsTable({paging, onItemSelected, onPageRequested}: RealmsTableProps
 												<td>{item.id}</td>
 												<td>{item.name}</td>
 												<td>{item.summary}</td>
+												<td>{item.topicCount}</td>
 												<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 												<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 											</tr>

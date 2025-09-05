@@ -4,6 +4,7 @@ import eu.zavadil.wn.data.realm.RealmCache;
 import eu.zavadil.wn.service.ArticleSourceService;
 import eu.zavadil.wn.service.LanguageService;
 import eu.zavadil.wn.worker.annotate.AnnotateQueueProcessor;
+import eu.zavadil.wn.worker.categorize.CategorizeQueueProcessor;
 import eu.zavadil.wn.worker.compile.CompileQueueProcessor;
 import eu.zavadil.wn.worker.ingest.IngestQueueProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class StatsService {
 	@Autowired
 	AnnotateQueueProcessor annotateWorker;
 
+	@Autowired
+	CategorizeQueueProcessor categorizeWorker;
+
 	public WnStats getStats() {
 		final WnStats stats = new WnStats();
 
@@ -42,6 +46,7 @@ public class StatsService {
 		stats.setCompileQueue(this.compileWorker.getStats());
 		stats.setAnnotateQueue(this.annotateWorker.getStats());
 		stats.setIngestQueue(this.ingestWorker.getStats());
+		stats.setCategorizeQueue(this.categorizeWorker.getStats());
 
 		return stats;
 	}

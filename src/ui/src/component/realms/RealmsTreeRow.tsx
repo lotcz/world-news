@@ -56,13 +56,14 @@ function RealmsTreeRow({level, tree, onItemSelected}: RealmsTreeRowProps) {
 						</Stack>
 					</td>
 					<td>{realm.summary}</td>
+					<td>{realm.topicCount}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.lastUpdatedOn)}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.createdOn)}</td>
 				</tr>
 			}
 			{
 				expanded && data.children.map(
-					r => <RealmsTreeRow level={level + 1} tree={r} onItemSelected={onItemSelected}/>
+					(r, index) => <RealmsTreeRow key={index} level={level + 1} tree={r} onItemSelected={onItemSelected}/>
 				)
 			}
 		</>

@@ -67,6 +67,7 @@ public class RealmController {
 
 	@DeleteMapping("{id}")
 	public void delete(@PathVariable int id) {
+		// todo: requeue topics for realm assignment
 		this.realmService.deleteById(id);
 	}
 
