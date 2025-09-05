@@ -56,7 +56,7 @@ function RealmsTreeRow({level, tree, onItemSelected}: RealmsTreeRowProps) {
 						</Stack>
 					</td>
 					<td>{realm.summary}</td>
-					<td>{realm.topicCount}</td>
+					<td>{data.totalTopicCount}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.lastUpdatedOn)}</td>
 					<td>{DateUtil.formatDateTimeForHumans(realm.createdOn)}</td>
 				</tr>

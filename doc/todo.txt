@@ -1,5 +1,4 @@
 Realms
-  - realm's total topic count (including children realms)
   - show realm similar articles again (tabs)
   - assign topics to realms
 

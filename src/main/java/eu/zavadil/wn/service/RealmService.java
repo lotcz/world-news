@@ -53,10 +53,12 @@ public class RealmService {
 
 	public void resetCache() {
 		this.realmCache.reset();
+		this.realmTree.reset();
 	}
 
 	public void resetCache(int realmId) {
 		this.realmCache.reset(realmId);
+		this.realmTree.reset();
 	}
 
 	public Realm getDefaultRealm() {

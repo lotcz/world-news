@@ -20,6 +20,19 @@ export type RealmsTreeProps = {
 	onPageRequested: (p: PagingRequest) => any;
 }
 
+function processTree(tree: RealmTree): number {
+	tree.collapsed = true;
+	let totalTopics = 0;
+	tree.children.forEach(
+		t => {
+			totalTopics += processTree(t);
+		}
+	);
+	const ownTopics = tree.realm ? tree.realm.topicCount : 0;
+	tree.totalTopicCount = ownTopics + totalTopics;
+	return tree.totalTopicCount;
+}
+
 function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -31,13 +44,18 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 			restClient
 				.realms
 				.loadTree()
-				.then(setData)
+				.then(
+					(tree) => {
+						processTree(tree);
+						setData(tree);
+					}
+				)
 				.catch((e: Error) => {
 					setData(null);
 					userAlerts.err(e);
 				});
 
-			// todo: filter using paging.search
+			// todo: jump to item using paging.search
 		},
 		[restClient, userAlerts]
 	);
