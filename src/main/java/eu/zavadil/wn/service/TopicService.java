@@ -38,7 +38,7 @@ public class TopicService {
 
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
-	
+
 	@Transactional
 	public Topic save(Topic topic) {
 		Topic saved = this.topicRepository.save(topic);
@@ -64,6 +64,10 @@ public class TopicService {
 
 	public void deleteById(int id) {
 		this.topicRepository.deleteById(id);
+	}
+
+	public Page<Topic> loadByRealm(int realmId, PageRequest pr) {
+		return this.topicRepository.findAllByRealmId(realmId, pr);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {

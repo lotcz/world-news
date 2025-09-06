@@ -1,7 +1,7 @@
-import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
+import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {Link, useNavigate, useParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import {NumberUtil, ObjectUtil} from "zavadil-ts-common";
+import {NumberUtil, ObjectUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
@@ -10,6 +10,8 @@ import RealmSelect from "./RealmSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {ConfirmDialogContext, SaveButton} from "zavadil-react-common";
 import {BsArrowUpSquare} from "react-icons/bs";
+import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
+import RealmTopicsList from "./RealmTopicsList";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -22,6 +24,7 @@ export default function RealmDetail() {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const confirmDialog = useContext(ConfirmDialogContext);
+	const [activeTab, setActiveTab] = useState<string>("children");
 	const [data, setData] = useState<Realm>();
 	const [saving, setSaving] = useState<boolean>(false);
 	const [changed, setChanged] = useState<boolean>(false);
@@ -76,7 +79,7 @@ export default function RealmDetail() {
 			if (!data?.id) return;
 			confirmDialog.confirm(
 				'Confirm',
-				'Really delete this realm?',
+				`Really delete this realm? All ${data.topicCount} topics will be categorized again.`,
 				() => restClient
 					.realms
 					.delete(Number(data.id))
@@ -170,11 +173,37 @@ export default function RealmDetail() {
 			{
 				data.id &&
 				<div>
-					<h4>Children</h4>
-					<div>
-						<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
+					<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, "children"))}>
+						<Tab title="Sub-realms" eventKey="children"/>
+						<Tab title="Topics" eventKey="topics"/>
+						<Tab title="Similar Topics" eventKey="similarTopics"/>
+					</Tabs>
+					<div className="p-3">
+						{
+							activeTab === 'children' && <div>
+								<div>
+									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
+								</div>
+								<RealmChildrenList realmId={data.id}/>
+							</div>
+						}
+						{
+							activeTab === 'topics' && <div>
+								<div>
+									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
+								</div>
+								<RealmTopicsList realmId={data.id}/>
+							</div>
+						}
+						{
+							activeTab === 'similarTopics' && <div>
+								<div>
+									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
+								</div>
+								<RealmSimilarTopicsList realmId={data.id}/>
+							</div>
+						}
 					</div>
-					<RealmChildrenList realmId={data.id}/>
 				</div>
 			}
 		</div>

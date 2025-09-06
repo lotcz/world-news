@@ -9,11 +9,10 @@ import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
-	{name: 'id', label: 'ID'},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
-	{name: 'topic.id', label: 'Topic ID'},
+	{name: 'topic.realm.name', label: 'Realm'},
 	{name: 'publishDate', label: 'Published'},
 ];
 
@@ -118,11 +117,10 @@ function ArticlesList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{item.id}</td>
 													<td>{item.source?.name}</td>
 													<td>{item.processingState}</td>
 													<td>{item.title}</td>
-													<td>{item.topic?.id}</td>
+													<td>{item.topic?.realm?.name}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 												</tr>
 											);

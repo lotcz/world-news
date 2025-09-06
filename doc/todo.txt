@@ -1,6 +1,14 @@
 Realms
-  - show realm similar articles again (tabs)
+  - will cover semantics
   - assign topics to realms
+  - put expanded ids to url to improve navigation
+
+Audiences
+  - will cover who might be interested
+  - by location
+  - by genre
+
+- put activeTab into url to navigation will work better
 
 - lock article to prevent updates
 - lock topic to prevent further compilation

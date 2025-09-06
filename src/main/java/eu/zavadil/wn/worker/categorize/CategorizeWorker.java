@@ -37,7 +37,6 @@ public class CategorizeWorker extends SmartQueueProcessorBase<Topic> implements 
 		}
 		topic.setRealm(realm);
 		this.topicService.save(topic);
-		this.realmService.resetCache(realm.getId());
 	}
 
 	@Override

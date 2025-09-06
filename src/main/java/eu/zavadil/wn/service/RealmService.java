@@ -56,11 +56,6 @@ public class RealmService {
 		this.realmTree.reset();
 	}
 
-	public void resetCache(int realmId) {
-		this.realmCache.reset(realmId);
-		this.realmTree.reset();
-	}
-
 	public Realm getDefaultRealm() {
 		return this.defaultRealm.get();
 	}
@@ -116,7 +111,7 @@ public class RealmService {
 	}
 
 	public Realm findMostSimilar(Embedding embedding) {
-		List<RealmEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.7F);
+		List<RealmEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.75F);
 		if (similar.isEmpty()) return null;
 		return similar.get(0).getEntity();
 	}

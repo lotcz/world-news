@@ -62,7 +62,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 					return article;
 				}
 			);
-
+		
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {
 			if (!article.isInternal()) {
@@ -81,12 +81,13 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		compiled.setBody(response);
 
 		// annotate new article
+		compiled.setLanguage(language);
 		compiled.setTitle(null);
 		compiled.setSummary(null);
 		compiled.getTags().clear();
 		this.annotateWorker.updateTitle(compiled);
 		this.annotateWorker.updateSummary(compiled);
-		this.annotateWorker.updateTags(compiled);
+		//this.annotateWorker.updateTags(compiled);
 		compiled.setProcessingState(ProcessingState.Done);
 		this.articleService.save(compiled);
 

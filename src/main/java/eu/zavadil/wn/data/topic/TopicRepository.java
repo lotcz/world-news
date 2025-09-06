@@ -18,6 +18,8 @@ public interface TopicRepository extends EntityRepository<Topic> {
 		""")
 	Page<Topic> search(@Param("search") String search, PageRequest pr);
 
+	Page<Topic> findAllByRealmId(int realmId, PageRequest pr);
+	
 	Page<Topic> findAllByProcessingStateAndArticleCountExternalGreaterThan(
 		ProcessingState processingState,
 		int minArticleCount,

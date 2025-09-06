@@ -80,6 +80,10 @@ ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 create index idx_article_last_imported
     on article_source (last_imported);
 
+create unique index idx_article_name_uq
+    on article_source (name);
+
+
 create table realm (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
@@ -130,8 +134,9 @@ create table topic (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255),
     realm_id integer
-        constraint fk2c5koqvpw2aylwd4yhrr9cjer
-        references realm,
+        constraint fk_topic_realm
+        references realm
+        on delete set null,
     processing_state tp_processing_state not null default 'NotReady',
     summary text,
     article_count_internal int not null default 0,

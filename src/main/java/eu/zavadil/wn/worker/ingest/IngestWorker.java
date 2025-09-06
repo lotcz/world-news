@@ -108,9 +108,6 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 		articleSource.setLastImported(Instant.now());
 		this.articleSourceService.set(articleSource);
 
-		// reset article source cache so article counts can be reloaded
-		this.articleSourceService.reset(articleSource.getId());
-
 		log.info(
 			"Loaded {} articles from {} - {} new, {} updated",
 			totalArticles,
@@ -149,6 +146,11 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			ars.setProcessingState(ProcessingState.Waiting);
 			this.articleSourceService.set(ars);
 		});
+		// reset article source cache so article counts can be reloaded
+		if (this.getStats().getProcessed() > 0) {
+			this.articleSourceService.reset();
+		}
+
 	}
 
 	@Override

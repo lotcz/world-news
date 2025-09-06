@@ -5,11 +5,11 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicEmbeddingDistance} from "../../types/EmbeddingDistance";
 
-export type TopicSimilarTopicsListProps = {
-	topicId: number;
+export type RealmSimilarTopicsListProps = {
+	realmId: number;
 }
 
-function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
+function RealmSimilarTopicsList({realmId}: RealmSimilarTopicsListProps) {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -23,17 +23,17 @@ function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
 		() => {
 			restClient
 				.topics
-				.loadSimilarToTopic(topicId)
+				.loadSimilarToRealm(realmId)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(undefined);
 					userAlerts.err(e);
 				});
 		},
-		[topicId, restClient, userAlerts]
+		[realmId, restClient, userAlerts]
 	);
 
-	useEffect(load, [topicId]);
+	useEffect(load, [realmId]);
 
 	if (!data) return <Spinner/>;
 
@@ -73,4 +73,4 @@ function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
 	);
 }
 
-export default TopicsSimilarTopicsList;
+export default RealmSimilarTopicsList;

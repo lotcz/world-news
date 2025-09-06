@@ -1,13 +1,12 @@
 /* reschedule articles in Error for reprocessing */
+UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiting';
 UPDATE article set processing_state = 'Waiting' WHERE processing_state IN ('Error', 'Processing');
 
 /* reschedule topics in Error for reprocessing */
 UPDATE topic set processing_state = 'Waiting' WHERE processing_state IN ('Error', 'Processing');
 
-/* reset all topics */
-UPDATE article SET topic_id = NULL WHERE topic_id IS NOT NULL;
-DELETE FROM topic WHERE 1=1;
-UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiting';
+/* reset all realm */
+UPDATE topic SET realm_id = NULL WHERE realm_id IS NOT NULL;
 
 /* delete topics with no articles */
 DELETE FROM topic WHERE article_count = 0;
@@ -23,3 +22,9 @@ WHERE id IN (
 	JOIN article a2 on (a2.title = a1.title)
 	AND a1.id > a2.id
 );
+
+
+/* TOTAL CLEANUP! */
+DELETE FROM topic WHERE 1=1;
+DELETE FROM article WHERE 1=1;
+DELETE FROM ai_log WHERE 1=1;

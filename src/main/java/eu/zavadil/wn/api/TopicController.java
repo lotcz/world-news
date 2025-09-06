@@ -55,6 +55,18 @@ public class TopicController {
 		this.topicService.deleteById(id);
 	}
 
+	@GetMapping("by-realm/{realmId}")
+	public JsonPage<Topic> loadByRealm(
+		@PathVariable int realmId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
+	) {
+		return JsonPageImpl.of(
+			this.topicService.loadByRealm(realmId, PagingUtils.of(page, size, sorting))
+		);
+	}
+
 	@GetMapping("similar-to-topic/{topicId}")
 	public List<TopicEmbeddingDistance> loadSimilarToTopic(
 		@PathVariable int topicId,

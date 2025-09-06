@@ -16,7 +16,6 @@ function TopicSimilarRealmsList({topicId}: TopicSimilarRealmsListProps) {
 	const [data, setData] = useState<Array<RealmEmbeddingDistance>>();
 
 	const navigateToDetail = (d: RealmEmbeddingDistance) => {
-		console.log(d.entityId);
 		navigate(`/realms/detail/${d.entityId}`);
 	}
 

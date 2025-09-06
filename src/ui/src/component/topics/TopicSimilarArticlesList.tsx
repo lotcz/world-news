@@ -16,7 +16,6 @@ function TopicSimilarArticlesList({topicId}: TopicSimilarArticlesListProps) {
 	const [data, setData] = useState<Array<ArticleEmbeddingDistance>>();
 
 	const navigateToDetail = (d: ArticleEmbeddingDistance) => {
-		console.log(d.entityId);
 		navigate(`/articles/detail/${d.entityId}`);
 	}
 
