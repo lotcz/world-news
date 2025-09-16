@@ -163,9 +163,9 @@ create table article (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    uid varchar(255) not null,
     body text,
     original_url varchar(255),
-    original_uid varchar(255),
     processing_state tp_processing_state not null default 'NotReady',
     publish_date timestamp(6) with time zone,
     summary text,
@@ -186,7 +186,6 @@ create table article (
         references topic
 );
 
-
 ALTER TABLE article
 ALTER COLUMN title TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
@@ -199,14 +198,14 @@ create index idx_article_processing_state
 create unique index idx_article_original_url
     on article (original_url);
 
-create index idx_article_original_uid
-    on article (original_uid);
+create unique index idx_article_source_uid
+    on article (source_id, uid);
+
+create unique index idx_article_source_uid
+    on article (source_id, uid);
 
 create index idx_article_topic
     on article (topic_id);
-
-create index idx_article_source
-    on article (source_id);
 
 create table article_tag (
     article_id integer not null

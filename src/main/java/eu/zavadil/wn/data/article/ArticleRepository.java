@@ -18,7 +18,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			from Article a
 			where a.title LIKE %:search%
 				or a.originalUrl LIKE %:search%
-				or a.originalUid LIKE %:search%
+				or a.uid LIKE %:search%
 		""")
 	Page<Article> search(@Param("search") String search, PageRequest pr);
 
@@ -38,7 +38,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 
 	Optional<Article> findFirstByOriginalUrl(String originalUrl);
 
-	Optional<Article> findFirstByOriginalUid(String originalUid);
+	Optional<Article> findFirstBySourceIdAndUid(int sourceId, String uid);
 
 	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);
 

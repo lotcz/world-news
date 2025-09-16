@@ -16,7 +16,7 @@ public class ArticleData {
 
 	private String originalUrl;
 
-	private String originalUid;
+	private String uid;
 
 	private Instant publishDate;
 

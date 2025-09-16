@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -56,13 +57,14 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 			.orElseGet(
 				() -> {
 					Article article = new Article();
+					article.setUid(UUID.randomUUID().toString());
 					article.setTopic(topic);
 					article.setLanguage(language);
 					article.setSource(this.articleSourceService.getInternalArticleSource());
 					return article;
 				}
 			);
-		
+
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {
 			if (!article.isInternal()) {

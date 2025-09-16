@@ -21,6 +21,27 @@ import java.time.Instant;
 @MappedSuperclass
 public class ArticleBase extends EntityBase {
 
+	private static final int UID_SIZE = 255;
+
+	@Column(length = UID_SIZE)
+	@Size(max = UID_SIZE)
+	private String uid;
+
+	public static String sanitizeUid(String uid) {
+		if (StringUtils.isBlank(uid)) {
+			return null;
+		}
+		if (uid.length() > UID_SIZE) {
+			log.warn("Uid {} is longer than max size {}, hashing...", uid, UID_SIZE);
+			return HashUtils.hashMd5(uid);
+		}
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = ArticleBase.sanitizeUid(uid);
+	}
+
 	private static final int TITLE_SIZE = 255;
 
 	@Column(length = TITLE_SIZE)
@@ -56,27 +77,6 @@ public class ArticleBase extends EntityBase {
 
 	public void setOriginalUrl(String url) {
 		this.originalUrl = ArticleBase.sanitizeUrl(url);
-	}
-
-	private static final int UID_SIZE = 255;
-
-	@Column(length = UID_SIZE)
-	@Size(max = UID_SIZE)
-	private String originalUid;
-
-	public static String sanitizeUid(String uid) {
-		if (StringUtils.isBlank(uid)) {
-			return null;
-		}
-		if (uid.length() > UID_SIZE) {
-			log.warn("Uid {} is longer than max size {}, hashing...", uid, UID_SIZE);
-			return HashUtils.hashMd5(uid);
-		}
-		return uid;
-	}
-
-	public void setOriginalUid(String uid) {
-		this.originalUid = ArticleBase.sanitizeUid(uid);
 	}
 
 	@Column(columnDefinition = "TEXT")

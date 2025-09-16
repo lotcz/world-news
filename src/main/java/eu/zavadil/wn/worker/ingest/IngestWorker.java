@@ -64,7 +64,12 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 				log.warn("Article has no URL: {}", articleData);
 				continue;
 			}
-			Article article = this.articleService.loadByOriginalUrlOrUid(url, articleData.getOriginalUid());
+			if (StringUtils.isBlank(articleData.getUid())) {
+				log.warn("Article has no UID: {}", articleData);
+				continue;
+			}
+			
+			Article article = this.articleService.loadByUid(articleSource.getId(), articleData.getUid());
 			if (article == null) {
 				newArticles++;
 				article = new Article();
@@ -81,7 +86,7 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 
 			article.setSource(articleSource);
 			article.setOriginalUrl(url);
-			article.setOriginalUid(articleData.getOriginalUid());
+			article.setUid(articleData.getUid());
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 

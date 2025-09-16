@@ -80,13 +80,8 @@ public class ArticleService {
 		this.articleRepository.deleteById(id);
 	}
 
-	public Article loadByOriginalUrlOrUid(String originalUrl, String originalUid) {
-		String url = Article.sanitizeUrl(originalUrl);
-		String uid = Article.sanitizeUid(originalUid);
-		return this.articleRepository.findFirstByOriginalUrl(url).orElseGet(
-			() -> StringUtils.isBlank(uid) ? null
-				: this.articleRepository.findFirstByOriginalUid(uid).orElse(null)
-		);
+	public Article loadByUid(int sourceId, String uid) {
+		return this.articleRepository.findFirstBySourceIdAndUid(sourceId, uid).orElse(null);
 	}
 
 	public Page<Article> loadArticlesForAnnotationWorker() {
