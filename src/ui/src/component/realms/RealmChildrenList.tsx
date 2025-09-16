@@ -49,6 +49,7 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 						<th>ID</th>
 						<th>Name</th>
 						<th>Summary</th>
+						<th>Topics</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -62,6 +63,7 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 										<td>{r.id}</td>
 										<td>{r.name}</td>
 										<td>{r.summary}</td>
+										<td>{r.topicCount}</td>
 									</tr>
 								);
 							})

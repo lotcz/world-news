@@ -1,27 +1,50 @@
-Realms
-  - will cover semantics
-  - assign topics to realms
-  - put expanded ids to url to improve navigation
-
-Audiences
-  - will cover who might be interested
-  - by location
-  - by genre
-
+- generate UID for internal articles and make it non-null and unique
+- Realms tree: put expanded ids to url to improve navigation
 - put activeTab into url to navigation will work better
-
 - lock article to prevent updates
 - lock topic to prevent further compilation
-- generate UID for internal articles and make it non-null and unique
+- allow hiding realm name in favor of parent (effective_realm_id)
 - integrate embeddings into AI log? (we at least need to monitor costs)
 
 Media
   - fotografie
+    - add image service
+    - bez fotky/AI generated/my own/creative commons/fotobanka
     - https://www.ctk.cz/sluzby/fotobanka/
+    - shutterstock
+    - bynder.com
+
+Ingestion - define filter texts and elements on article source level
+  - limit to element
+  - exclude element
+  - filter out strings
+
+2.0
+===
+
+- introduce virtual writer to do the AI compilation work with flavor
+- full-text search in summary and body
+- semantic search (in summary)
+- import videos
+- tag groups - if certain set of tags occurs together, merge it into a single tag
+- rethink tags
+- community grammar nazi contest
+- mobile app
+- monitor news sources by country and allow comparison (potential use in propaganda debunk)
+
+Timelines
+  - create timelines of long-running stories
+  - turn into separate articles
+  - make podcast and later videos of them
+
+Audiences
+  - to supplement realms which cover area of interest
+  - will cover *who* might be interested on the article
+  - by location
+  - by genre
 
 Ingestion
 
-- define filter texts and elements on article source level
 - split ingestion to url gathering and body download so body can be only downloaded when article is updated
 - add option to not download body and only keep summary (NYT)
 - mimic normal traffic
@@ -36,36 +59,3 @@ Ingestion
     - https://servis.lidovky.cz/rss.aspx
     - https://servis.idnes.cz/rss.aspx?c=zpravodaj
     - https://www.antiyoutuber.cz/rss
-
-Websites
-
-- GDPR consent (research and implement correctly)
-- Privacy policy
-- Terms and Conditions
-- monitor which realms or tags is user interested in then offer him to be notified about it
-
-Revenue sources
-- ads (google AdSense, Sklik, own ad system)
-- affiliate
-  - https://affiliateport.eu
-  - https://www.partnerbox.cz/
-- dropshipping
-- sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
-
-
-
-2.0
-===
-
-- introduce virtual writer to do the AI compilation work with flavor
-- full-text search in summary and body
-- semantic search in summary and body
-- import videos
-- tag groups - if certain set of tags occurs together, merge it into a single tag
-- rethink tags
-- community grammar nazi contest
-
-Timelines
-  - create timelines of long-running stories
-  - turn into separate articles
-  - make podcast and later videos of them

@@ -83,7 +83,6 @@ create index idx_article_last_imported
 create unique index idx_article_name_uq
     on article_source (name);
 
-
 create table realm (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
@@ -133,6 +132,7 @@ create table topic (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255),
+    image_id int null,
     realm_id integer
         constraint fk_topic_realm
         references realm
@@ -170,6 +170,10 @@ create table article (
     publish_date timestamp(6) with time zone,
     summary text,
     title varchar(255),
+    image_id int null
+    	constraint fk_article_image
+        references image
+        on delete cascade,
     language_id integer not null
         constraint fkntjo7u9ep5digg27txr8fnqa5
         references language,
@@ -181,6 +185,7 @@ create table article (
         constraint fk6x3cr4vpqhjktvuju4u1f77q1
         references topic
 );
+
 
 ALTER TABLE article
 ALTER COLUMN title TYPE VARCHAR(255) COLLATE "en_US.utf8";
@@ -242,4 +247,16 @@ create table article_image (
         references image
         on delete cascade,
     primary key (article_id, image_id)
+);
+
+create table topic_image (
+    topic_id integer not null
+        constraint fk_topic_image_topic
+        references article
+        on delete cascade,
+    image_id integer not null
+        constraint fk_topic_image_image
+        references image
+        on delete cascade,
+    primary key (topic_id, image_id)
 );

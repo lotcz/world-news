@@ -114,17 +114,19 @@ function ArticlesList() {
 									(data.totalItems === 0) ? <tr>
 											<td colSpan={HEADER.length}>Nothing here...</td>
 										</tr> :
-										data.content.map((item, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{item.source?.name}</td>
-													<td>{item.processingState}</td>
-													<td>{item.title}</td>
-													<td>{item.topic?.realm?.name}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
-												</tr>
-											);
-										})
+										data.content.map(
+											(item, index) => {
+												return (
+													<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
+														<td>{item.source?.name}</td>
+														<td>{item.processingState}</td>
+														<td>{item.title}</td>
+														<td>{item.topic?.realm?.name}</td>
+														<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
+													</tr>
+												);
+											}
+										)
 								}
 							</AdvancedTable>
 						)

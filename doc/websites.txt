@@ -1,4 +1,25 @@
+Websites
+
+- GDPR consent (research and implement correctly)
+- Privacy policy
+- Terms and Conditions
+- monitor which realms or tags is user interested in then offer him to be notified about it
+
+- paid program allows seeing external sources
+- openstreetmap integration
+- 3D planetary overview
+
+Revenue sources
+
+- ads (google AdSense, Sklik, own ad system)
+- affiliate
+  - https://affiliateport.eu
+  - https://www.partnerbox.cz/
+- dropshipping
+- sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
+
 Pravesestalo.cz
+
   - https://pravesestalo.cz/ is free
   - Zajimavosti ze sveta (lehce bulvarni zpravy z ruznych oblasti, zajimave, poutave, krimi, weird and peculiar)
   - stalo se tento den... (historicke okenko)
@@ -9,6 +30,7 @@ koncovka .today nebo .online nebo .news
 "daily news" search on YT is almost empty
 
 El poblitico
+
 Satire and parody
   - El poblitico (with merch)
   - Karel Politico
@@ -24,3 +46,6 @@ AI generated nonsense and satire
 
 Good news
 positive news, no violence or crime
+
+Activism and greenfluencing
+  - prepared emails addressed to officials

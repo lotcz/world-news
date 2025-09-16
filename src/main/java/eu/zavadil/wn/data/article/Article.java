@@ -28,6 +28,9 @@ public class Article extends ArticleBase {
 	@ManyToOne(optional = false)
 	private Language language;
 
+	@ManyToOne(optional = true)
+	private Image image;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "article_tag",
