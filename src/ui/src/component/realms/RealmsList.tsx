@@ -9,11 +9,15 @@ import RealmsTable from "./RealmsTable";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {WnRestClientContext} from "../../client/WnRestClient";
 
-function RealmsList() {
+export type RealmsListProps = {
+	activeTab: string;
+}
+
+function RealmsList({activeTab}: RealmsListProps) {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
-	const [activeTab, setActiveTab] = useState<string>("tree");
+	//const [activeTab, setActiveTab] = useState<string>("tree");
 	const [paging, setPaging] = useState<PagingRequest>(PagingUtil.pagingRequestFromString(pagingString));
 	const [searchInput, setSearchInput] = useState<string>('');
 
@@ -84,7 +88,7 @@ function RealmsList() {
 			</div>
 
 			<div className="pt-2 px-3">
-				<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(String(key))}>
+				<Tabs activeKey={activeTab} onSelect={(key) => navigate(`/realms/${key}`)}>
 					<Tab title="Tree" eventKey="tree"/>
 					<Tab title="Table" eventKey="table"/>
 				</Tabs>

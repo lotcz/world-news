@@ -50,13 +50,16 @@ function Main() {
 							<Route path=":pagingString" element={<TagsList/>}/>
 						</Route>
 						<Route path="realms">
-							<Route path="" element={<RealmsList/>}/>
+							<Route path="" element={<RealmsList activeTab="tree"/>}/>
+							<Route path="tree" element={<RealmsList activeTab="tree"/>}/>
+							<Route path="tree/:expanded" element={<RealmsList activeTab="tree"/>}/>
+							<Route path="table" element={<RealmsList activeTab="table"/>}/>
+							<Route path="table/:pagingString" element={<RealmsList activeTab="table"/>}/>
 							<Route path="detail">
 								<Route path="add" element={<RealmDetail/>}/>
 								<Route path="add/:parentId" element={<RealmDetail/>}/>
 								<Route path=":id" element={<RealmDetail/>}/>
 							</Route>
-							<Route path=":pagingString" element={<RealmsList/>}/>
 						</Route>
 						<Route path="article-sources">
 							<Route path="" element={<ArticleSourcesList/>}/>

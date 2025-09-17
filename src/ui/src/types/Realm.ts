@@ -9,6 +9,5 @@ export type Realm = EntityWithName & {
 export type RealmTree = {
 	realm: Realm | null;
 	children: Array<RealmTree>;
-	collapsed?: boolean;
 	totalTopicCount?: number;
 }

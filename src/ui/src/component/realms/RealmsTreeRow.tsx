@@ -1,6 +1,5 @@
-import React, {useCallback, useMemo, useState} from 'react';
-import {DateUtil} from "zavadil-ts-common";
-import {Realm, RealmTree} from "../../types/Realm";
+import React, {useMemo} from 'react';
+import {RealmTree} from "../../types/Realm";
 import {IconButton} from "zavadil-react-common";
 import {BiSolidMinusSquare, BiSolidPlusSquare, BiSquare} from "react-icons/bi";
 import {Stack} from "react-bootstrap";
@@ -8,34 +7,26 @@ import {Stack} from "react-bootstrap";
 export type RealmsTreeRowProps = {
 	level: number;
 	tree: RealmTree;
-	onItemSelected: (l: Realm) => any;
+	expandedIds: Set<number>;
+	onItemSelected: (tree: RealmTree) => any;
+	onExpanded: (tree: RealmTree) => any;
+	onCollapsed: (tree: RealmTree) => any;
 }
 
-function RealmsTreeRow({level, tree, onItemSelected}: RealmsTreeRowProps) {
-	const [data, setData] = useState<RealmTree>({...tree});
+function RealmsTreeRow({level, tree, expandedIds, onItemSelected, onExpanded, onCollapsed}: RealmsTreeRowProps) {
 
-	const realm = useMemo(
-		() => tree.realm,
-		[tree]
-	);
-
-	const expanded = useMemo(
-		() => data.collapsed === false || realm === null,
-		[data, realm]
-	);
-
-	const toggleExpanded = useCallback(
+	const isExpanded = useMemo(
 		() => {
-			data.collapsed = expanded;
-			setData({...data});
+			if (tree.realm === null || !tree.realm.id) return true;
+			return expandedIds.has(tree.realm.id);
 		},
-		[expanded, data]
+		[tree, expandedIds]
 	);
 
 	return (
 		<>
 			{
-				realm && <tr role="button" onClick={() => onItemSelected(realm)}>
+				tree.realm && <tr role="button" onClick={() => onItemSelected(tree)}>
 					<td>
 						<Stack direction="horizontal" gap={2}>
 							<div
@@ -44,26 +35,32 @@ function RealmsTreeRow({level, tree, onItemSelected}: RealmsTreeRowProps) {
 								className="cursor-default"
 							>
 								{
-									data.children.length > 0 ? <IconButton
+									tree.children.length > 0 ? <IconButton
 											variant="link"
-											onClick={toggleExpanded}
-											icon={expanded ? <BiSolidMinusSquare/> : <BiSolidPlusSquare/>}
+											onClick={() => isExpanded ? onCollapsed(tree) : onExpanded(tree)}
+											icon={isExpanded ? <BiSolidMinusSquare/> : <BiSolidPlusSquare/>}
 										/>
 										: <IconButton variant="link" disabled={true} icon={<BiSquare/>} onClick={() => null}/>
 								}
 							</div>
-							<div>{realm.name}</div>
+							<div>{tree.realm.name}</div>
 						</Stack>
 					</td>
-					<td>{realm.summary}</td>
-					<td>{data.totalTopicCount}</td>
-					<td>{DateUtil.formatDateTimeForHumans(realm.lastUpdatedOn)}</td>
-					<td>{DateUtil.formatDateTimeForHumans(realm.createdOn)}</td>
+					<td>{tree.realm.summary}</td>
+					<td>{tree.totalTopicCount}</td>
 				</tr>
 			}
 			{
-				expanded && data.children.map(
-					(r, index) => <RealmsTreeRow key={index} level={level + 1} tree={r} onItemSelected={onItemSelected}/>
+				isExpanded && tree.children.map(
+					(r, index) => <RealmsTreeRow
+						key={index}
+						level={level + 1}
+						tree={r}
+						expandedIds={expandedIds}
+						onItemSelected={onItemSelected}
+						onCollapsed={onCollapsed}
+						onExpanded={onExpanded}
+					/>
 				)
 			}
 		</>
