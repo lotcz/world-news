@@ -2,6 +2,7 @@ package eu.zavadil.wn.worker.annotate;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
+import eu.zavadil.wn.ai.assistant.AiAssistantService;
 import eu.zavadil.wn.ai.embeddings.Embedding;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
@@ -9,7 +10,6 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
-import eu.zavadil.wn.service.AiAssistantService;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.TagService;
 import eu.zavadil.wn.service.TopicService;

@@ -1,10 +1,9 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Spinner} from 'react-bootstrap';
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {DateUtil, Page, PagingRequest} from "zavadil-ts-common";
-import {AdvancedTable} from "zavadil-react-common";
+import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
 import {Topic} from "../../types/Topic";
 
 export type RealmTopicsListProps = {
@@ -48,7 +47,7 @@ function RealmTopicsList({realmId}: RealmTopicsListProps) {
 
 	useEffect(load, [realmId, paging]);
 
-	if (!data) return <Spinner/>;
+	if (!data) return <TablePlaceholder/>;
 
 	return (
 		<div>

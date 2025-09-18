@@ -1,8 +1,6 @@
-package eu.zavadil.wn.service;
+package eu.zavadil.wn.ai.assistant;
 
-import eu.zavadil.wn.ai.assistant.AiAssistantEngine;
-import eu.zavadil.wn.ai.assistant.AiAssistantParams;
-import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
+import eu.zavadil.wn.ai.AiLogService;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;

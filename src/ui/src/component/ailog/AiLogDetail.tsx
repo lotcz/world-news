@@ -71,6 +71,38 @@ export default function AiLogDetail() {
 					</Row>
 					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Input tokens:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							{data.inputTokens}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Output tokens:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							{data.outputTokens}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Processing time:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							{data.requestProcessingTimeNs} ns
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Cost:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							{data.requestCostUsd} USD
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>System Prompt:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>

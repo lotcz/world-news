@@ -1,4 +1,4 @@
-package eu.zavadil.wn.service;
+package eu.zavadil.wn.ai;
 
 import eu.zavadil.wn.ai.assistant.AiAssistantParams;
 import eu.zavadil.wn.ai.assistant.AiAssistantResponse;

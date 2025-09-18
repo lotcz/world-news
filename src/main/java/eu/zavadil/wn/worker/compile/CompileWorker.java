@@ -1,13 +1,17 @@
 package eu.zavadil.wn.worker.compile;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
+import eu.zavadil.wn.ai.assistant.AiAssistantService;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
-import eu.zavadil.wn.service.*;
+import eu.zavadil.wn.service.ArticleService;
+import eu.zavadil.wn.service.ArticleSourceService;
+import eu.zavadil.wn.service.TagService;
+import eu.zavadil.wn.service.TopicService;
 import eu.zavadil.wn.worker.annotate.AnnotateWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

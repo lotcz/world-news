@@ -9,6 +9,7 @@ create cast	(varchar AS tp_operation) WITH INOUT AS IMPLICIT;
 alter type tp_operation add value IF NOT EXISTS 'DetectTags';
 alter type tp_operation add value IF NOT EXISTS 'CompileArticles';
 alter type tp_operation add value IF NOT EXISTS 'DetectRealm';
+alter type tp_operation add value IF NOT EXISTS 'GetEmbeddings';
 
 create table ai_log (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
@@ -19,9 +20,13 @@ create table ai_log (
     operation tp_operation,
     response text,
     system_prompt text,
-    temperature double precision not null,
+    temperature double precision not null default 0,
     user_prompt text,
-    model varchar(100)
+    model varchar(100),
+    input_tokens integer not null default 0,
+	output_tokens integer not null default 0,
+	request_processing_time_ns integer not null default 0,
+	request_cost_usd double precision not null default 0
 );
 
 create index idx_ai_log_created_on

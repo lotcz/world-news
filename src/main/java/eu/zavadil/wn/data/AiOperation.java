@@ -5,5 +5,6 @@ public enum AiOperation {
 	CreateTitle,
 	DetectTags,
 	CompileArticles,
-	DetectRealm
+	DetectRealm,
+	GetEmbeddings
 }

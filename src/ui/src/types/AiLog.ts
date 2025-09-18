@@ -9,5 +9,8 @@ export type AiLog = EntityBase & {
 	entityType?: string | null;
 	entityId?: number | null;
 	operation?: string | null;
-
+	inputTokens: number;
+	outputTokens: number;
+	requestProcessingTimeNs: number;
+	requestCostUsd: number;
 }

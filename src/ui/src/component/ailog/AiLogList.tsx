@@ -10,10 +10,14 @@ import RefreshIconButton from "../general/RefreshIconButton";
 
 const HEADER = [
 	{name: 'createdOn', label: 'Created'},
-	{name: 'operation', label: 'operation'},
-	{name: 'entityType', label: 'entityType'},
-	{name: 'userPrompt', label: 'userPrompt'},
-	{name: 'response', label: 'response'}
+	{name: 'operation', label: 'Operation'},
+	{name: 'entityType', label: 'Entity Type'},
+	{name: 'userPrompt', label: 'User Prompt'},
+	{name: 'response', label: 'Response'},
+	{name: 'inputTokens', label: 'Input'},
+	{name: 'outputTokens', label: 'Output'},
+	{name: 'requestProcessingTimeNs', label: 'Time'},
+	{name: 'requestCostUsd', label: 'Cost'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {
@@ -123,6 +127,10 @@ function AiLogList() {
 													<td>{item.entityType}</td>
 													<td>{item.userPrompt}</td>
 													<td>{item.response}</td>
+													<td>{item.inputTokens}</td>
+													<td>{item.outputTokens}</td>
+													<td>{item.requestProcessingTimeNs}</td>
+													<td>{item.requestCostUsd}</td>
 												</tr>
 											);
 										})
