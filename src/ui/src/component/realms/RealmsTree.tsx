@@ -12,7 +12,8 @@ const EXPANDED_PARAM = 'exp';
 const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'topicCount', label: 'Topics'}
+	{name: 'topicCount', label: 'Topics'},
+	{name: '', label: ''}
 ];
 
 export type RealmsTreeProps = {

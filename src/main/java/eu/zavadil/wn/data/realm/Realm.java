@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.realm;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +18,9 @@ import lombok.EqualsAndHashCode;
 	}
 )
 public class Realm extends EntityWithNameBase {
+
+	@JsonProperty("isHidden")
+	private boolean isHidden;
 
 	@Column(name = "parent_id")
 	private Integer parentId;

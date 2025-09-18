@@ -1,6 +1,7 @@
 import {EntityWithName} from "zavadil-ts-common";
 
 export type Realm = EntityWithName & {
+	isHidden: boolean;
 	parentId?: number | null;
 	summary?: string;
 	topicCount: number;

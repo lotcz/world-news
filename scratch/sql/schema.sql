@@ -85,6 +85,7 @@ create unique index idx_article_name_uq
 
 create table realm (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
+    is_hidden boolean default false,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     parent_id integer

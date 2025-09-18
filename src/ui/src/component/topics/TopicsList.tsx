@@ -7,7 +7,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Topic} from "../../types/Topic";
 import RefreshIconButton from "../general/RefreshIconButton";
-import LockedIcon from "../general/LockedIcon";
+import IsLockedIcon from "../general/IsLockedIcon";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
@@ -140,7 +140,7 @@ function TopicsList() {
 													<td>{item.articleCountExternal}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
-													<td><LockedIcon locked={item.isLocked}/></td>
+													<td><IsLockedIcon locked={item.isLocked}/></td>
 												</tr>
 											);
 										})

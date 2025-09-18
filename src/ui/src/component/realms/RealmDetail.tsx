@@ -8,7 +8,7 @@ import {Realm} from "../../types/Realm";
 import RealmChildrenList from "./RealmChildrenList";
 import RealmSelect from "./RealmSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {ConfirmDialogContext, SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, SaveButton, Switch} from "zavadil-react-common";
 import {BsArrowUpSquare} from "react-icons/bs";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 import RealmTopicsList from "./RealmTopicsList";
@@ -53,6 +53,7 @@ export default function RealmDetail() {
 		() => {
 			if (!id) {
 				setData({
+					isHidden: false,
 					name: '',
 					summary: '',
 					topicCount: 0,
@@ -135,6 +136,21 @@ export default function RealmDetail() {
 			</div>
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Hidden:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								checked={data.isHidden}
+								onChange={(e) => {
+									data.isHidden = e;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Parent:</Form.Label>

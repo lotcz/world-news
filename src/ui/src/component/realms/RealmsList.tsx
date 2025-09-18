@@ -27,7 +27,7 @@ function RealmsList({activeTab}: RealmsListProps) {
 
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/realms/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/realms/table/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);

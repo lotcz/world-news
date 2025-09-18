@@ -3,6 +3,7 @@ import {RealmTree} from "../../types/Realm";
 import {IconButton} from "zavadil-react-common";
 import {BiSolidMinusSquare, BiSolidPlusSquare, BiSquare} from "react-icons/bi";
 import {Stack} from "react-bootstrap";
+import IsHiddenIcon from "../general/IsHiddenIcon";
 
 export type RealmsTreeRowProps = {
 	level: number;
@@ -48,6 +49,7 @@ function RealmsTreeRow({level, tree, expandedIds, onItemSelected, onExpanded, on
 					</td>
 					<td>{tree.realm.summary}</td>
 					<td>{tree.totalTopicCount}</td>
+					<td><IsHiddenIcon hidden={tree.realm.isHidden}/></td>
 				</tr>
 			}
 			{

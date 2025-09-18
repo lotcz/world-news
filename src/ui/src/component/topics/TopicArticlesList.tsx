@@ -5,7 +5,7 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
-import LockedIcon from "../general/LockedIcon";
+import IsLockedIcon from "../general/IsLockedIcon";
 
 export type TopicArticlesListProps = {
 	topicId: number;
@@ -73,7 +73,7 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
-													<td><LockedIcon locked={article.isLocked}/></td>
+													<td><IsLockedIcon locked={article.isLocked}/></td>
 												</tr>
 											);
 										})

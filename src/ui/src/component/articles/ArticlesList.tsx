@@ -7,7 +7,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
-import LockedIcon from "../general/LockedIcon";
+import IsLockedIcon from "../general/IsLockedIcon";
 
 const HEADER = [
 	{name: 'source.name', label: 'Source'},
@@ -125,7 +125,7 @@ function ArticlesList() {
 														<td>{item.title}</td>
 														<td>{item.topic?.realm?.name}</td>
 														<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
-														<td><LockedIcon locked={item.isLocked}/></td>
+														<td><IsLockedIcon locked={item.isLocked}/></td>
 													</tr>
 												);
 											}

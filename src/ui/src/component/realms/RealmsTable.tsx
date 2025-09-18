@@ -5,6 +5,7 @@ import {DateUtil, Page, PagingRequest} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
+import IsHiddenIcon from "../general/IsHiddenIcon";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
@@ -12,7 +13,8 @@ const HEADER = [
 	{name: 'summary', label: 'Summary'},
 	{name: 'topicCount', label: 'Topics'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'}
+	{name: 'createdOn', label: 'Created'},
+	{name: '', label: ''}
 ];
 
 export type RealmsTableProps = {
@@ -69,6 +71,7 @@ function RealmsTable({paging, onItemSelected, onPageRequested}: RealmsTableProps
 												<td>{item.topicCount}</td>
 												<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 												<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+												<td><IsHiddenIcon hidden={item.isHidden}/></td>
 											</tr>
 										);
 									})

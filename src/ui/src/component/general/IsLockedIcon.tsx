@@ -4,9 +4,9 @@ export type LockedIconProps = {
 	locked: boolean;
 };
 
-function LockedIcon({locked}: LockedIconProps) {
+function IsLockedIcon({locked}: LockedIconProps) {
 	if (!locked) return <></>
 	return <BsLockFill color="red"/>
 }
 
-export default LockedIcon;
+export default IsLockedIcon;
