@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.topic;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import eu.zavadil.wn.data.ProcessingState;
 import jakarta.persistence.Column;
@@ -13,6 +14,9 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 @Data
 @MappedSuperclass
 public class TopicBase extends EntityWithNameBase {
+
+	@JsonProperty("isLocked")
+	private boolean isLocked = false;
 
 	@Column(columnDefinition = "TEXT")
 	private String summary;

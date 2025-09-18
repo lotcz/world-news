@@ -7,7 +7,6 @@ import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
-import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.data.topic.TopicRepository;
 import eu.zavadil.wn.data.topic.TopicStub;
@@ -100,14 +99,6 @@ public class TopicService {
 		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.26F);
 		if (similar.isEmpty()) return null;
 		return similar.get(0).getEntity();
-	}
-
-	public Page<Topic> loadTopicsForCompilation() {
-		return this.topicRepository.findAllByProcessingStateAndArticleCountExternalGreaterThan(
-			ProcessingState.Waiting,
-			1,
-			PageRequest.of(0, 10)
-		);
 	}
 
 }

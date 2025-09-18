@@ -45,6 +45,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	public void compile(Topic topic) {
+		if (topic.isLocked()) return;
+
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
 
@@ -64,6 +66,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 					return article;
 				}
 			);
+
+		if (compiled.isLocked()) return;
 
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {

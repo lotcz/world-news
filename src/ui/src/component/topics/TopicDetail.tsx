@@ -15,6 +15,7 @@ import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 import RealmSelect from "../realms/RealmSelect";
 import {BsArrowRightSquare} from "react-icons/bs";
+import {Switch} from "zavadil-react-common";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
@@ -54,6 +55,7 @@ export default function TopicDetail() {
 		() => {
 			if (!id) {
 				setData({
+					isLocked: false,
 					name: '',
 					articleCount: 0,
 					articleCountInternal: 0,
@@ -116,6 +118,21 @@ export default function TopicDetail() {
 			</div>
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Locked:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								checked={data.isLocked}
+								onChange={(e) => {
+									data.isLocked = e;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Realm:</Form.Label>

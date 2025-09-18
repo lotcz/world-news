@@ -68,12 +68,14 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 				log.warn("Article has no UID: {}", articleData);
 				continue;
 			}
-			
+
 			Article article = this.articleService.loadByUid(articleSource.getId(), articleData.getUid());
 			if (article == null) {
 				newArticles++;
 				article = new Article();
 			} else {
+				if (article.isLocked()) continue;
+
 				boolean titleIdentical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
 					|| StringUtils.isBlank(articleData.getTitle());
 				boolean bodyIdentical = StringUtils.safeEquals(article.getBody(), articleData.getBody())
@@ -81,6 +83,7 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 				if (titleIdentical && bodyIdentical) {
 					continue;
 				}
+
 				updatedArticles++;
 			}
 

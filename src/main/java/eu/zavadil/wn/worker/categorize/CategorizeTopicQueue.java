@@ -1,7 +1,6 @@
 package eu.zavadil.wn.worker.categorize;
 
 import eu.zavadil.java.spring.common.queues.PagedSmartQueue;
-import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.data.topic.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,7 @@ public class CategorizeTopicQueue extends PagedSmartQueue<Topic> {
 	@Override
 	public Page<Topic> loadRemaining() {
 		return this.topicRepository
-			.findAllByProcessingStateAndRealmIdIsNullAndArticleCountInternalGreaterThan(
-				ProcessingState.Done,
-				0,
+			.loadCategorizationQueue(
 				PageRequest.of(0, 10)
 			);
 	}

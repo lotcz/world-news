@@ -2,6 +2,7 @@ import {EntityWithName} from "zavadil-ts-common";
 import {Realm} from "./Realm";
 
 export type TopicBase = EntityWithName & {
+	isLocked: boolean;
 	summary?: string;
 	processingState?: string | null;
 	articleCount: number;

@@ -4,6 +4,7 @@ import {ArticleSource} from "./ArticleSource";
 import {Topic} from "./Topic";
 
 export type ArticleBase = EntityBase & {
+	isLocked: boolean;
 	title?: string;
 	publishDate?: Date | null;
 	originalUrl?: string | null;

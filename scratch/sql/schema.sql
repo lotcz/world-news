@@ -131,6 +131,7 @@ create table topic (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    is_locked boolean default false,
     name varchar(255),
     image_id int null,
     realm_id integer
@@ -147,14 +148,17 @@ create table topic (
 ALTER TABLE topic
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
-create index idx_topic_processing_state_realm_article_count_internal
-    on topic (processing_state, realm_id, article_count_internal);
+create index idx_topic_load_compilation_queue
+    on topic (is_locked, processing_state, article_count_external);
 
-create index idx_topic_processing_state_article_count_external
-    on topic (processing_state, article_count_external);
+create index idx_topic_load_categorization_queue
+    on topic (realm_id, processing_state, is_locked, article_count_internal);
+
+create index idx_topic_article_count_external
+    on topic (article_count_external desc);
 
 create index idx_topic_article_count_last_updated
-    on topic (article_count, last_updated_on);
+    on topic (last_updated_on desc);
 
 create index idx_topic_realm
     on topic (realm_id);
@@ -164,6 +168,7 @@ create table article (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     uid varchar(255) not null,
+	is_locked boolean default false,
     body text,
     original_url varchar(255),
     processing_state tp_processing_state not null default 'NotReady',

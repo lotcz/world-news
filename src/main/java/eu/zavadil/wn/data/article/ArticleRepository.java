@@ -36,16 +36,22 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> loadByTagId(int tagId, PageRequest pr);
 
-	Optional<Article> findFirstByOriginalUrl(String originalUrl);
-
 	Optional<Article> findFirstBySourceIdAndUid(int sourceId, String uid);
 
-	Page<Article> findAllByProcessingStateOrderByLastUpdatedOnAsc(ProcessingState state, PageRequest pr);
-
+	/**
+	 * stuck articles
+	 */
 	Page<Article> findAllByProcessingStateAndLastUpdatedOnLessThanOrderByLastUpdatedOnAsc(
 		ProcessingState state,
 		Instant lastUpdatedOn,
 		PageRequest pr
 	);
+
+	@Query("""
+			select a
+			from Article a
+			where a.processingState = 'Waiting'
+		""")
+	Page<Article> loadAnnotationQueue(PageRequest pr);
 
 }

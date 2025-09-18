@@ -6,7 +6,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
-import {ConfirmDialogContext, DateTimeInput} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, Switch} from "zavadil-react-common";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import {BsBoxArrowUpRight} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
@@ -57,6 +57,7 @@ export default function ArticleDetail() {
 		() => {
 			if (!id) {
 				setData({
+					isLocked: false,
 					title: ''
 				});
 				return;
@@ -136,6 +137,21 @@ export default function ArticleDetail() {
 			</div>
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Locked:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								checked={data.isLocked}
+								onChange={(e) => {
+									data.isLocked = e;
+									setData({...data});
+									setChanged(true);
+								}}
+							/>
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>State:</Form.Label>

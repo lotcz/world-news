@@ -1,5 +1,3 @@
-- lock article to prevent updates
-- lock topic to prevent further compilation
 - allow hiding realm name in favor of parent (effective_realm_id)
 - integrate embeddings into AI log? (we at least need to monitor costs)
 

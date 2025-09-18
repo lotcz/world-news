@@ -7,6 +7,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Topic} from "../../types/Topic";
 import RefreshIconButton from "../general/RefreshIconButton";
+import LockedIcon from "../general/LockedIcon";
 
 const HEADER = [
 	{name: 'id', label: 'ID'},
@@ -17,7 +18,8 @@ const HEADER = [
 	{name: 'articleCountInternal', label: 'Internal'},
 	{name: 'articleCountExternal', label: 'External'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'}
+	{name: 'createdOn', label: 'Created'},
+	{name: '', label: ''}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
@@ -138,6 +140,7 @@ function TopicsList() {
 													<td>{item.articleCountExternal}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+													<td><LockedIcon locked={item.isLocked}/></td>
 												</tr>
 											);
 										})

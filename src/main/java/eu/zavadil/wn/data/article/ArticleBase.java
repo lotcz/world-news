@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.article;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityBase;
 import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.java.util.StringUtils;
@@ -20,6 +21,9 @@ import java.time.Instant;
 @Data
 @MappedSuperclass
 public class ArticleBase extends EntityBase {
+
+	@JsonProperty("isLocked")
+	private boolean isLocked = false;
 
 	private static final int UID_SIZE = 255;
 

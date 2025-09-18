@@ -7,6 +7,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
+import LockedIcon from "../general/LockedIcon";
 
 const HEADER = [
 	{name: 'source.name', label: 'Source'},
@@ -14,6 +15,7 @@ const HEADER = [
 	{name: 'title', label: 'Title'},
 	{name: 'topic.realm.name', label: 'Realm'},
 	{name: 'publishDate', label: 'Published'},
+	{name: '', label: ''},
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'createdOn', desc: true}]}
@@ -123,6 +125,7 @@ function ArticlesList() {
 														<td>{item.title}</td>
 														<td>{item.topic?.realm?.name}</td>
 														<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
+														<td><LockedIcon locked={item.isLocked}/></td>
 													</tr>
 												);
 											}

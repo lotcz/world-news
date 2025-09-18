@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
+import LockedIcon from "../general/LockedIcon";
 
 export type TopicArticlesListProps = {
 	topicId: number;
@@ -16,6 +17,7 @@ const HEADER = [
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
+	{name: '', label: ''},
 ];
 
 function TopicArticlesList({topicId}: TopicArticlesListProps) {
@@ -71,6 +73,7 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
+													<td><LockedIcon locked={article.isLocked}/></td>
 												</tr>
 											);
 										})

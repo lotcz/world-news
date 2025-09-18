@@ -84,14 +84,6 @@ public class ArticleService {
 		return this.articleRepository.findFirstBySourceIdAndUid(sourceId, uid).orElse(null);
 	}
 
-	public Page<Article> loadArticlesForAnnotationWorker() {
-		return this.articleRepository
-			.findAllByProcessingStateOrderByLastUpdatedOnAsc(
-				ProcessingState.Waiting,
-				PageRequest.of(0, 10)
-			);
-	}
-
 	public Embedding updateEmbedding(Article article) {
 		return this.articleEmbeddingsService.updateEmbedding(article);
 	}
