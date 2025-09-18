@@ -1,9 +1,13 @@
-- Realms tree: put expanded ids to url to improve navigation
-- put activeTab into url to navigation will work better
+- loading filler for tables
 - lock article to prevent updates
 - lock topic to prevent further compilation
 - allow hiding realm name in favor of parent (effective_realm_id)
 - integrate embeddings into AI log? (we at least need to monitor costs)
+
+Ingestion - define filter texts and elements on article source level
+  - limit to element
+  - exclude element
+  - filter out strings
 
 Media
   - fotografie
@@ -13,10 +17,6 @@ Media
     - shutterstock
     - bynder.com
 
-Ingestion - define filter texts and elements on article source level
-  - limit to element
-  - exclude element
-  - filter out strings
 
 2.0
 ===

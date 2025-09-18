@@ -1,5 +1,5 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
-import {Link, useNavigate, useParams} from "react-router";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
@@ -16,6 +16,9 @@ import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 import RealmSelect from "../realms/RealmSelect";
 import {BsArrowRightSquare} from "react-icons/bs";
 
+const TAB_PARAM_NAME = 'tab';
+const DEFAULT_TAB = 'articles';
+
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 1;
@@ -24,10 +27,28 @@ const COL_2_LG = 6;
 export default function TopicDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+
+	useEffect(
+		() => {
+			if (!activeTab) return;
+			searchParams.set(TAB_PARAM_NAME, activeTab);
+			setSearchParams(searchParams, {replace: true});
+		},
+		[activeTab]
+	);
+
+	useEffect(
+		() => {
+			setActiveTab(StringUtil.getNonEmpty(searchParams.get(TAB_PARAM_NAME), DEFAULT_TAB));
+		},
+		[id]
+	);
 
 	const reload = useCallback(
 		() => {
@@ -167,44 +188,37 @@ export default function TopicDetail() {
 					</Row>
 				</Stack>
 			</Form>
-			<Tabs defaultActiveKey="articles">
-				<Tab title="Articles" eventKey="articles">
-					<div className="px-3">
+			{
+				data.id && <div>
+					<Tabs
+						activeKey={activeTab}
+						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
+					>
+						<Tab title="Articles" eventKey="articles"/>
+						<Tab title="AI Log" eventKey="logs"/>
+						<Tab title="Similar Topics" eventKey="similar-topics"/>
+						<Tab title="Similar Articles" eventKey="similar-articles"/>
+						<Tab title="Similar Realms" eventKey="similar-realms"/>
+					</Tabs>
+					<div className="px-3 py-1">
 						{
-							data.id && <TopicArticlesList topicId={data.id}/>
+							activeTab === 'articles' && <TopicArticlesList topicId={data.id}/>
+						}
+						{
+							activeTab === 'ai-log' && <TopicAiLogList topicId={data.id}/>
+						}
+						{
+							activeTab === 'similar-topics' && <TopicSimilarTopicsList topicId={data.id}/>
+						}
+						{
+							activeTab === 'similar-articles' && <TopicSimilarArticlesList topicId={data.id}/>
+						}
+						{
+							activeTab === 'similar-realms' && <TopicSimilarRealmsList topicId={data.id}/>
 						}
 					</div>
-				</Tab>
-				<Tab title="AI Log" eventKey="logs">
-					<div className="px-3">
-						{
-							data.id && <TopicAiLogList topicId={data.id}/>
-						}
-					</div>
-				</Tab>
-				<Tab title="Similar Topics" eventKey="similarTopics">
-					<div className="px-3">
-						{
-							data.id && <TopicSimilarTopicsList topicId={data.id}/>
-						}
-					</div>
-				</Tab>
-				<Tab title="Similar Articles" eventKey="similarArticles">
-					<div className="px-3">
-						{
-							data.id && <TopicSimilarArticlesList topicId={data.id}/>
-						}
-					</div>
-				</Tab>
-				<Tab title="Similar Realms" eventKey="similarRealms">
-					<div className="px-3">
-						{
-							data.id && <TopicSimilarRealmsList topicId={data.id}/>
-						}
-					</div>
-				</Tab>
-			</Tabs>
-
+				</div>
+			}
 		</div>
 	)
 }

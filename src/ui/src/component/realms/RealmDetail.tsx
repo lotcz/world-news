@@ -1,5 +1,5 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
-import {Link, useNavigate, useParams} from "react-router";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {NumberUtil, ObjectUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -13,6 +13,9 @@ import {BsArrowUpSquare} from "react-icons/bs";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 import RealmTopicsList from "./RealmTopicsList";
 
+const TAB_PARAM_NAME = 'tab';
+const DEFAULT_TAB = 'sub-realms';
+
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 1;
@@ -21,13 +24,30 @@ const COL_2_LG = 5;
 export default function RealmDetail() {
 	const {id, parentId} = useParams();
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const confirmDialog = useContext(ConfirmDialogContext);
-	const [activeTab, setActiveTab] = useState<string>("children");
+	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<Realm>();
 	const [saving, setSaving] = useState<boolean>(false);
 	const [changed, setChanged] = useState<boolean>(false);
+
+	useEffect(
+		() => {
+			if (!activeTab) return;
+			searchParams.set(TAB_PARAM_NAME, activeTab);
+			setSearchParams(searchParams, {replace: true});
+		},
+		[activeTab]
+	);
+
+	useEffect(
+		() => {
+			setActiveTab(StringUtil.getNonEmpty(searchParams.get(TAB_PARAM_NAME), DEFAULT_TAB));
+		},
+		[id]
+	);
 
 	const reload = useCallback(
 		() => {
@@ -173,14 +193,17 @@ export default function RealmDetail() {
 			{
 				data.id &&
 				<div>
-					<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, "children"))}>
-						<Tab title="Sub-realms" eventKey="children"/>
+					<Tabs
+						activeKey={activeTab}
+						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
+					>
+						<Tab title="Sub-realms" eventKey="sub-realms"/>
 						<Tab title="Topics" eventKey="topics"/>
-						<Tab title="Similar Topics" eventKey="similarTopics"/>
+						<Tab title="Similar Topics" eventKey="similar-topics"/>
 					</Tabs>
 					<div className="p-3">
 						{
-							activeTab === 'children' && <div>
+							activeTab === 'sub-realms' && <div>
 								<div>
 									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
 								</div>
@@ -196,7 +219,7 @@ export default function RealmDetail() {
 							</div>
 						}
 						{
-							activeTab === 'similarTopics' && <div>
+							activeTab === 'similar-topics' && <div>
 								<div>
 									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
 								</div>

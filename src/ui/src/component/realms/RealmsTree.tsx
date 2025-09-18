@@ -7,6 +7,8 @@ import {Realm, RealmTree} from "../../types/Realm";
 import RealmsTreeRow from "./RealmsTreeRow";
 import {useSearchParams} from "react-router";
 
+const EXPANDED_PARAM = 'exp';
+
 const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
@@ -54,10 +56,10 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 	const [data, setData] = useState<RealmTree | null>(null);
 	const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set<number>());
 
-	// Load from URL on mount
+	// Load expanded IDs from URL on mount
 	useEffect(
 		() => {
-			const param = searchParams.get("collapsed");
+			const param = searchParams.get(EXPANDED_PARAM);
 			if (StringUtil.notBlank(param)) {
 				const list: Array<number> = param
 					.split("-")
@@ -69,13 +71,13 @@ function RealmsTree({paging, onItemSelected}: RealmsTreeProps) {
 		[]
 	);
 
-	// Save to URL when expandedIds change
+	// Save expanded IDs to URL when expandedIds change
 	useEffect(
 		() => {
 			if (expandedIds.size > 0) {
-				searchParams.set("collapsed", Array.from(expandedIds).join("-"));
+				searchParams.set(EXPANDED_PARAM, Array.from(expandedIds).join("-"));
 			} else {
-				searchParams.delete("collapsed");
+				searchParams.delete(EXPANDED_PARAM);
 			}
 			setSearchParams(searchParams, {replace: true}); // no reload
 		},

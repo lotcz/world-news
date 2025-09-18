@@ -1,5 +1,5 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
-import {useNavigate, useParams} from "react-router";
+import {useNavigate, useParams, useSearchParams} from "react-router";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
@@ -18,6 +18,9 @@ import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
 
+const TAB_PARAM_NAME = 'tab';
+const DEFAULT_TAB = 'ai-log';
+
 const COL_1_MD = 3;
 const COL_2_MD = 5;
 const COL_1_LG = 1;
@@ -26,11 +29,29 @@ const COL_2_LG = 6;
 export default function ArticleDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const confirmDialog = useContext(ConfirmDialogContext);
+	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+
+	useEffect(
+		() => {
+			if (!activeTab) return;
+			searchParams.set(TAB_PARAM_NAME, activeTab);
+			setSearchParams(searchParams, {replace: true});
+		},
+		[activeTab]
+	);
+
+	useEffect(
+		() => {
+			setActiveTab(StringUtil.getNonEmpty(searchParams.get(TAB_PARAM_NAME), DEFAULT_TAB));
+		},
+		[id]
+	);
 
 	const reload = useCallback(
 		() => {
@@ -276,29 +297,29 @@ export default function ArticleDetail() {
 					</Row>
 				</Stack>
 			</Form>
-			<Tabs defaultActiveKey="logs">
-				<Tab eventKey="logs" title="AI Log">
-					<div className="px-3">
+			{
+				data.id && <div>
+					<Tabs
+						activeKey={activeTab}
+						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
+					>
+						<Tab eventKey="ai-log" title="AI Log"/>
+						<Tab eventKey="similar-articles" title="Similar Articles"/>
+						<Tab eventKey="similar-topics" title="Similar Topics"/>
+					</Tabs>
+					<div className="px-2 py-1">
 						{
-							data.id && <ArticleAiLogList articleId={data.id}/>
+							activeTab === "ai-log" && <ArticleAiLogList articleId={data.id}/>
+						}
+						{
+							activeTab === "similar-articles" && <ArticleSimilarArticlesList articleId={data.id}/>
+						}
+						{
+							activeTab === "similar-topics" && <ArticleSimilarTopicsList articleId={data.id}/>
 						}
 					</div>
-				</Tab>
-				<Tab eventKey="similarArticles" title="Similar Articles">
-					<div className="px-3">
-						{
-							data.id && <ArticleSimilarArticlesList articleId={data.id}/>
-						}
-					</div>
-				</Tab>
-				<Tab eventKey="similarTopics" title="Similar Topics">
-					<div className="px-3">
-						{
-							data.id && <ArticleSimilarTopicsList articleId={data.id}/>
-						}
-					</div>
-				</Tab>
-			</Tabs>
+				</div>
+			}
 
 		</div>
 	)

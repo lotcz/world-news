@@ -50,37 +50,35 @@ function EntityAiLogList({entityId, entityName}: EntityAiLogListProps) {
 
 	return (
 		<div>
-			<div className="d-flex pt-2 gap-3">
-				{
-					(logs === null) ? <Spinner/>
-						: (
-							<AdvancedTable
-								header={HEADER}
-								paging={paging}
-								totalItems={logs.totalItems}
-								onPagingChanged={setPaging}
-								hover={true}
-								striped={true}
-							>
-								{
-									(logs.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>Nothing.</td>
-										</tr> :
-										logs.content.map((log, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(log)}>
-													<td>{DateUtil.formatDateTimeForHumans(log.createdOn)}</td>
-													<td>{log.operation}</td>
-													<td>{log.userPrompt}</td>
-													<td>{log.response}</td>
-												</tr>
-											);
-										})
-								}
-							</AdvancedTable>
-						)
-				}
-			</div>
+			{
+				(logs === null) ? <Spinner/>
+					: (
+						<AdvancedTable
+							header={HEADER}
+							paging={paging}
+							totalItems={logs.totalItems}
+							onPagingChanged={setPaging}
+							hover={true}
+							striped={true}
+						>
+							{
+								(logs.totalItems === 0) ? <tr>
+										<td colSpan={HEADER.length}>Nothing.</td>
+									</tr> :
+									logs.content.map((log, index) => {
+										return (
+											<tr key={index} role="button" onClick={() => navigateToDetail(log)}>
+												<td>{DateUtil.formatDateTimeForHumans(log.createdOn)}</td>
+												<td>{log.operation}</td>
+												<td>{log.userPrompt}</td>
+												<td>{log.response}</td>
+											</tr>
+										);
+									})
+							}
+						</AdvancedTable>
+					)
+			}
 		</div>
 	);
 }
