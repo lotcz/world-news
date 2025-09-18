@@ -1,9 +1,10 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Spinner, Table} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicEmbeddingDistance} from "../../types/EmbeddingDistance";
+import {TablePlaceholder} from "zavadil-react-common";
 
 export type ArticleSimilarTopicsListProps = {
 	articleId: number;
@@ -36,7 +37,7 @@ function ArticleSimilarTopicsList({articleId}: ArticleSimilarTopicsListProps) {
 
 	useEffect(load, [articleId]);
 
-	if (!data) return <Spinner/>;
+	if (!data) return <TablePlaceholder/>;
 
 	return (
 		<div>

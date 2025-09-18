@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Spinner} from 'react-bootstrap';
-import {AdvancedTable} from "zavadil-react-common";
+import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
 import {Page, PagingRequest} from "zavadil-ts-common";
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -50,7 +49,7 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 		<div>
 			<div className="d-flex pt-2 gap-3">
 				{
-					(articles === null) ? <Spinner/>
+					(articles === null) ? <TablePlaceholder/>
 						: (
 							<AdvancedTable
 								header={HEADER}

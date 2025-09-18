@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Spinner} from 'react-bootstrap';
-import {AdvancedTable} from "zavadil-react-common";
+import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
 import {DateUtil, ObjectUtil, Page, PagingRequest} from "zavadil-ts-common";
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -51,7 +50,7 @@ function EntityAiLogList({entityId, entityName}: EntityAiLogListProps) {
 	return (
 		<div>
 			{
-				(logs === null) ? <Spinner/>
+				(logs === null) ? <TablePlaceholder/>
 					: (
 						<AdvancedTable
 							header={HEADER}

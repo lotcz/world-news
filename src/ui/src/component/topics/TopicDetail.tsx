@@ -195,7 +195,7 @@ export default function TopicDetail() {
 						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
 					>
 						<Tab title="Articles" eventKey="articles"/>
-						<Tab title="AI Log" eventKey="logs"/>
+						<Tab title="AI Log" eventKey="ai-log"/>
 						<Tab title="Similar Topics" eventKey="similar-topics"/>
 						<Tab title="Similar Articles" eventKey="similar-articles"/>
 						<Tab title="Similar Realms" eventKey="similar-realms"/>
