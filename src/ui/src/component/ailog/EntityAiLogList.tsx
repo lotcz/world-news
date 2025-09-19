@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
-import {DateUtil, ObjectUtil, Page, PagingRequest} from "zavadil-ts-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, StringUtil} from "zavadil-ts-common";
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -67,10 +67,10 @@ function EntityAiLogList({entityId, entityName}: EntityAiLogListProps) {
 									logs.content.map((log, index) => {
 										return (
 											<tr key={index} role="button" onClick={() => navigateToDetail(log)}>
-												<td>{DateUtil.formatDateTimeForHumans(log.createdOn)}</td>
+												<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(log.createdOn)}</td>
 												<td>{log.operation}</td>
-												<td>{log.userPrompt}</td>
-												<td>{log.response}</td>
+												<td>{StringUtil.ellipsis(log.userPrompt, 100)}</td>
+												<td>{StringUtil.ellipsis(log.response, 100)}</td>
 											</tr>
 										);
 									})

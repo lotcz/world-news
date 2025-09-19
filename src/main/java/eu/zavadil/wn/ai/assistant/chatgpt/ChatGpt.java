@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * My custom implementation of chatGPT
+ */
 @Service
 public class ChatGpt extends HttpApiClientBase implements AiAssistantEngine {
 

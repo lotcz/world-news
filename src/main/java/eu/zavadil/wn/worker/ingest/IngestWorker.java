@@ -93,13 +93,16 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 
-			// dont import summary, generate our own
-			//if (StringUtils.notBlank(articleData.getSummary())) {
-			//	article.setSummary(articleData.getSummary());
-			//}
-
 			if (StringUtils.notBlank(articleData.getBody())) {
-				article.setBody(articleData.getBody());
+				String body = articleData.getBody();
+				// filter out lines
+				List<String> filters = articleSource.getFilterOutLines();
+				for (String filter : filters) {
+					if (StringUtils.notBlank(filter)) {
+						body = StringUtils.safeReplace(body, filter, "");
+					}
+				}
+				article.setBody(body);
 			}
 
 			if (articleData.getPublishDate() != null) {

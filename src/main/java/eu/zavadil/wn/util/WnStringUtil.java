@@ -4,8 +4,6 @@ import eu.zavadil.java.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.Normalizer;
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 public class WnStringUtil {
@@ -47,17 +45,6 @@ public class WnStringUtil {
 			return removeWrappingAsterisks(text.substring(1, text.length() - 1));
 		}
 		return text;
-	}
-
-	public static String listToText(List<String> strings) {
-		return String.join("\r\n", strings.stream().map(StringUtils::nullToEmpty).toList());
-	}
-
-	public static List<String> textToList(String text) {
-		if (StringUtils.isBlank(text)) {
-			return List.of();
-		}
-		return Arrays.asList(text.split("\\R"));
 	}
 
 }

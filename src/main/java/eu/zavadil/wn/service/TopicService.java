@@ -1,9 +1,9 @@
 package eu.zavadil.wn.service;
 
 import eu.zavadil.java.util.StringUtils;
-import eu.zavadil.wn.ai.embeddings.Embedding;
-import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
-import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
+import eu.zavadil.wn.ai.embeddings.data.EmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.data.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;

@@ -6,6 +6,8 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {AiLog} from "../../types/AiLog";
+import DurationNs from "../general/DurationNs";
+import CostUsd from "../general/CostUsd";
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -90,7 +92,7 @@ export default function AiLogDetail() {
 							<Form.Label>Processing time:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							{data.requestProcessingTimeNs} ns
+							<DurationNs ns={data.requestProcessingTimeNs}/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">
@@ -98,7 +100,7 @@ export default function AiLogDetail() {
 							<Form.Label>Cost:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							{data.requestCostUsd} USD
+							<CostUsd usd={data.requestCostUsd}/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">

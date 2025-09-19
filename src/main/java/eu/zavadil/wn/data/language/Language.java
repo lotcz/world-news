@@ -2,7 +2,7 @@ package eu.zavadil.wn.data.language;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
-import eu.zavadil.wn.util.WnStringUtil;
+import eu.zavadil.java.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -34,7 +34,7 @@ public class Language extends EntityWithNameBase {
 
 	@JsonIgnore
 	public List<String> getSystemPrompt() {
-		return WnStringUtil.textToList(this.getAiSystemPrompt());
+		return StringUtils.textToLines(this.getAiSystemPrompt());
 	}
 
 	@Column(columnDefinition = "TEXT")
@@ -42,7 +42,7 @@ public class Language extends EntityWithNameBase {
 
 	@JsonIgnore
 	public List<String> getUserPromptCreateTitle() {
-		return WnStringUtil.textToList(this.getAiUserPromptCreateTitle());
+		return StringUtils.textToLines(this.getAiUserPromptCreateTitle());
 	}
 
 	@Column(columnDefinition = "TEXT")
@@ -50,7 +50,7 @@ public class Language extends EntityWithNameBase {
 
 	@JsonIgnore
 	public List<String> getUserPromptCreateSummary() {
-		return WnStringUtil.textToList(this.getAiUserPromptCreateSummary());
+		return StringUtils.textToLines(this.getAiUserPromptCreateSummary());
 	}
 
 	@Column(columnDefinition = "TEXT")
@@ -58,7 +58,7 @@ public class Language extends EntityWithNameBase {
 
 	@JsonIgnore
 	public List<String> getUserPromptDetectTags() {
-		return WnStringUtil.textToList(this.getAiUserPromptDetectTags());
+		return StringUtils.textToLines(this.getAiUserPromptDetectTags());
 	}
 
 	@Column(columnDefinition = "TEXT")
@@ -66,6 +66,6 @@ public class Language extends EntityWithNameBase {
 
 	@JsonIgnore
 	public List<String> getUserPromptCompileArticles() {
-		return WnStringUtil.textToList(this.getAiUserPromptCompileArticles());
+		return StringUtils.textToLines(this.getAiUserPromptCompileArticles());
 	}
 }

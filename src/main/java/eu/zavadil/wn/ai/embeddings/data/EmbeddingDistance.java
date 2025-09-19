@@ -1,4 +1,4 @@
-package eu.zavadil.wn.ai.embeddings;
+package eu.zavadil.wn.ai.embeddings.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

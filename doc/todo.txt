@@ -1,10 +1,3 @@
-- integrate embeddings into AI log? (we at least need to monitor costs)
-
-Ingestion - define filter texts and elements on article source level
-  - limit to element
-  - exclude element
-  - filter out strings
-
 Media
   - fotografie
     - add image service
@@ -13,10 +6,10 @@ Media
     - shutterstock
     - bynder.com
 
-
 2.0
 ===
 
+- use bigserial/Long as IDs
 - introduce virtual writer to do the AI compilation work with flavor
 - full-text search in summary and body
 - semantic search (in summary)
@@ -26,6 +19,10 @@ Media
 - community grammar nazi contest
 - mobile app
 - monitor news sources by country and allow comparison (potential use in propaganda debunk)
+- cost monitoring
+  - add table with model costs
+  - add job to calculate costs for log entries
+  - add job to calculate cost per article/topic/realm
 
 Timelines
   - create timelines of long-running stories
@@ -39,6 +36,10 @@ Audiences
   - by genre
 
 Ingestion
+
+- define filter texts and elements on article source level
+  - limit to element
+  - exclude element
 
 - split ingestion to url gathering and body download so body can be only downloaded when article is updated
 - add option to not download body and only keep summary (NYT)

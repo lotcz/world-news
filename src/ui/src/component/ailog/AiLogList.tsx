@@ -7,11 +7,13 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {AiLog} from "../../types/AiLog";
 import RefreshIconButton from "../general/RefreshIconButton";
+import DurationNs from "../general/DurationNs";
+import CostUsd from "../general/CostUsd";
 
 const HEADER = [
 	{name: 'createdOn', label: 'Created'},
 	{name: 'operation', label: 'Operation'},
-	{name: 'entityType', label: 'Entity Type'},
+	{name: 'entityType', label: 'Entity'},
 	{name: 'userPrompt', label: 'User Prompt'},
 	{name: 'response', label: 'Response'},
 	{name: 'inputTokens', label: 'Input'},
@@ -122,15 +124,15 @@ function AiLogList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+													<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 													<td>{item.operation}</td>
 													<td>{item.entityType}</td>
-													<td>{item.userPrompt}</td>
-													<td>{item.response}</td>
+													<td>{StringUtil.ellipsis(item.userPrompt, 100)}</td>
+													<td>{StringUtil.ellipsis(item.response, 100)}</td>
 													<td>{item.inputTokens}</td>
 													<td>{item.outputTokens}</td>
-													<td>{item.requestProcessingTimeNs}</td>
-													<td>{item.requestCostUsd}</td>
+													<td><DurationNs ns={item.requestProcessingTimeNs}/></td>
+													<td><CostUsd usd={item.requestCostUsd}/></td>
 												</tr>
 											);
 										})

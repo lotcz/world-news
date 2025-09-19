@@ -90,9 +90,6 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 			}
 		}
 
-		// todo: move to article source
-		body = StringUtils.safeReplace(body, "Článek si také můžete poslechnout v audioverzi.", "");
-
 		articleData.setBody(this.sanitizeText(body));
 
 		return articleData;

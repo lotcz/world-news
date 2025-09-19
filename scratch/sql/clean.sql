@@ -1,3 +1,5 @@
+update ai_log set request_cost_usd = null where request_cost_usd = 0;
+
 /* reschedule articles in Error for reprocessing */
 UPDATE article set processing_state = 'Waiting' WHERE processing_state <> 'Waiting';
 UPDATE article set processing_state = 'Waiting' WHERE processing_state IN ('Error', 'Processing');

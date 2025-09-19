@@ -3,7 +3,7 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
-import eu.zavadil.wn.ai.embeddings.TopicEmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.data.TopicEmbeddingDistance;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.data.topic.TopicStub;
 import eu.zavadil.wn.service.TopicService;

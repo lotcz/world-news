@@ -20,13 +20,13 @@ create table ai_log (
     operation tp_operation,
     response text,
     system_prompt text,
-    temperature double precision not null default 0,
+    temperature double precision,
     user_prompt text,
     model varchar(100),
     input_tokens integer not null default 0,
 	output_tokens integer not null default 0,
-	request_processing_time_ns integer not null default 0,
-	request_cost_usd double precision not null default 0
+	request_processing_time_ns bigint not null default 0,
+	request_cost_usd double precision
 );
 
 create index idx_ai_log_created_on
@@ -75,7 +75,9 @@ create table article_source (
     language_id integer not null
     	constraint fk_article_source_language
        	references language,
-    filter_out text,
+    filter_out_text text,
+    limit_to_element varchar(255),
+	exclude_elements text,
     article_count int not null default 0
 );
 

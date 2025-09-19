@@ -2,6 +2,8 @@ package eu.zavadil.wn.ai;
 
 import eu.zavadil.wn.ai.assistant.AiAssistantParams;
 import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
+import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
+import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.aiLog.AiLog;
@@ -49,10 +51,33 @@ public class AiLogService {
 				.userPrompt(params.getUserPromptString())
 				.temperature(params.getTemperature())
 				.model(params.getModel())
-				.response(response.getResponse())
 				.operation(operation)
 				.entityType(entityType)
 				.entityId(entityId)
+				.response(response.getResponse())
+				.inputTokens((int) response.getInputTokens())
+				.outputTokens((int) response.getOutputTokens())
+				.requestProcessingTimeNs(response.getProcessingTimeNs())
+				.build()
+		);
+	}
+
+	public AiLog log(
+		AiEmbeddingsParams params,
+		AiEmbeddingsResponse response,
+		EntityType entityType,
+		Integer entityId
+	) {
+		return this.log(
+			AiLog.builder()
+				.userPrompt(params.getText())
+				.model(params.getModel())
+				.operation(AiOperation.GetEmbeddings)
+				.entityType(entityType)
+				.entityId(entityId)
+				.response(response.getResult().toString())
+				.inputTokens((int) response.getInputTokens())
+				.requestProcessingTimeNs(response.getProcessingTimeNs())
 				.build()
 		);
 	}

@@ -3,7 +3,7 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
-import eu.zavadil.wn.ai.embeddings.RealmEmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.data.RealmEmbeddingDistance;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.realm.RealmTree;
 import eu.zavadil.wn.service.RealmService;

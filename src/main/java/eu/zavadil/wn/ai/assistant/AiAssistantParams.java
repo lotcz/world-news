@@ -1,6 +1,6 @@
 package eu.zavadil.wn.ai.assistant;
 
-import eu.zavadil.wn.util.WnStringUtil;
+import eu.zavadil.java.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,13 +18,13 @@ public class AiAssistantParams {
 	private List<String> systemPrompt = new ArrayList<>();
 
 	public String getSystemPromptString() {
-		return WnStringUtil.listToText(this.systemPrompt);
+		return StringUtils.linesToText(this.systemPrompt);
 	}
 
 	private List<String> userPrompt = new ArrayList<>();
 
 	public String getUserPromptString() {
-		return WnStringUtil.listToText(this.userPrompt);
+		return StringUtils.linesToText(this.userPrompt);
 	}
 
 	/**

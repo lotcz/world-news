@@ -3,7 +3,7 @@ package eu.zavadil.wn.worker.annotate;
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.assistant.AiAssistantService;
-import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.ProcessingState;

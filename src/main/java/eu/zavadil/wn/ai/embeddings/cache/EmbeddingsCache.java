@@ -2,7 +2,7 @@ package eu.zavadil.wn.ai.embeddings.cache;
 
 import com.pgvector.PGvector;
 import eu.zavadil.java.util.HashUtils;
-import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

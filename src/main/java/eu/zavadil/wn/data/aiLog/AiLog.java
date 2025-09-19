@@ -52,12 +52,15 @@ public class AiLog extends EntityBase {
 	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private AiOperation operation;
 
+	@Builder.Default
 	private int inputTokens = 0;
 
+	@Builder.Default
 	private int outputTokens = 0;
 
-	private int requestProcessingTimeNs = 0;
+	@Builder.Default
+	private long requestProcessingTimeNs = 0;
 
-	private double requestCostUsd = 0;
-	
+	private Double requestCostUsd;
+
 }

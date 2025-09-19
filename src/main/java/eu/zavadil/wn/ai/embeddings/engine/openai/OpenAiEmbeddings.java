@@ -1,52 +1,60 @@
 package eu.zavadil.wn.ai.embeddings.engine.openai;
 
-import eu.zavadil.java.spring.common.client.HttpApiClientBase;
-import eu.zavadil.wn.ai.embeddings.Embedding;
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.models.embeddings.CreateEmbeddingResponse;
+import com.openai.models.embeddings.EmbeddingCreateParams;
+import eu.zavadil.java.caching.Lazy;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenAiEmbeddings extends HttpApiClientBase implements AiEmbeddingsEngine {
+@Primary
+public class OpenAiEmbeddings implements AiEmbeddingsEngine {
 
 	@Value("${chatgpt.apikey}")
 	String apiKey;
 
-	/**
-	 * Don't change this without resetting database! Different models are not compatible for search.
-	 */
-	private String model = "text-embedding-3-small";
+	private final Lazy<OpenAIClient> openAIClient;
 
 	public OpenAiEmbeddings() {
-		super("https://api.openai.com/v1/embeddings");
-	}
-
-	@Override
-	public HttpHeaders getHttpHeaders(String path) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json");
-		headers.add("Authorization", String.format("Bearer %s", this.apiKey));
-		return headers;
+		this.openAIClient = new Lazy<>(
+			() -> OpenAIOkHttpClient
+				.builder()
+				.apiKey(this.apiKey)
+				.build()
+		);
 	}
 
 	@Override
 	public AiEmbeddingsResponse getEmbedding(AiEmbeddingsParams params) {
-		OpenAiEmbeddingsRequest request = OpenAiEmbeddingsRequest
+		EmbeddingCreateParams request = EmbeddingCreateParams
 			.builder()
-			.model(this.model)
+			.model(params.getModel())
 			.input(params.getText())
 			.build();
 
-		OpenAiEmbeddingsResponse response = this.exchange(HttpMethod.POST, "", request, OpenAiEmbeddingsResponse.class);
-		Embedding embedding = response.getData().get(0).getEmbedding();
+		long start = System.nanoTime();
+
+		CreateEmbeddingResponse response = this.openAIClient
+			.get()
+			.embeddings()
+			.create(request);
+
+		long elapsed = System.nanoTime() - start;
+
+		Embedding embedding = new Embedding(response.data().get(0).embedding());
 
 		return AiEmbeddingsResponse
 			.builder()
 			.result(embedding)
+			.inputTokens(response.usage().promptTokens())
+			.processingTimeNs(elapsed)
 			.build();
 	}
 

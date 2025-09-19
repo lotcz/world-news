@@ -7,8 +7,10 @@ export type ArticleSourceBase = EntityWithName & {
 	url?: string;
 	lastImported?: Date | null;
 	importType: string;
-	filterOut?: string | null;
 	articleCount: number;
+	limitToElement?: string | null;
+	excludeElements?: string | null;
+	filterOutText?: string | null;
 }
 
 export type ArticleSourceStub = ArticleSourceBase & {

@@ -1,7 +1,7 @@
 package eu.zavadil.wn.worker.categorize;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
-import eu.zavadil.wn.ai.embeddings.Embedding;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.topic.Topic;

@@ -1,8 +1,8 @@
 package eu.zavadil.wn.ai.embeddings.repository;
 
 import com.pgvector.PGvector;
-import eu.zavadil.wn.ai.embeddings.Embedding;
-import eu.zavadil.wn.ai.embeddings.EmbeddingDistance;
+import eu.zavadil.wn.ai.embeddings.data.Embedding;
+import eu.zavadil.wn.ai.embeddings.data.EmbeddingDistance;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.JdbcTemplate;

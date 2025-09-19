@@ -1,11 +1,11 @@
-package eu.zavadil.wn.ai.embeddings.engine.openai;
+package eu.zavadil.wn.ai.embeddings.engine.chatgpt;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class OpenAiEmbeddingsRequest {
+public class ChatGptEmbeddingsRequest {
 
 	private String input;
 

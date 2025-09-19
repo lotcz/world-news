@@ -16,8 +16,10 @@ public class AiAssistantResponse {
 
 	private String response;
 
-	private int inputTokens;
+	private long inputTokens;
 
-	private int outputTokens;
+	private long outputTokens;
+
+	private long processingTimeNs;
 
 }
