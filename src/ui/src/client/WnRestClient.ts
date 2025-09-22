@@ -10,6 +10,7 @@ import {AiLogClient} from "./AiLogClient";
 import {TagsClient} from "./TagsClient";
 import {TopicsClient} from "./TopicsClient";
 import {RealmsClient} from "./RealmsClient";
+import {ImagesClient} from "./ImagesClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -29,6 +30,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public aiLog: AiLogClient;
 
+	public images: ImagesClient;
+
 	constructor() {
 		super(conf.API_URL);
 
@@ -40,6 +43,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.tags = new TagsClient(this);
 		this.articles = new ArticlesClient(this);
 		this.aiLog = new AiLogClient(this);
+		this.images = new ImagesClient(this);
 	}
 
 	version(): Promise<string> {
@@ -64,10 +68,6 @@ export class WnRestClient extends RestClientWithOAuth {
 		return this.post(`queues/ingest/start/${sourceId}`);
 	}
 
-	getImagezResizedUrl(name: string, type: string, width: number, height: number, ext?: string): Promise<string> {
-		return this.get('images/imagez/url/resized', {name, type, width, height, ext})
-			.then(r => r.text());
-	}
 }
 
 export const WnRestClientContext = createContext(new WnRestClient());

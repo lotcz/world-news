@@ -8,7 +8,7 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
 import IsLockedIcon from "../general/IsLockedIcon";
-import ImagezImageThumb from "../general/ImagezImageThumb";
+import {ImagezImageThumb} from "../general/ImagezImage";
 
 const HEADER = [
 	{name: '', label: ''},
@@ -122,7 +122,7 @@ function ArticlesList() {
 											(item, index) => {
 												return (
 													<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-														<td><ImagezImageThumb name="e6a8d25da0b679ce3eedc18ac7302036.jpg"/></td>
+														<td><ImagezImageThumb name={item.image?.name}/></td>
 														<td>{item.source?.name}</td>
 														<td>{item.processingState}</td>
 														<td>{item.title}</td>

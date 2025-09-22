@@ -17,7 +17,7 @@ import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
-import ImagezImagePreview from "../general/ImagezImagePreview";
+import {ImagezImagePreview} from "../general/ImagezImage";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';
@@ -251,7 +251,7 @@ export default function ArticleDetail() {
 							<Form.Label>Image:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<ImagezImagePreview name="e6a8d25da0b679ce3eedc18ac7302036.jpg"/>
+							<ImagezImagePreview id={data.mainImageId}/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">
