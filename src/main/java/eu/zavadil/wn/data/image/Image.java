@@ -1,17 +1,19 @@
 package eu.zavadil.wn.data.image;
 
-import eu.zavadil.wn.data.article.Article;
+import eu.zavadil.java.spring.common.entity.EntityBase;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-public class Image extends ImageBase {
+public class Image extends EntityBase {
 
-	@ManyToOne
-	private Article article;
+	private String originalUrl;
+
+	private String name;
+
+	private String description;
 
 }

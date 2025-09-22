@@ -18,7 +18,7 @@ public class Topic extends TopicBase {
 	private Realm realm;
 
 	@ManyToOne
-	private Image image;
+	private Image mainImage;
 
 	@ManyToMany
 	@JoinTable(

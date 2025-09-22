@@ -1,10 +1,16 @@
+- separate entity for external article?
+
+
 Media
+  - imagez client
+  -
   - fotografie
     - add image service
     - bez fotky/AI generated/my own/creative commons/fotobanka
     - https://www.ctk.cz/sluzby/fotobanka/
     - shutterstock
     - bynder.com
+
 
 2.0
 ===
@@ -23,6 +29,14 @@ Media
   - add table with model costs
   - add job to calculate costs for log entries
   - add job to calculate cost per article/topic/realm
+
+Social
+  - Facebook
+  - Discord
+  - Instagram
+  - X
+  - YouTube
+  - BlueSky
 
 Timelines
   - create timelines of long-running stories

@@ -141,7 +141,10 @@ create table topic (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     is_locked boolean default false,
     name varchar(255),
-    image_id int null,
+    main_image_id int null
+    	constraint fk_topic_image
+        references image
+        on delete set null,
     realm_id integer
         constraint fk_topic_realm
         references realm
@@ -183,10 +186,10 @@ create table article (
     publish_date timestamp(6) with time zone,
     summary text,
     title varchar(255),
-    image_id int null
+    main_image_id int null
     	constraint fk_article_image
         references image
-        on delete cascade,
+        on delete set null,
     language_id integer not null
         constraint fkntjo7u9ep5digg27txr8fnqa5
         references language,
@@ -240,13 +243,9 @@ create table image (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
-    description varchar(255),
     original_url varchar(255),
-    path varchar(255),
-    article_id integer
-        constraint fkj1itl8jvakcxyqmrq91bmp49u
-        references article
-        on delete cascade
+    name varchar(255) not null,
+    description text
 );
 
 create table article_image (

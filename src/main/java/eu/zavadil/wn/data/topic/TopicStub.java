@@ -21,7 +21,7 @@ public class TopicStub extends TopicBase {
 	@Column(name = "realm_id")
 	private Integer realmId;
 
-	@Column(name = "image_id")
-	private Integer imageId;
+	@Column(name = "main_image_id")
+	private Integer mainImageId;
 
 }

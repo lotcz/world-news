@@ -29,7 +29,7 @@ public class Article extends ArticleBase {
 	private Language language;
 
 	@ManyToOne(optional = true)
-	private Image image;
+	private Image mainImage;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(

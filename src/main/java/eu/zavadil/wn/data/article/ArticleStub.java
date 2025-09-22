@@ -30,6 +30,6 @@ public class ArticleStub extends ArticleBase {
 	@Column(name = "language_id", nullable = false)
 	private Integer languageId;
 
-	@Column(name = "image_id")
-	private Integer imageId;
+	@Column(name = "main_image_id")
+	private Integer mainImageId;
 }

@@ -17,6 +17,7 @@ import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
+import ImagezImagePreview from "../general/ImagezImagePreview";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';
@@ -243,6 +244,14 @@ export default function ArticleDetail() {
 									target="_blank"
 								><BsBoxArrowUpRight/></a>
 							}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Image:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<ImagezImagePreview name="e6a8d25da0b679ce3eedc18ac7302036.jpg"/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

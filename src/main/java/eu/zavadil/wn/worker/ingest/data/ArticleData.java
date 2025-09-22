@@ -20,5 +20,7 @@ public class ArticleData {
 
 	private Instant publishDate;
 
+	private ImageData mainImage;
+
 	private List<ImageData> images;
 }

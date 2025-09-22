@@ -59,11 +59,15 @@ export class WnRestClient extends RestClientWithOAuth {
 	startIngestion(): Promise<Response> {
 		return this.post('queues/ingest/start');
 	}
-	
+
 	startIngestionBySource(sourceId: number): Promise<Response> {
 		return this.post(`queues/ingest/start/${sourceId}`);
 	}
 
+	getImagezResizedUrl(name: string, type: string, width: number, height: number, ext?: string): Promise<string> {
+		return this.get('images/imagez/url/resized', {name, type, width, height, ext})
+			.then(r => r.text());
+	}
 }
 
 export const WnRestClientContext = createContext(new WnRestClient());
