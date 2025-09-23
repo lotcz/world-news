@@ -1,0 +1,10 @@
+### docs: https://api.openverse.org/v1/
+
+### search
+GET https://api.openverse.org/v1/images?q=karel&page=1&page_size=10
+Accept: application/json
+
+### via server
+GET {{url}}/images/cc/search?search=karel&page=0&size=10
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json

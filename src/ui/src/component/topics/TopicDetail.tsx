@@ -14,8 +14,10 @@ import TopicSimilarTopicsList from "./TopicSimilarTopicsList";
 import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 import RealmSelect from "../realms/RealmSelect";
-import {BsArrowRightSquare} from "react-icons/bs";
-import {Switch} from "zavadil-react-common";
+import {BsArrowRightSquare, BsTrash} from "react-icons/bs";
+import {IconButton, Switch} from "zavadil-react-common";
+import {ImagezImagePreview} from "../images/ImagezImage";
+import {SupplyImageModal} from "../images/supply/SupplyImageModal";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
@@ -32,6 +34,7 @@ export default function TopicDetail() {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [activeTab, setActiveTab] = useState<string>();
+	const [imageSelectOpen, setImageSelectOpen] = useState<boolean>(false);
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -170,6 +173,30 @@ export default function TopicDetail() {
 							</div>
 						</Col>
 					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Image:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex gap-2 align-items-start">
+							<ImagezImagePreview id={data.mainImageId}/>
+							<Button size="sm" onClick={() => setImageSelectOpen(true)}>Change...</Button>
+							{
+								data.mainImageId &&
+								<IconButton
+									size="sm"
+									variant="danger"
+									icon={<BsTrash/>}
+									onClick={
+										() => {
+											data.mainImageId = null;
+											setData({...data});
+											setChanged(true);
+										}
+									}
+								>Remove</IconButton>
+							}
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Name:</Form.Label>
@@ -235,6 +262,19 @@ export default function TopicDetail() {
 						}
 					</div>
 				</div>
+			}
+			{
+				imageSelectOpen && <SupplyImageModal
+					onClose={() => setImageSelectOpen(false)}
+					onSelected={
+						(id) => {
+							data.mainImageId = id;
+							setData({...data});
+							setImageSelectOpen(false);
+							setChanged(true);
+						}
+					}
+				/>
 			}
 		</div>
 	)

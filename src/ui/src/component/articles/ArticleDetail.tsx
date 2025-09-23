@@ -17,7 +17,7 @@ import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
-import {ImagezImagePreview} from "../general/ImagezImage";
+import {ImagezImagePreview} from "../images/ImagezImage";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';

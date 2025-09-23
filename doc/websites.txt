@@ -24,7 +24,8 @@ Pravesestalo.cz
   - Zajimavosti ze sveta (lehce bulvarni zpravy z ruznych oblasti, zajimave, poutave, krimi, weird and peculiar)
   - stalo se tento den... (historicke okenko)
   - get some inspiration from publico.cz
-
+  - publish interesting leaked materials
+  
 justhappening.eu or justhappened.eu
 koncovka .today nebo .online nebo .news
 "daily news" search on YT is almost empty

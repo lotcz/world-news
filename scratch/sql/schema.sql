@@ -245,7 +245,10 @@ create table image (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     original_url varchar(255),
     name varchar(255) not null,
-    description text
+    description text,
+    author varchar(100),
+    source varchar(100),
+    license varchar(100)
 );
 
 create table article_image (

@@ -8,7 +8,7 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
 import IsLockedIcon from "../general/IsLockedIcon";
-import {ImagezImageThumb} from "../general/ImagezImage";
+import {ImagezImageThumb} from "../images/ImagezImage";
 
 const HEADER = [
 	{name: '', label: ''},
