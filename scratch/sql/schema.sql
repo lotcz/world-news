@@ -135,6 +135,19 @@ create index idx_tag_synonym
 create type tp_processing_state AS ENUM ('NotReady', 'Waiting', 'Processing', 'Done', 'Error');
 create cast	(varchar AS tp_processing_state) WITH INOUT AS IMPLICIT;
 
+
+create table image (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    original_url varchar(255),
+    name varchar(255) not null,
+    description text,
+    author varchar(100),
+    source varchar(100),
+    license varchar(100)
+);
+
 create table topic (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
@@ -143,8 +156,7 @@ create table topic (
     name varchar(255),
     main_image_id int null
     	constraint fk_topic_image
-        references image
-        on delete set null,
+        references image,
     realm_id integer
         constraint fk_topic_realm
         references realm
@@ -188,8 +200,7 @@ create table article (
     title varchar(255),
     main_image_id int null
     	constraint fk_article_image
-        references image
-        on delete set null,
+        references image,
     language_id integer not null
         constraint fkntjo7u9ep5digg27txr8fnqa5
         references language,
@@ -238,18 +249,6 @@ create table article_tag (
 create index idx_article_tag_tag_id
     on article_tag (tag_id);
 
-
-create table image (
-    id integer primary key GENERATED ALWAYS AS IDENTITY,
-    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
-    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
-    original_url varchar(255),
-    name varchar(255) not null,
-    description text,
-    author varchar(100),
-    source varchar(100),
-    license varchar(100)
-);
 
 create table article_image (
     article_id integer not null

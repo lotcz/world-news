@@ -108,7 +108,7 @@ function TagsList() {
 				</Stack>
 			</div>
 
-			<div className="d-flex pt-2 px-3 gap-3">
+			<div className="pt-2 px-3 gap-3">
 				{
 					(data === null) ? <span><Spinner/></span>
 						: (

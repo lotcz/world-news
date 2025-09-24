@@ -26,5 +26,5 @@ export type Article = ArticleBase & {
 	language?: Language;
 	source?: ArticleSource;
 	topic?: Topic;
-	image?: Image;
+	mainImage?: Image;
 }

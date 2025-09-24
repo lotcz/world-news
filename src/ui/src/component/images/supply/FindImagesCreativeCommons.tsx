@@ -12,6 +12,7 @@ const HEADER: SelectableTableHeader<ImageSearchResult> = [
 	{name: 'title', label: 'Name'},
 	{name: 'source', label: 'Source'},
 	{name: 'creator', label: 'Creator'},
+	{name: 'filetype', label: 'Type'},
 	{name: 'license', label: 'License'}
 ];
 
@@ -43,6 +44,7 @@ function FindImagesCreativeCommons({onSelected, keywords, description}: FindImag
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(null);
 			restClient
 				.images
 				.searchCreativeCommons(paging)
@@ -52,7 +54,7 @@ function FindImagesCreativeCommons({onSelected, keywords, description}: FindImag
 					userAlerts.err(e);
 				});
 		},
-		[paging, userAlerts]
+		[paging, userAlerts, restClient]
 	);
 
 	useEffect(loadPageHandler, [paging]);

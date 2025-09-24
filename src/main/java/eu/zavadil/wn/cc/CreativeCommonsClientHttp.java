@@ -22,6 +22,7 @@ public class CreativeCommonsClientHttp extends HttpApiClientBase implements Crea
 		params.put("q", search);
 		params.put("page", String.valueOf(pr.getPageNumber() + 1));
 		params.put("page_size", String.valueOf(pr.getPageSize()));
+		params.put("license_type", "commercial");
 		ImageSearchResultPage page = this.get("images", params, ImageSearchResultPage.class);
 		return new PageImpl<>(page.getResults(), pr, page.getResultCount());
 	}

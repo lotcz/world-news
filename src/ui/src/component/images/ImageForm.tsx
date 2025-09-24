@@ -23,7 +23,7 @@ export default function ImageForm({data, onChange}: ImageFormProps) {
 					<Col md={COL_1_MD} lg={COL_1_LG}>
 						<Form.Label>Original URL:</Form.Label>
 					</Col>
-					<Col md={COL_2_MD} lg={COL_2_LG}>
+					<Col md={11 - COL_1_MD} lg={11 - COL_1_LG}>
 						<Form.Control
 							type="text"
 							value={StringUtil.getNonEmpty(data.originalUrl)}

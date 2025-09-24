@@ -12,7 +12,7 @@ export function Img({url, alt, maxWidth, maxHeight}: ImgProps) {
 	if (url === undefined) return <Spinner size="sm"/>
 	if (url === null) return <BsImage size="15"/>
 	return <img
-		className="img img-thumbnail"
+		className="img"
 		src={url}
 		alt={alt || 'image'}
 		style={{maxHeight, maxWidth}}

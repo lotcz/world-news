@@ -1,5 +1,4 @@
 - search creative commons from server
-  - add author and source
   - register and implement OAuth flow
 - topic relevance/popularity
 

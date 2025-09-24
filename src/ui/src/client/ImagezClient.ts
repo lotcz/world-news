@@ -11,7 +11,7 @@ export class ImagezClient extends RestClient {
 	}
 
 	getImagezResizedUrlByName(name: string, type: string, width: number, height: number, ext?: string): string {
-		let raw = `${this.secretToken}-${name}-${type}-${width}-${height}`;
+		let raw = `${this.secretToken}-${name}-${width}-${height}-${type}`;
 		if (StringUtil.notBlank(ext)) {
 			raw += `-${ext}`;
 		}

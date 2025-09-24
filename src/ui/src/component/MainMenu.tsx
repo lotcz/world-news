@@ -48,6 +48,9 @@ function MainMenu() {
 				<div>
 					<NavLink to="/articles">Articles</NavLink>
 				</div>
+				<div>
+					<NavLink to="/images">Images</NavLink>
+				</div>
 			</div>
 			<h3 className="mt-2"><Localize text="System"/></h3>
 			<div className="ps-3">

@@ -119,7 +119,7 @@ export default function ArticleDetail() {
 
 	return (
 		<div>
-			<div className="d-flex justify-content-between p-2 gap-2">
+			<div className="p-2">
 				<Stack direction="horizontal" gap={2}>
 					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
 					<RefreshIconButton onClick={reload}/>

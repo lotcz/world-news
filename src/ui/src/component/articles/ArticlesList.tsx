@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {Button, Form, Stack} from 'react-bootstrap';
+import {AdvancedTable, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
 import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -102,9 +102,9 @@ function ArticlesList() {
 				</Stack>
 			</div>
 
-			<div className="d-flex pt-2 px-3 gap-3">
+			<div className="pt-2 px-3">
 				{
-					(data === null) ? <span><Spinner/></span>
+					(data === null) ? <TablePlaceholder/>
 						: (
 							<AdvancedTable
 								header={HEADER}
@@ -122,12 +122,12 @@ function ArticlesList() {
 											(item, index) => {
 												return (
 													<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-														<td><ImagezImageThumb name={item.image?.name}/></td>
+														<td><ImagezImageThumb name={item.mainImage?.name || item.topic?.mainImage?.name}/></td>
 														<td>{item.source?.name}</td>
 														<td>{item.processingState}</td>
 														<td>{item.title}</td>
 														<td>{item.topic?.realm?.name}</td>
-														<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
+														<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 														<td><IsLockedIcon locked={item.isLocked}/></td>
 													</tr>
 												);

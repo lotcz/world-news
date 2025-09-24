@@ -1,36 +1,33 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {Button, Form, Stack} from 'react-bootstrap';
+import {AdvancedTable, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
 import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
-import {Topic} from "../../types/Topic";
 import RefreshIconButton from "../general/RefreshIconButton";
-import IsLockedIcon from "../general/IsLockedIcon";
-import {ImagezImageThumb} from "../images/ImagezImage";
+import {Image} from "../../types/Image";
+import {ImagezImageThumb} from "./ImagezImage";
 
 const HEADER = [
-	{name: 'mainImageId', label: ''},
-	{name: 'processingState', label: 'State'},
+	{name: 'id', label: ''},
 	{name: 'name', label: 'Name'},
-	{name: 'summary', label: 'Summary'},
-	{name: 'realm.name', label: 'Realm'},
-	{name: 'articleCountInternal', label: 'Internal'},
-	{name: 'articleCountExternal', label: 'External'},
+	{name: 'description', label: 'Description'},
+	{name: 'source', label: 'Source'},
+	{name: 'author', label: 'Author'},
+	{name: 'license', label: 'Internal'},
 	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'},
-	{name: '', label: ''}
+	{name: 'createdOn', label: 'Created'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
 
-function TopicsList() {
+export default function ImagesList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<Topic> | null>(null);
+	const [data, setData] = useState<Page<Image> | null>(null);
 
 	const paging = useMemo(
 		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
@@ -41,18 +38,18 @@ function TopicsList() {
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
-		navigate("/topics/detail/add")
+		navigate("/image/detail/add")
 	};
 
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/topics/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/images/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);
 
-	const navigateToDetail = (l: Topic) => {
-		navigate(`/topics/detail/${l.id}`);
+	const navigateToDetail = (l: Image) => {
+		navigate(`/images/detail/${l.id}`);
 	}
 
 	const applySearch = useCallback(
@@ -67,8 +64,9 @@ function TopicsList() {
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(null);
 			restClient
-				.topics
+				.images
 				.loadPage(paging)
 				.then(setData)
 				.catch((e: Error) => {
@@ -113,9 +111,9 @@ function TopicsList() {
 				</Stack>
 			</div>
 
-			<div className="pt-2 px-3 gap-3">
+			<div className="px-3 gap-3">
 				{
-					(data === null) ? <span><Spinner/></span>
+					(data === null) ? <TablePlaceholder/>
 						: (
 							<AdvancedTable
 								header={HEADER}
@@ -132,16 +130,14 @@ function TopicsList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td><ImagezImageThumb name={item.mainImage?.name}/></td>
-													<td>{item.processingState}</td>
+													<td><ImagezImageThumb name={item.name}/></td>
 													<td>{item.name}</td>
-													<td>{item.summary}</td>
-													<td>{item.realm?.name}</td>
-													<td>{item.articleCountInternal}</td>
-													<td>{item.articleCountExternal}</td>
+													<td>{item.description}</td>
+													<td>{item.source}</td>
+													<td>{item.author}</td>
+													<td>{item.license}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
-													<td><IsLockedIcon locked={item.isLocked}/></td>
 												</tr>
 											);
 										})
@@ -154,4 +150,3 @@ function TopicsList() {
 	);
 }
 
-export default TopicsList;

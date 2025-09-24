@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface ImageRepository extends EntityRepository<Image> {
 
 	@Query("""
-			select r
-			from Language r
-			where lower(r.name) LIKE %:search%
+			select i
+			from Image i
+			where i.name LIKE %:search%
 		""")
 	Page<Image> search(String search, PageRequest pr);
 }

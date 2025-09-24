@@ -16,6 +16,7 @@ export type ImageSearchResult = {
 	license?: string;
 	source?: string;
 	url: string;
+	filetype: string;
 	width: number;
 	height: number;
 }
