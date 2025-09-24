@@ -1,3 +1,4 @@
+- mark images as illustrations (default)
 - upload own images
 - create images using ChatGPT
 - create spoke web in CodeIgniter

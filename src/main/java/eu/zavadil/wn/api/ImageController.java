@@ -6,10 +6,10 @@ import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.wn.cc.CreativeCommons;
 import eu.zavadil.wn.cc.ImageSearchResult;
 import eu.zavadil.wn.data.image.Image;
-import eu.zavadil.wn.data.image.ImageRepository;
 import eu.zavadil.wn.imagez.ImagezSettingsPayload;
 import eu.zavadil.wn.imagez.ImagezSmartApi;
 import eu.zavadil.wn.imagez.ResizeRequest;
+import eu.zavadil.wn.service.ImageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class ImageController {
 	ImagezSmartApi imagez;
 
 	@Autowired
-	ImageRepository imageRepository;
+	ImageService imageService;
 
 	@Autowired
 	CreativeCommons creativeCommons;
@@ -47,29 +47,29 @@ public class ImageController {
 		@RequestParam(defaultValue = "") String search,
 		@RequestParam(defaultValue = "") String sorting
 	) {
-		return JsonPageImpl.of(this.imageRepository.search(search, PagingUtils.of(page, size, sorting)));
+		return JsonPageImpl.of(this.imageService.search(search, PagingUtils.of(page, size, sorting)));
 	}
 
 	@PostMapping("")
 	public Image insert(@RequestBody Image document) {
 		document.setId(null);
-		return this.imageRepository.save(document);
+		return this.imageService.save(document);
 	}
 
 	@GetMapping("{id}")
 	public Image load(@PathVariable int id) {
-		return this.imageRepository.findById(id).orElseThrow();
+		return this.imageService.requireById(id);
 	}
 
 	@PutMapping("{id}")
 	public Image update(@PathVariable int id, @RequestBody Image document) {
 		document.setId(id);
-		return this.imageRepository.save(document);
+		return this.imageService.save(document);
 	}
 
 	@DeleteMapping("{id}")
 	public void delete(@PathVariable int id) {
-		this.imageRepository.deleteById(id);
+		this.imageService.deleteById(id);
 	}
 
 	// IMAGEZ
@@ -101,7 +101,7 @@ public class ImageController {
 		@RequestParam int height,
 		@RequestParam(defaultValue = "") String ext
 	) {
-		Image image = this.imageRepository.findById(id).orElseThrow();
+		Image image = this.imageService.requireById(id);
 		return this.imagez.getImageUrlResized(
 			image.getName(),
 			new ResizeRequest(type, width, height, ext)

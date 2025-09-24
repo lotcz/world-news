@@ -5,7 +5,6 @@ import eu.zavadil.java.spring.common.client.HttpApiClientBase;
 import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.java.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -36,10 +35,14 @@ public class ImagezClientHttp extends HttpApiClientBase implements ImagezSmartAp
 
 	@Override
 	public ImageHealthPayload uploadFromUrl(String url) {
-		UrlBuilder builder = UrlBuilder.of("upload-url").addQuery("url", url).addQuery("token", this.secretToken);
-		String path = builder.getPathString();
-		String query = builder.getQueryString();
-		return this.exchange(HttpMethod.POST, String.format("%s?%s", path, query), null, ImageHealthPayload.class);
+		return this.post(
+			"upload-url",
+			new UrlBuilder()
+				.addQuery("url", url)
+				.addQuery("token", this.secretToken)
+				.getQueryParams(),
+			ImageHealthPayload.class
+		);
 	}
 
 	@Override
@@ -70,5 +73,14 @@ public class ImagezClientHttp extends HttpApiClientBase implements ImagezSmartAp
 		}
 		String token = HashUtils.crc32Hex(tokenRaw);
 		return builder.addQuery("token", token).build();
+	}
+
+	public void deleteOriginal(String name) {
+		this.delete(
+			String.format("original/%s", name),
+			new UrlBuilder()
+				.addQuery("token", this.secretToken)
+				.getQueryParams()
+		);
 	}
 }

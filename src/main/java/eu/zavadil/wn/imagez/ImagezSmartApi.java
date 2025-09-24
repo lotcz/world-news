@@ -11,6 +11,8 @@ public interface ImagezSmartApi {
 
 	ImageHealthPayload uploadFromUrl(String url);
 
+	void deleteOriginal(String name);
+
 	URL getImageUrlOriginal(String name);
 
 	URL getImageUrlResized(String name, ResizeRequest resizeRequest);
