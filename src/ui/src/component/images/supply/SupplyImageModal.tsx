@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {Modal, Tab, Tabs} from 'react-bootstrap';
-import {NumberUtil, StringUtil} from "zavadil-ts-common";
+import {NumberUtil, PagingRequest, StringUtil} from "zavadil-ts-common";
 import FindImagesCreativeCommons from "./FindImagesCreativeCommons";
 import {Image} from "../../../types/Image";
 import {SupplyImagePreview} from "./SupplyImagePreview";
@@ -21,6 +21,8 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 	const alerts = useContext(WnUserAlertsContext);
 	const [activeTab, setActiveTab] = useState<string>(DEFAULT_TAB);
 	const [preview, setPreview] = useState<Image>();
+	const [search, setSearch] = useState<string>(keywords ? keywords.join(' ') : '');
+	const [ccPaging, setCcPaging] = useState<PagingRequest>({page: 0, size: 10})
 
 	const saveImage = useCallback(
 		(image: Image) => {
@@ -50,6 +52,7 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 				<Modal.Title>Supply an image</Modal.Title>
 			</Modal.Header>
 			<Modal.Body className="pt-2 pb-0 px-0">
+				<p className="p-2">{description}</p>
 				<Tabs
 					activeKey={activeTab}
 					onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
@@ -65,6 +68,10 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 					<div>
 						{
 							activeTab === "commons" && <FindImagesCreativeCommons
+								search={search}
+								onSearchChanged={setSearch}
+								paging={ccPaging}
+								onPagingChanged={setCcPaging}
 								onSelected={
 									(i) => {
 										setPreview(i);

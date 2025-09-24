@@ -5,18 +5,19 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
+import {ImagezImageThumb} from "../images/ImagezImage";
 
 export type ArticleSourceArticlesListProps = {
 	articleSourceId: number;
 }
 
 const HEADER = [
-	{name: 'id', label: 'ID'},
+	{name: '', label: ''},
 	{name: 'publishDate', label: 'Published'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'source.articleCountExternal', label: 'Siblings'},
+	{name: 'topic.articleCountExternal', label: 'Siblings'},
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
@@ -69,12 +70,12 @@ function ArticleSourceArticlesList({articleSourceId}: ArticleSourceArticlesListP
 										articles.content.map((article, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(article)}>
-													<td>{article.id}</td>
+													<td><ImagezImageThumb name={article.mainImage?.name || article.topic?.mainImage?.name}/></td>
 													<td>{DateUtil.formatDateTimeForHumans(article.publishDate)}</td>
 													<td>{article.processingState}</td>
 													<td>{article.title}</td>
 													<td>{article.summary}</td>
-													<td>{article.topic ? article.topic.articleCount - 1 : 0}</td>
+													<td>{article.topic ? article.topic.articleCountExternal : 0}</td>
 												</tr>
 											);
 										})

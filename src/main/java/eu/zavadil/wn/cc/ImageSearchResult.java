@@ -17,6 +17,8 @@ public class ImageSearchResult {
 
 	private String url;
 
+	private String thumbnail;
+
 	private String filetype;
 
 	private int width;

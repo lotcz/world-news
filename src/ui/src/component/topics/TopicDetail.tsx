@@ -177,23 +177,30 @@ export default function TopicDetail() {
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Image:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex gap-2 align-items-start">
-							<ImagezImagePreview id={data.mainImageId}/>
-							<Button size="sm" onClick={() => setImageSelectOpen(true)}>Change...</Button>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
 							{
-								data.mainImageId &&
-								<IconButton
-									size="sm"
-									variant="danger"
-									icon={<BsTrash/>}
-									onClick={
-										() => {
-											data.mainImageId = null;
-											setData({...data});
-											setChanged(true);
-										}
-									}
-								>Remove</IconButton>
+								data.mainImageId ? <div>
+										<div>
+											<ImagezImagePreview id={data.mainImageId}/>
+										</div>
+										<div className="mt-2 d-flex align-items-center gap-3">
+											<IconButton
+												size="sm"
+												variant="danger"
+												icon={<BsTrash/>}
+												onClick={
+													() => {
+														data.mainImageId = null;
+														setData({...data});
+														setChanged(true);
+													}
+												}
+											>Remove</IconButton>
+											<Button size="sm" onClick={() => navigate(`/images/detail/${data.mainImageId}`)}>Edit..</Button>
+											<Button size="sm" onClick={() => setImageSelectOpen(true)}>Change...</Button>
+										</div>
+									</div>
+									: <Button size="sm" onClick={() => setImageSelectOpen(true)}>Find...</Button>
 							}
 						</Col>
 					</Row>
@@ -265,6 +272,7 @@ export default function TopicDetail() {
 			}
 			{
 				imageSelectOpen && <SupplyImageModal
+					description={data.name}
 					onClose={() => setImageSelectOpen(false)}
 					onSelected={
 						(id) => {

@@ -11,23 +11,26 @@ const HEADER: SelectableTableHeader<ImageSearchResult> = [
 	{name: '', label: '', renderer: (isr) => <Img url={isr.url} alt={isr.id} maxHeight={85}/>},
 	{name: 'title', label: 'Name'},
 	{name: 'source', label: 'Source'},
-	{name: 'creator', label: 'Creator'},
+	{name: 'creator', label: 'Creator', renderer: (isr) => StringUtil.ellipsis(isr.creator, 50)},
 	{name: 'filetype', label: 'Type'},
-	{name: 'license', label: 'License'}
+	{name: 'license', label: 'License'},
+	{name: 'width', label: 'Width'},
+	{name: 'height', label: 'Height'}
 ];
 
 export type FindImagesCreativeCommonsProps = {
 	keywords?: Array<string> | null;
-	description?: string | null;
+	search: string;
+	onSearchChanged: (search: string) => any;
+	paging: PagingRequest;
+	onPagingChanged: (p: PagingRequest) => any;
 	onSelected: (image: Image) => any;
 }
 
-function FindImagesCreativeCommons({onSelected, keywords, description}: FindImagesCreativeCommonsProps) {
+function FindImagesCreativeCommons({onSelected, search, onSearchChanged, paging, onPagingChanged}: FindImagesCreativeCommonsProps) {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Page<ImageSearchResult> | null>(null);
-	const [paging, setPaging] = useState<PagingRequest>({page: 0, size: 10})
-	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const selectImage = (i: ImageSearchResult) => {
 		onSelected(
@@ -62,11 +65,11 @@ function FindImagesCreativeCommons({onSelected, keywords, description}: FindImag
 	const applySearch = useCallback(
 		(e: FormEvent) => {
 			e.preventDefault();
-			paging.search = searchInput;
+			paging.search = search;
 			paging.page = 0;
-			setPaging({...paging});
+			onPagingChanged({...paging});
 		},
-		[paging, searchInput]
+		[paging, search]
 	);
 
 	return (
@@ -76,9 +79,9 @@ function FindImagesCreativeCommons({onSelected, keywords, description}: FindImag
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch}>
 							<TextInputWithReset
-								value={searchInput}
-								onChange={setSearchInput}
-								onReset={() => setPaging({page: 0, size: 0})}
+								value={search}
+								onChange={onSearchChanged}
+								onReset={() => onPagingChanged({page: 0, size: 0})}
 							/>
 						</Form>
 					</div>
@@ -95,7 +98,7 @@ function FindImagesCreativeCommons({onSelected, keywords, description}: FindImag
 								header={HEADER}
 								paging={paging}
 								totalItems={data.totalItems}
-								onPagingChanged={setPaging}
+								onPagingChanged={onPagingChanged}
 								items={data.content}
 								hover={true}
 								striped={true}

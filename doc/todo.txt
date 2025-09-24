@@ -1,20 +1,7 @@
-- search creative commons from server
-  - register and implement OAuth flow
-- topic relevance/popularity
-
-- separate entity for external article?
-
-
-Media
-  - imagez client
-  -
-  - fotografie
-    - add image service
-    - bez fotky/AI generated/my own/creative commons/fotobanka
-    - https://www.ctk.cz/sluzby/fotobanka/
-    - shutterstock
-    - bynder.com
-
+- upload own images
+- create images using ChatGPT
+- create spoke web in CodeIgniter
+- advertising
 
 2.0
 ===
@@ -23,9 +10,9 @@ Media
 - introduce virtual writer to do the AI compilation work with flavor
 - full-text search in summary and body
 - semantic search (in summary)
-- import videos
+- topic relevance/popularity
 - tag groups - if certain set of tags occurs together, merge it into a single tag
-- rethink tags
+- rethink tags - add tags to topic only, generate from summary
 - community grammar nazi contest
 - mobile app
 - monitor news sources by country and allow comparison (potential use in propaganda debunk)
@@ -33,6 +20,9 @@ Media
   - add table with model costs
   - add job to calculate costs for log entries
   - add job to calculate cost per article/topic/realm
+- creative commons
+  - register and implement OAuth flow
+- separate entity for external article?
 
 Social
   - Facebook
@@ -52,6 +42,13 @@ Audiences
   - will cover *who* might be interested on the article
   - by location
   - by genre
+
+Media
+  - import videos
+  - fotografie
+    - https://www.ctk.cz/sluzby/fotobanka/
+    - shutterstock
+    - bynder.com
 
 Ingestion
 
