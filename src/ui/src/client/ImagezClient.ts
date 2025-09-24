@@ -26,4 +26,10 @@ export class ImagezClient extends RestClient {
 		return this.postJson('images/upload-url', null, {url, token: this.secretToken});
 	}
 
+	uploadFile(f: File): Promise<ImageHealth> {
+		let formData = new FormData();
+		formData.append("image", f);
+		return this.postFormJson('images/upload', formData, {token: this.secretToken});
+	}
+
 }

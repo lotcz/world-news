@@ -39,6 +39,10 @@ export class ImagesClient extends EntityClient<Image> {
 		return this.imagez.get().then((imagez) => imagez.uploadExternalUrl(url));
 	}
 
+	uploadFile(f: File): Promise<ImageHealth> {
+		return this.imagez.get().then((imagez) => imagez.uploadFile(f));
+	}
+
 	// CC
 
 	searchCreativeCommons(pr: PagingRequest): Promise<Page<ImageSearchResult>> {

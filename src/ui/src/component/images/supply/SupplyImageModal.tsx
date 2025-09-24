@@ -6,6 +6,7 @@ import {Image} from "../../../types/Image";
 import {SupplyImagePreview} from "./SupplyImagePreview";
 import {WnRestClientContext} from "../../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
+import {SupplyImageUpload} from "./SupplyImageUpload";
 
 const DEFAULT_TAB = 'commons';
 
@@ -83,7 +84,14 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 							activeTab === "chatgpt" && <div>ChatGPT</div>
 						}
 						{
-							activeTab === "upload" && <div>Upload</div>
+							activeTab === "upload" && <SupplyImageUpload
+								onSelected={
+									(name) => {
+										setPreview({name: name});
+										setActiveTab("preview");
+									}
+								}
+							/>
 						}
 						{
 							activeTab === "preview" && preview && <SupplyImagePreview
