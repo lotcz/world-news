@@ -40,7 +40,7 @@ export default function ImagesList() {
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
-		navigate("/image/detail/add")
+		navigate("/images/detail/add")
 	};
 
 	const navigateToPage = useCallback(

@@ -44,6 +44,7 @@ public class ImageService {
 		Image image = this.requireById(id);
 		this.imageRepository.delete(image);
 
+		// todo: check if same name exists elsewhere
 		// deleted successfully from db, delete file from imagez
 		this.imagez.deleteOriginal(image.getName());
 	}

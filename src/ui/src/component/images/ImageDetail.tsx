@@ -1,4 +1,4 @@
-import {Spinner, Stack, Tab, Tabs} from "react-bootstrap";
+import {Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
@@ -6,16 +6,17 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {Image} from "../../types/Image";
-import ImageForm from "./ImageForm";
 import {ConfirmDialogContext, DeleteButton, SaveButton} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
+import {ImagezImagePreview} from "./ImagezImage";
+import ExternalLink from "../general/ExternalLink";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
-const COL_1_LG = 1;
+const COL_1_LG = 2;
 const COL_2_LG = 6;
 
 export default function ImageDetail() {
@@ -45,6 +46,15 @@ export default function ImageDetail() {
 			setActiveTab(StringUtil.getNonEmpty(searchParams.get(TAB_PARAM_NAME), DEFAULT_TAB));
 		},
 		[id]
+	);
+
+	const onChange = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setChanged(true);
+		},
+		[data]
 	);
 
 	const reload = useCallback(
@@ -125,17 +135,113 @@ export default function ImageDetail() {
 					<DeleteButton loading={deleting} disabled={!data.id} onClick={deleteImage}>Delete</DeleteButton>
 				</Stack>
 			</div>
-			<div className="px-3 w-75">
-				<ImageForm
-					data={data}
-					onChange={
-						() => {
-							setData({...data});
-							setChanged(true);
-						}
-					}
-				/>
-			</div>
+
+			<Form className="px-3 w-75">
+				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Original URL:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-1">
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.originalUrl)}
+								onChange={(e) => {
+									data.originalUrl = StringUtil.emptyToNull(e.target.value);
+									onChange();
+								}}
+							/>
+							{
+								StringUtil.notBlank(data.originalUrl) && <ExternalLink url={data.originalUrl}/>
+							}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Name:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<div>
+								<Form.Control
+									type="text"
+									value={data.name}
+									onChange={(e) => {
+										data.name = e.target.value;
+										onChange();
+									}}
+								/>
+								<div className="pt-2">
+									{
+										StringUtil.notBlank(data.name) && <ImagezImagePreview name={data.name}/>
+									}
+								</div>
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Description:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								as="textarea"
+								rows={5}
+								value={StringUtil.getNonEmpty(data.description)}
+								onChange={(e) => {
+									data.description = e.target.value;
+									onChange();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Source:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.source)}
+								onChange={(e) => {
+									data.source = StringUtil.emptyToNull(e.target.value);
+									onChange();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Author:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.author)}
+								onChange={(e) => {
+									data.author = StringUtil.emptyToNull(e.target.value);
+									onChange();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>License:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.license)}
+								onChange={(e) => {
+									data.license = StringUtil.emptyToNull(e.target.value);
+									onChange();
+								}}
+							/>
+						</Col>
+					</Row>
+				</Stack>
+			</Form>
+
 			{
 				data.id && <div>
 					<Tabs

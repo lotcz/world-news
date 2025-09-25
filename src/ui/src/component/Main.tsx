@@ -25,7 +25,7 @@ function Main() {
 		<main>
 			<Stack direction="horizontal" className="align-items-stretch">
 				<MainMenu/>
-				<div className="flex-grow-1">
+				<div className="flex-grow-1 pb-4">
 					<Routes>
 						<Route path="/" element={<Dashboard/>}/>
 						<Route path="ai-log">

@@ -1,12 +1,13 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {Modal, Tab, Tabs} from 'react-bootstrap';
-import {NumberUtil, PagingRequest, StringUtil} from "zavadil-ts-common";
+import {NumberUtil, PagingRequest, StringUtil, UrlUtil} from "zavadil-ts-common";
 import FindImagesCreativeCommons from "./FindImagesCreativeCommons";
 import {Image} from "../../../types/Image";
 import {SupplyImagePreview} from "./SupplyImagePreview";
 import {WnRestClientContext} from "../../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
 import {SupplyImageUpload} from "./SupplyImageUpload";
+import {SupplyImageUrl} from "./SupplyImageFromUrl";
 
 const DEFAULT_TAB = 'commons';
 
@@ -49,20 +50,25 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 
 	return (
 		<Modal show={true} onHide={onClose} size="xl">
-			<Modal.Header closeButton>
-				<Modal.Title>Supply an image</Modal.Title>
+			<Modal.Header closeButton className="align-items-start">
+				<div>
+					<Modal.Title>Supply an image</Modal.Title>
+					{
+						description && <div>{description}</div>
+					}
+				</div>
 			</Modal.Header>
-			<Modal.Body className="pt-2 pb-0 px-0">
-				<p className="p-2">{description}</p>
+			<Modal.Body className="p-0">
 				<Tabs
 					activeKey={activeTab}
 					onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
 				>
 					<Tab eventKey="commons" title="Creative Commons"/>
 					<Tab eventKey="chatgpt" title="ChatGPT"/>
+					<Tab eventKey="url" title="From URL"/>
 					<Tab eventKey="upload" title="Upload"/>
 					{
-						preview && <Tab eventKey="preview" title="Preview"/>
+						preview && <Tab eventKey="preview" title={<strong>Preview</strong>}/>
 					}
 				</Tabs>
 				<div className="p-2">
@@ -94,8 +100,18 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 							/>
 						}
 						{
+							activeTab === "url" && <SupplyImageUrl
+								onSelected={
+									(url) => {
+										setPreview({originalUrl: url, name: '', source: UrlUtil.extractHostFromUrl(url)});
+										setActiveTab("preview");
+									}
+								}
+							/>
+						}
+						{
 							activeTab === "preview" && preview && <SupplyImagePreview
-								image={preview}
+								data={preview}
 								onChange={(i) => setPreview({...i})}
 								onConfirmed={saveImage}
 							/>

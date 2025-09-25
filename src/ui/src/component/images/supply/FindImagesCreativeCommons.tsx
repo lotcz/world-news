@@ -69,14 +69,14 @@ function FindImagesCreativeCommons({onSelected, search, onSearchChanged, paging,
 			paging.page = 0;
 			onPagingChanged({...paging});
 		},
-		[paging, search]
+		[paging, search, onPagingChanged]
 	);
 
 	return (
 		<div>
 			<div className="d-flex justify-content-center">
 				<div className="d-flex gap-2">
-					<div style={{width: '250px'}}>
+					<div style={{width: '450px'}}>
 						<Form onSubmit={applySearch}>
 							<TextInputWithReset
 								value={search}
