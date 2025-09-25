@@ -1,15 +1,19 @@
-- mark images as illustrations (default)
-- upload own images
-- create images using ChatGPT
+
+- select from existing images
+- create images using ChatGPT/DALL-E
 - create spoke web in CodeIgniter
 - advertising
 
 2.0
 ===
 
+- improve OAuth server (see todo.txt in there)
 - use bigserial/Long as IDs
+- add Topic Extension worker to extend existing topic with new info when available
+- add manual instructions to topic for compilation
 - introduce virtual writer to do the AI compilation work with flavor
 - full-text search in summary and body
+- warn when leaving unsaved form (use global solution handling browser beforeunload and all navigation calls)
 - semantic search (in summary)
 - topic relevance/popularity
 - tag groups - if certain set of tags occurs together, merge it into a single tag
@@ -35,7 +39,7 @@ Social
 
 Timelines
   - create timelines of long-running stories
-  - turn into separate articles
+  - link topics into master topic
   - make podcast and later videos of them
 
 Audiences

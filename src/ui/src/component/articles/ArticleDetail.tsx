@@ -1,14 +1,14 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams, useSearchParams} from "react-router";
-import {useCallback, useContext, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
-import {ConfirmDialogContext, DateTimeInput, Switch} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, IconButton, Switch} from "zavadil-react-common";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
-import {BsBoxArrowUpRight} from "react-icons/bs";
+import {BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
 import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
 import TopicInfo from "../topics/TopicInfo";
@@ -18,6 +18,8 @@ import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
 import {ImagezImagePreview} from "../images/ImagezImage";
+import BackIconLink from "../general/BackIconLink";
+import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';
@@ -34,6 +36,7 @@ export default function ArticleDetail() {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const confirmDialog = useContext(ConfirmDialogContext);
+	const supplyImageDialog = useContext(SupplyImageDialogContext);
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
@@ -59,7 +62,9 @@ export default function ArticleDetail() {
 			if (!id) {
 				setData({
 					isLocked: false,
-					title: ''
+					title: '',
+					mainImageIsIllustrative: true,
+					mainImageIsAiGenerated: false
 				});
 				return;
 			}
@@ -113,6 +118,22 @@ export default function ArticleDetail() {
 		[restClient, data, userAlerts, navigate, confirmDialog]
 	);
 
+	const showImageSupplyDialog = useCallback(
+		() => data && supplyImageDialog.show(
+			{
+				onClose: () => supplyImageDialog.hide(),
+				onSelected: (id) => {
+					data.mainImageId = id;
+					setData({...data});
+					supplyImageDialog.hide();
+					setChanged(true);
+				},
+				description: data.summary
+			}
+		),
+		[data, supplyImageDialog]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -121,7 +142,7 @@ export default function ArticleDetail() {
 		<div>
 			<div className="p-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
 					<Button
 						disabled={!changed}
@@ -251,7 +272,53 @@ export default function ArticleDetail() {
 							<Form.Label>Image:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<ImagezImagePreview id={data.mainImageId}/>
+							{
+								data.mainImageId ? <div>
+										<div className="d-flex align-items-center gap-3">
+											<Switch
+												id="mainImageIsIllustrative"
+												checked={data.mainImageIsIllustrative}
+												onChange={(e) => {
+													data.mainImageIsIllustrative = e;
+													setData({...data});
+													setChanged(true);
+												}}
+												label="Illustrative photo"
+
+											/>
+											<Switch
+												id="mainImageIsAiGenerated"
+												checked={data.mainImageIsAiGenerated}
+												onChange={(e) => {
+													data.mainImageIsAiGenerated = e;
+													setData({...data});
+													setChanged(true);
+												}}
+												label="AI generated"
+											/>
+										</div>
+										<div className="mt-1">
+											<ImagezImagePreview id={data.mainImageId}/>
+										</div>
+										<div className="mt-2 d-flex align-items-center gap-3">
+											<IconButton
+												size="sm"
+												variant="danger"
+												icon={<BsTrash/>}
+												onClick={
+													() => {
+														data.mainImageId = null;
+														setData({...data});
+														setChanged(true);
+													}
+												}
+											>Remove</IconButton>
+											<Button size="sm" onClick={() => navigate(`/images/detail/${data.mainImageId}`)}>Edit..</Button>
+											<Button size="sm" onClick={showImageSupplyDialog}>Change...</Button>
+										</div>
+									</div>
+									: <Button size="sm" onClick={showImageSupplyDialog}>Supply...</Button>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">

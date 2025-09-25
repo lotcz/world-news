@@ -91,3 +91,11 @@ tr.selectable.selected td {
 .main-menu {
 	font-size: 14pt;
 }
+
+.prevent-text-selection,
+.form-switch {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}

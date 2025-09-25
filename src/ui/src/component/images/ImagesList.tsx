@@ -8,6 +8,7 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {Image} from "../../types/Image";
 import {ImagezImageThumb} from "./ImagezImage";
+import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 
 const HEADER = [
 	{name: 'id', label: ''},
@@ -27,6 +28,7 @@ export default function ImagesList() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const supplyImageDialog = useContext(SupplyImageDialogContext);
 	const [data, setData] = useState<Page<Image> | null>(null);
 
 	const paging = useMemo(
@@ -48,8 +50,12 @@ export default function ImagesList() {
 		[navigate]
 	);
 
-	const navigateToDetail = (l: Image) => {
-		navigate(`/images/detail/${l.id}`);
+	const navigateToId = (id: number) => {
+		navigate(`/images/detail/${id}`);
+	}
+
+	const navigateToDetail = (i: Image) => {
+		if (i.id) navigateToId(i.id);
 	}
 
 	const applySearch = useCallback(
@@ -87,12 +93,26 @@ export default function ImagesList() {
 		[loadPageHandler]
 	);
 
+	const showImageSupplyDialog = useCallback(
+		() => supplyImageDialog.show(
+			{
+				onClose: () => supplyImageDialog.hide(),
+				onSelected: (id) => {
+					supplyImageDialog.hide();
+					navigateToId(id);
+				}
+			}
+		),
+		[supplyImageDialog, navigateToId]
+	);
+
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
 					<RefreshIconButton onClick={reload}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
+					<Button onClick={showImageSupplyDialog} className="text-nowrap">Supply...</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch} id="topics-search-form">
 							<TextInputWithReset

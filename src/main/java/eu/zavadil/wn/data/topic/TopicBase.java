@@ -18,6 +18,12 @@ public class TopicBase extends EntityWithNameBase {
 	@JsonProperty("isLocked")
 	private boolean isLocked = false;
 
+	@JsonProperty("mainImageIsIllustrative")
+	private boolean mainImageIsIllustrative = true;
+
+	@JsonProperty("mainImageIsAiGenerated")
+	private boolean mainImageIsAiGenerated = false;
+
 	@Column(columnDefinition = "TEXT")
 	private String summary;
 

@@ -25,6 +25,12 @@ public class ArticleBase extends EntityBase {
 	@JsonProperty("isLocked")
 	private boolean isLocked = false;
 
+	@JsonProperty("mainImageIsIllustrative")
+	private boolean mainImageIsIllustrative = true;
+
+	@JsonProperty("mainImageIsAiGenerated")
+	private boolean mainImageIsAiGenerated = false;
+
 	private static final int UID_SIZE = 255;
 
 	@Column(length = UID_SIZE)

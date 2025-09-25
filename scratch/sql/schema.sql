@@ -157,6 +157,8 @@ create table topic (
     main_image_id int null
     	constraint fk_topic_image
         references image,
+    main_image_is_illustrative boolean default true,
+    main_image_is_ai_generated boolean default false,
     realm_id integer
         constraint fk_topic_realm
         references realm
@@ -201,6 +203,8 @@ create table article (
     main_image_id int null
     	constraint fk_article_image
         references image,
+    main_image_is_illustrative boolean default true,
+    main_image_is_ai_generated boolean default false,
     language_id integer not null
         constraint fkntjo7u9ep5digg27txr8fnqa5
         references language,

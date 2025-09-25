@@ -1,14 +1,14 @@
-import {Button, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
+import {Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {Image} from "../../types/Image";
 import ImageForm from "./ImageForm";
-import {ConfirmDialogContext} from "zavadil-react-common";
+import {ConfirmDialogContext, DeleteButton, SaveButton} from "zavadil-react-common";
+import BackIconLink from "../general/BackIconLink";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
@@ -28,6 +28,8 @@ export default function ImageDetail() {
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<Image>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [deleting, setDeleting] = useState<boolean>(false);
+	const [saving, setSaving] = useState<boolean>(false);
 
 	useEffect(
 		() => {
@@ -67,6 +69,7 @@ export default function ImageDetail() {
 		() => {
 			if (!data) return;
 			const inserting = NumberUtil.isEmpty(data.id);
+			setSaving(true);
 			restClient
 				.images
 				.save(data)
@@ -80,6 +83,7 @@ export default function ImageDetail() {
 						setChanged(false);
 					})
 				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false))
 		},
 		[restClient, data, userAlerts, navigate]
 	);
@@ -90,14 +94,18 @@ export default function ImageDetail() {
 			confirmDialog.confirm(
 				'Confirm',
 				'Really delete this image?',
-				() => restClient
-					.images
-					.delete(Number(data.id))
-					.then(
-						(f) => {
-							navigate(-1);
-						})
-					.catch((e: Error) => userAlerts.err(e))
+				() => {
+					setDeleting(true);
+					restClient
+						.images
+						.delete(Number(data.id))
+						.then(
+							(f) => {
+								navigate(-1);
+							})
+						.catch((e: Error) => userAlerts.err(e))
+						.finally(() => setDeleting(false))
+				}
 			);
 		},
 		[restClient, data, userAlerts, navigate, confirmDialog]
@@ -111,19 +119,10 @@ export default function ImageDetail() {
 		<div>
 			<div className="p-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
-					<Button
-						disabled={!changed}
-						onClick={saveData}
-						className="d-flex gap-2 align-items-center text-nowrap"
-					>
-						<div className="d-flex align-items-center gap-2">
-							<FaFloppyDisk/>
-							<div>Save</div>
-						</div>
-					</Button>
-					<Button variant="danger" onClick={deleteImage}>Delete</Button>
+					<SaveButton loading={saving} disabled={!changed} onClick={saveData}>Save</SaveButton>
+					<DeleteButton loading={deleting} disabled={!data.id} onClick={deleteImage}>Delete</DeleteButton>
 				</Stack>
 			</div>
 			<div className="px-3 w-75">

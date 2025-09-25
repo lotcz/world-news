@@ -9,14 +9,20 @@ Websites
 - openstreetmap integration
 - 3D planetary overview
 
-Revenue sources
-
-- ads (google AdSense, Sklik, own ad system)
-- affiliate
-  - https://affiliateport.eu
-  - https://www.partnerbox.cz/
-- dropshipping
-- sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
+Revenue sources/Monetization
+  - Programmatic Ads:
+    - Google AdSense
+    - Media.net
+    - Sklik
+  - Direct Ad Sales
+  - own ad system
+  - No Sponsored Content!
+    - ask for membership or contribution to keep free of sponsored content
+  - Affiliate
+    - https://affiliateport.eu
+    - https://www.partnerbox.cz/
+  - Dropshipping
+    - sell merch for niche sites (https://merchize.com/, https://www.t2u.cz)
 
 Pravesestalo.cz
 
@@ -38,9 +44,6 @@ Satire and parody
 
 Pop-culture diaries
 Movies and games, sci-fi and action
-
-Drunken stories
-opilecké historky z celeho sveta, 18+
 
 absolutegarbage.online
 AI generated nonsense and satire

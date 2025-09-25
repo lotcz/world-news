@@ -17,7 +17,8 @@ import RealmSelect from "../realms/RealmSelect";
 import {BsArrowRightSquare, BsTrash} from "react-icons/bs";
 import {IconButton, Switch} from "zavadil-react-common";
 import {ImagezImagePreview} from "../images/ImagezImage";
-import {SupplyImageModal} from "../images/supply/SupplyImageModal";
+import BackIconLink from "../general/BackIconLink";
+import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
@@ -33,8 +34,8 @@ export default function TopicDetail() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const supplyImageDialog = useContext(SupplyImageDialogContext);
 	const [activeTab, setActiveTab] = useState<string>();
-	const [imageSelectOpen, setImageSelectOpen] = useState<boolean>(false);
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -62,7 +63,9 @@ export default function TopicDetail() {
 					name: '',
 					articleCount: 0,
 					articleCountInternal: 0,
-					articleCountExternal: 0
+					articleCountExternal: 0,
+					mainImageIsIllustrative: true,
+					mainImageIsAiGenerated: false
 				});
 				return;
 			}
@@ -97,6 +100,22 @@ export default function TopicDetail() {
 		[restClient, data, userAlerts, navigate]
 	);
 
+	const showImageSupplyDialog = useCallback(
+		() => data && supplyImageDialog.show(
+			{
+				onClose: () => supplyImageDialog.hide(),
+				onSelected: (id) => {
+					data.mainImageId = id;
+					setData({...data});
+					supplyImageDialog.hide();
+					setChanged(true);
+				},
+				description: data.summary
+			}
+		),
+		[data, supplyImageDialog]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -105,7 +124,7 @@ export default function TopicDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
 					<Button
 						disabled={!changed}
@@ -180,7 +199,30 @@ export default function TopicDetail() {
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							{
 								data.mainImageId ? <div>
-										<div>
+										<div className="d-flex align-items-center gap-3">
+											<Switch
+												id="mainImageIsIllustrative"
+												checked={data.mainImageIsIllustrative}
+												onChange={(e) => {
+													data.mainImageIsIllustrative = e;
+													setData({...data});
+													setChanged(true);
+												}}
+												label="Illustrative photo"
+
+											/>
+											<Switch
+												id="mainImageIsAiGenerated"
+												checked={data.mainImageIsAiGenerated}
+												onChange={(e) => {
+													data.mainImageIsAiGenerated = e;
+													setData({...data});
+													setChanged(true);
+												}}
+												label="AI generated"
+											/>
+										</div>
+										<div className="mt-1">
 											<ImagezImagePreview id={data.mainImageId}/>
 										</div>
 										<div className="mt-2 d-flex align-items-center gap-3">
@@ -197,10 +239,10 @@ export default function TopicDetail() {
 												}
 											>Remove</IconButton>
 											<Button size="sm" onClick={() => navigate(`/images/detail/${data.mainImageId}`)}>Edit..</Button>
-											<Button size="sm" onClick={() => setImageSelectOpen(true)}>Change...</Button>
+											<Button size="sm" onClick={showImageSupplyDialog}>Change...</Button>
 										</div>
 									</div>
-									: <Button size="sm" onClick={() => setImageSelectOpen(true)}>Find...</Button>
+									: <Button size="sm" onClick={showImageSupplyDialog}>Supply...</Button>
 							}
 						</Col>
 					</Row>
@@ -269,20 +311,6 @@ export default function TopicDetail() {
 						}
 					</div>
 				</div>
-			}
-			{
-				imageSelectOpen && <SupplyImageModal
-					description={data.name}
-					onClose={() => setImageSelectOpen(false)}
-					onSelected={
-						(id) => {
-							data.mainImageId = id;
-							setData({...data});
-							setImageSelectOpen(false);
-							setChanged(true);
-						}
-					}
-				/>
 			}
 		</div>
 	)
