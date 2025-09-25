@@ -14,7 +14,6 @@ export type ArticleBase = EntityBase & {
 	body?: string | null;
 	processingState?: string | null;
 	mainImageIsIllustrative: boolean;
-	mainImageIsAiGenerated: boolean;
 }
 
 export type ArticleStub = ArticleBase & {

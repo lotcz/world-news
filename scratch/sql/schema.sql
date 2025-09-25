@@ -10,6 +10,7 @@ alter type tp_operation add value IF NOT EXISTS 'DetectTags';
 alter type tp_operation add value IF NOT EXISTS 'CompileArticles';
 alter type tp_operation add value IF NOT EXISTS 'DetectRealm';
 alter type tp_operation add value IF NOT EXISTS 'GetEmbeddings';
+alter type tp_operation add value IF NOT EXISTS 'GenerateImage';
 
 create table ai_log (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
@@ -142,6 +143,7 @@ create table image (
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     original_url varchar(255),
     name varchar(255) not null,
+    is_ai_generated boolean default false,
     description text,
     author varchar(100),
     source varchar(100),
@@ -158,7 +160,6 @@ create table topic (
     	constraint fk_topic_image
         references image,
     main_image_is_illustrative boolean default true,
-    main_image_is_ai_generated boolean default false,
     realm_id integer
         constraint fk_topic_realm
         references realm
@@ -204,7 +205,6 @@ create table article (
     	constraint fk_article_image
         references image,
     main_image_is_illustrative boolean default true,
-    main_image_is_ai_generated boolean default false,
     language_id integer not null
         constraint fkntjo7u9ep5digg27txr8fnqa5
         references language,

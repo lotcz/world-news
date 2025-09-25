@@ -28,9 +28,6 @@ public class ArticleBase extends EntityBase {
 	@JsonProperty("mainImageIsIllustrative")
 	private boolean mainImageIsIllustrative = true;
 
-	@JsonProperty("mainImageIsAiGenerated")
-	private boolean mainImageIsAiGenerated = false;
-
 	private static final int UID_SIZE = 255;
 
 	@Column(length = UID_SIZE)

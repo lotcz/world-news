@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Primary
-public class OpenAi implements AiAssistantEngine {
+public class OpenAiAssistant implements AiAssistantEngine {
 
 	@Value("${chatgpt.apikey}")
 	String apiKey;
 
 	private final Lazy<OpenAIClient> openAIClient;
 
-	public OpenAi() {
+	public OpenAiAssistant() {
 		this.openAIClient = new Lazy<>(
 			() -> OpenAIOkHttpClient
 				.builder()

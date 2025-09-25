@@ -10,7 +10,6 @@ export type TopicBase = EntityWithName & {
 	articleCountInternal: number;
 	articleCountExternal: number;
 	mainImageIsIllustrative: boolean;
-	mainImageIsAiGenerated: boolean;
 }
 
 export type TopicStub = TopicBase & {

@@ -6,7 +6,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {Image} from "../../types/Image";
-import {ConfirmDialogContext, DeleteButton, SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, DeleteButton, SaveButton, Switch} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {ImagezImagePreview} from "./ImagezImage";
 import ExternalLink from "../general/ExternalLink";
@@ -61,7 +61,8 @@ export default function ImageDetail() {
 		() => {
 			if (!id) {
 				setData({
-					name: ''
+					name: '',
+					isAiGenerated: false
 				});
 				return;
 			}
@@ -176,6 +177,23 @@ export default function ImageDetail() {
 									}
 								</div>
 							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>AI generated:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								id="isAiGenerated"
+								checked={data.isAiGenerated}
+								onChange={(e) => {
+									data.isAiGenerated = e;
+									setData({...data});
+									setChanged(true);
+								}}
+								label="Image was created with AI"
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">

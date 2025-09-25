@@ -3,7 +3,7 @@ import {Image} from "../../../types/Image";
 import {WnRestClientContext} from "../../../client/WnRestClient";
 import {StringUtil} from "zavadil-ts-common";
 import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
-import {SaveButton} from "zavadil-react-common";
+import {SaveButton, Switch} from "zavadil-react-common";
 import {Col, Form, Row, Stack} from "react-bootstrap";
 import {ImagezImagePreview} from "../ImagezImage";
 import {Img} from "../Img";
@@ -92,6 +92,22 @@ export function SupplyImagePreview({data, onChange, onConfirmed}: SupplyImagePre
 									<ImagezImagePreview name={data.name}/>
 								</div>
 							}
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>AI generated:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								id="isAiGenerated"
+								checked={data.isAiGenerated}
+								onChange={(e) => {
+									data.isAiGenerated = e;
+									onChange({...data});
+								}}
+								label="Image was created with AI"
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">

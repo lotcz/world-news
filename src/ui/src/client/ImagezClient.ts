@@ -22,6 +22,10 @@ export class ImagezClient extends RestClient {
 		).toString()
 	}
 
+	loadImageHealth(name: string): Promise<ImageHealth> {
+		return this.postJson(`images/health/${name}`);
+	}
+
 	uploadExternalUrl(url: string): Promise<ImageHealth> {
 		return this.postJson('images/upload-url', null, {url, token: this.secretToken});
 	}
@@ -32,4 +36,7 @@ export class ImagezClient extends RestClient {
 		return this.postFormJson('images/upload', formData, {token: this.secretToken});
 	}
 
+	deleteImage(name: string): Promise<any> {
+		return this.del(`images/original/${name}`, {token: this.secretToken});
+	}
 }

@@ -7,6 +7,7 @@ export type Image = EntityBase & {
 	author?: string | null;
 	source?: string | null;
 	license?: string | null;
+	isAiGenerated: boolean;
 }
 
 export type ImageSearchResult = {

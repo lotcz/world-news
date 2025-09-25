@@ -1,4 +1,3 @@
-- select from existing images
 - create images using ChatGPT/DALL-E
 - create spoke web in CodeIgniter
 - advertising

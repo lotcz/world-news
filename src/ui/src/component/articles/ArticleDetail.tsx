@@ -63,8 +63,7 @@ export default function ArticleDetail() {
 				setData({
 					isLocked: false,
 					title: '',
-					mainImageIsIllustrative: true,
-					mainImageIsAiGenerated: false
+					mainImageIsIllustrative: true
 				});
 				return;
 			}
@@ -128,7 +127,9 @@ export default function ArticleDetail() {
 					supplyImageDialog.hide();
 					setChanged(true);
 				},
-				description: data.summary
+				description: data.summary,
+				entityType: 'Topic',
+				entityId: data.id
 			}
 		),
 		[data, supplyImageDialog]
@@ -285,16 +286,6 @@ export default function ArticleDetail() {
 												}}
 												label="Illustrative photo"
 
-											/>
-											<Switch
-												id="mainImageIsAiGenerated"
-												checked={data.mainImageIsAiGenerated}
-												onChange={(e) => {
-													data.mainImageIsAiGenerated = e;
-													setData({...data});
-													setChanged(true);
-												}}
-												label="AI generated"
 											/>
 										</div>
 										<div className="mt-1">

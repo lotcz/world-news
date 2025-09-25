@@ -9,6 +9,7 @@ import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
 import {SupplyImageUpload} from "./SupplyImageUpload";
 import {SupplyImageUrl} from "./SupplyImageFromUrl";
 import SupplyImageExisting from "./SupplyImageExisting";
+import {SupplyImageGenerateWithAi} from "./SupplyImageGenerateWithAi";
 
 const DEFAULT_TAB = 'commons';
 
@@ -17,9 +18,11 @@ export type SupplyImageModalProps = {
 	description?: string | null;
 	onClose: () => any;
 	onSelected: (imageId: number) => any;
+	entityType?: string | null;
+	entityId?: number | null;
 }
 
-export function SupplyImageModal({onClose, onSelected, keywords, description}: SupplyImageModalProps) {
+export function SupplyImageModal({onClose, onSelected, keywords, description, entityType, entityId}: SupplyImageModalProps) {
 	const restClient = useContext(WnRestClientContext);
 	const alerts = useContext(WnUserAlertsContext);
 	const [activeTab, setActiveTab] = useState<string>(DEFAULT_TAB);
@@ -65,7 +68,7 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 					onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
 				>
 					<Tab eventKey="commons" title="Creative Commons"/>
-					<Tab eventKey="chatgpt" title="ChatGPT"/>
+					<Tab eventKey="ai" title="Generate with AI"/>
 					<Tab eventKey="url" title="From URL"/>
 					<Tab eventKey="upload" title="Upload"/>
 					<Tab eventKey="existing" title="Existing"/>
@@ -89,13 +92,23 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 								}/>
 						}
 						{
-							activeTab === "chatgpt" && <div>ChatGPT</div>
+							activeTab === "ai" && <SupplyImageGenerateWithAi
+								onSelected={
+									(name) => {
+										setPreview({name: name, isAiGenerated: true, source: "ChatGPT"});
+										setActiveTab("preview");
+									}
+								}
+								description={description}
+								entityType={entityType}
+								entityId={entityId}
+							/>
 						}
 						{
 							activeTab === "upload" && <SupplyImageUpload
 								onSelected={
 									(name) => {
-										setPreview({name: name});
+										setPreview({name: name, isAiGenerated: false});
 										setActiveTab("preview");
 									}
 								}
@@ -105,7 +118,7 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 							activeTab === "url" && <SupplyImageUrl
 								onSelected={
 									(url) => {
-										setPreview({originalUrl: url, name: '', source: UrlUtil.extractHostFromUrl(url)});
+										setPreview({originalUrl: url, isAiGenerated: false, name: '', source: UrlUtil.extractHostFromUrl(url)});
 										setActiveTab("preview");
 									}
 								}

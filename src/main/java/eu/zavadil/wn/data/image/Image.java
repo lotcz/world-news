@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.image;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 public class Image extends EntityBase {
+
+	@JsonProperty("isAiGenerated")
+	private boolean isAiGenerated = false;
 
 	private static final int URL_SIZE = 255;
 

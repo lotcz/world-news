@@ -4,13 +4,24 @@ import eu.zavadil.java.UrlBuilder;
 import eu.zavadil.java.spring.common.client.HttpApiClientBase;
 import eu.zavadil.java.util.HashUtils;
 import eu.zavadil.java.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.FileInputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class ImagezClientHttp extends HttpApiClientBase implements ImagezSmartApi {
 
 	private String secretToken;
@@ -29,8 +40,29 @@ public class ImagezClientHttp extends HttpApiClientBase implements ImagezSmartAp
 	}
 
 	@Override
-	public ImageHealthPayload upload(FileInputStream fileStream) {
-		return null;
+	public ImageHealthPayload upload(String fileName, byte[] fileBytes) {
+		ByteArrayResource resource = new ByteArrayResource(fileBytes) {
+			@Override
+			public String getFilename() {
+				return fileName;
+			}
+		};
+
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+		body.add("image", resource);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+		Map<String, String> params = new HashMap<>();
+		params.put("token", this.secretToken);
+		String url = this.getUrl("upload", params);
+
+		ResponseEntity<ImageHealthPayload> response = restTemplate.postForEntity(url, requestEntity, ImageHealthPayload.class);
+		return response.getBody();
 	}
 
 	@Override

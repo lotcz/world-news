@@ -21,9 +21,6 @@ public class TopicBase extends EntityWithNameBase {
 	@JsonProperty("mainImageIsIllustrative")
 	private boolean mainImageIsIllustrative = true;
 
-	@JsonProperty("mainImageIsAiGenerated")
-	private boolean mainImageIsAiGenerated = false;
-
 	@Column(columnDefinition = "TEXT")
 	private String summary;
 

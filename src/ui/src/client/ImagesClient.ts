@@ -35,6 +35,14 @@ export class ImagesClient extends EntityClient<Image> {
 		return this.imagez.get().then((imagez) => imagez.getImagezResizedUrlByName(name, type, width, height, ext));
 	}
 
+	getImagezHealth(name: string): Promise<ImageHealth> {
+		return this.imagez.get().then((imagez) => imagez.loadImageHealth(name));
+	}
+
+	deleteImagezImage(name: string): Promise<any> {
+		return this.imagez.get().then((imagez) => imagez.deleteImage(name));
+	}
+
 	uploadExternalUrl(url: string): Promise<ImageHealth> {
 		return this.imagez.get().then((imagez) => imagez.uploadExternalUrl(url));
 	}
@@ -47,6 +55,12 @@ export class ImagesClient extends EntityClient<Image> {
 
 	searchCreativeCommons(pr: PagingRequest): Promise<Page<ImageSearchResult>> {
 		return this.client.getJson(`${this.name}/cc/search`, PagingUtil.pagingRequestToQueryParams(pr));
+	}
+
+	// GENERATE
+
+	generateImage(systemPrompt: string, userPrompt: string, entityType?: string | null, entityId?: number | null): Promise<ImageHealth> {
+		return this.client.postJson(`${this.name}/generate`, null, {systemPrompt, userPrompt, entityType, entityId});
 	}
 
 }

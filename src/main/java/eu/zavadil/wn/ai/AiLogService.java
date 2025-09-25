@@ -4,6 +4,8 @@ import eu.zavadil.wn.ai.assistant.AiAssistantParams;
 import eu.zavadil.wn.ai.assistant.AiAssistantResponse;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
+import eu.zavadil.wn.ai.images.AiImageParams;
+import eu.zavadil.wn.ai.images.AiImageResponse;
 import eu.zavadil.wn.data.AiOperation;
 import eu.zavadil.wn.data.EntityType;
 import eu.zavadil.wn.data.aiLog.AiLog;
@@ -76,6 +78,27 @@ public class AiLogService {
 				.entityType(entityType)
 				.entityId(entityId)
 				.response(response.getResult().toString())
+				.inputTokens((int) response.getInputTokens())
+				.requestProcessingTimeNs(response.getProcessingTimeNs())
+				.build()
+		);
+	}
+
+	public AiLog log(
+		AiImageParams params,
+		AiImageResponse response,
+		EntityType entityType,
+		Integer entityId
+	) {
+		return this.log(
+			AiLog.builder()
+				.systemPrompt(params.getSystemPromptString())
+				.userPrompt(params.getUserPromptString())
+				.model(params.getModel())
+				.operation(AiOperation.GenerateImage)
+				.entityType(entityType)
+				.entityId(entityId)
+				.response(response.getResponse())
 				.inputTokens((int) response.getInputTokens())
 				.requestProcessingTimeNs(response.getProcessingTimeNs())
 				.build()

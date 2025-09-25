@@ -64,8 +64,7 @@ export default function TopicDetail() {
 					articleCount: 0,
 					articleCountInternal: 0,
 					articleCountExternal: 0,
-					mainImageIsIllustrative: true,
-					mainImageIsAiGenerated: false
+					mainImageIsIllustrative: true
 				});
 				return;
 			}
@@ -110,7 +109,9 @@ export default function TopicDetail() {
 					supplyImageDialog.hide();
 					setChanged(true);
 				},
-				description: data.summary
+				description: data.summary,
+				entityType: 'Topic',
+				entityId: data.id
 			}
 		),
 		[data, supplyImageDialog]
@@ -210,16 +211,6 @@ export default function TopicDetail() {
 												}}
 												label="Illustrative photo"
 
-											/>
-											<Switch
-												id="mainImageIsAiGenerated"
-												checked={data.mainImageIsAiGenerated}
-												onChange={(e) => {
-													data.mainImageIsAiGenerated = e;
-													setData({...data});
-													setChanged(true);
-												}}
-												label="AI generated"
 											/>
 										</div>
 										<div className="mt-1">

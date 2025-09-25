@@ -1,13 +1,12 @@
 package eu.zavadil.wn.imagez;
 
-import java.io.FileInputStream;
 import java.net.URL;
 
 public interface ImagezSmartApi {
 
 	ImageHealthPayload getHealth(String name);
 
-	ImageHealthPayload upload(FileInputStream fileStream);
+	ImageHealthPayload upload(String fileName, byte[] fileBytes);
 
 	ImageHealthPayload uploadFromUrl(String url);
 
