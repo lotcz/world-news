@@ -18,7 +18,7 @@ const HEADER: SelectableTableHeader<ImageSearchResult> = [
 	{name: 'height', label: 'Height'}
 ];
 
-export type FindImagesCreativeCommonsProps = {
+export type SupplyImageCreativeCommonsProps = {
 	keywords?: Array<string> | null;
 	search: string;
 	onSearchChanged: (search: string) => any;
@@ -27,7 +27,7 @@ export type FindImagesCreativeCommonsProps = {
 	onSelected: (image: Image) => any;
 }
 
-function FindImagesCreativeCommons({onSelected, search, onSearchChanged, paging, onPagingChanged}: FindImagesCreativeCommonsProps) {
+function SupplyImageCreativeCommons({onSelected, search, onSearchChanged, paging, onPagingChanged}: SupplyImageCreativeCommonsProps) {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Page<ImageSearchResult> | null>(null);
@@ -110,4 +110,4 @@ function FindImagesCreativeCommons({onSelected, search, onSearchChanged, paging,
 	);
 }
 
-export default FindImagesCreativeCommons;
+export default SupplyImageCreativeCommons;

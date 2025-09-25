@@ -1,13 +1,14 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {Modal, Tab, Tabs} from 'react-bootstrap';
 import {NumberUtil, PagingRequest, StringUtil, UrlUtil} from "zavadil-ts-common";
-import FindImagesCreativeCommons from "./FindImagesCreativeCommons";
+import SupplyImageCreativeCommons from "./SupplyImageCreativeCommons";
 import {Image} from "../../../types/Image";
 import {SupplyImagePreview} from "./SupplyImagePreview";
 import {WnRestClientContext} from "../../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
 import {SupplyImageUpload} from "./SupplyImageUpload";
 import {SupplyImageUrl} from "./SupplyImageFromUrl";
+import SupplyImageExisting from "./SupplyImageExisting";
 
 const DEFAULT_TAB = 'commons';
 
@@ -67,6 +68,7 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 					<Tab eventKey="chatgpt" title="ChatGPT"/>
 					<Tab eventKey="url" title="From URL"/>
 					<Tab eventKey="upload" title="Upload"/>
+					<Tab eventKey="existing" title="Existing"/>
 					{
 						preview && <Tab eventKey="preview" title={<strong>Preview</strong>}/>
 					}
@@ -74,7 +76,7 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 				<div className="p-2">
 					<div>
 						{
-							activeTab === "commons" && <FindImagesCreativeCommons
+							activeTab === "commons" && <SupplyImageCreativeCommons
 								search={search}
 								onSearchChanged={setSearch}
 								paging={ccPaging}
@@ -104,6 +106,18 @@ export function SupplyImageModal({onClose, onSelected, keywords, description}: S
 								onSelected={
 									(url) => {
 										setPreview({originalUrl: url, name: '', source: UrlUtil.extractHostFromUrl(url)});
+										setActiveTab("preview");
+									}
+								}
+							/>
+						}
+						{
+							activeTab === "existing" && <SupplyImageExisting
+								search={search}
+								onSearchChanged={setSearch}
+								onSelected={
+									(img) => {
+										setPreview(img);
 										setActiveTab("preview");
 									}
 								}

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface ImageRepository extends EntityRepository<Image> {
 
 	@Query("""
@@ -13,4 +15,7 @@ public interface ImageRepository extends EntityRepository<Image> {
 			where i.name LIKE %:search%
 		""")
 	Page<Image> search(String search, PageRequest pr);
+
+	Optional<Image> findFirstByName(String name);
+	
 }

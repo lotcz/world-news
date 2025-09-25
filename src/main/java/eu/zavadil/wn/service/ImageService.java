@@ -38,15 +38,24 @@ public class ImageService {
 		return this.imageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Image", id));
 	}
 
+	public Image loadByName(String name) {
+		return this.imageRepository.findFirstByName(name).orElse(null);
+	}
+
+	public boolean nameExists(String name) {
+		Image img = this.loadByName(name);
+		return (img != null);
+	}
+
 	public void deleteById(int id) {
 		// todo: check if can be deleted
 
 		Image image = this.requireById(id);
 		this.imageRepository.delete(image);
 
-		// todo: check if same name exists elsewhere
-		// deleted successfully from db, delete file from imagez
-		this.imagez.deleteOriginal(image.getName());
+		if (!this.nameExists(image.getName())) {
+			this.imagez.deleteOriginal(image.getName());
+		}
 	}
 
 }
