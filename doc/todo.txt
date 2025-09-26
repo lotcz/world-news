@@ -1,5 +1,3 @@
-- article queue for image assignment for published articles
-
 - create spoke web in CodeIgniter
 
 - reset and start new db

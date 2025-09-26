@@ -2,8 +2,10 @@ package eu.zavadil.wn.data.article;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
 import eu.zavadil.wn.data.ProcessingState;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -53,5 +55,24 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			where a.processingState = 'Waiting'
 		""")
 	Page<Article> loadAnnotationQueue(PageRequest pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.processingState = 'Done'
+				and a.mainImage is null
+				and a.source.id in (select s.id from ArticleSource s where s.importType = :importType)
+		""")
+	Page<Article> loadImageSupplyQueueInternal(ImportType importType, PageRequest pr);
+
+	/**
+	 * Unused - we prefer to assign image to topic
+	 */
+	default Page<Article> loadImageSupplyQueue(int size) {
+		return this.loadImageSupplyQueueInternal(
+			ImportType.Internal,
+			PageRequest.of(0, size, Sort.by("lastUpdatedOn"))
+		);
+	}
 
 }

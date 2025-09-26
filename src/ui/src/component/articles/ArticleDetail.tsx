@@ -71,6 +71,7 @@ export default function ArticleDetail() {
 			if (!id) {
 				setData({
 					isLocked: false,
+					isToast: false,
 					title: '',
 					mainImageIsIllustrative: true
 				});
@@ -167,10 +168,11 @@ export default function ArticleDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Locked:</Form.Label>
+							<Form.Label htmlFor="isLocked">Locked:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<Switch
+								id="isLocked"
 								checked={data.isLocked}
 								onChange={(e) => {
 									data.isLocked = e;
@@ -342,6 +344,21 @@ export default function ArticleDetail() {
 									</div>
 									: <Button size="sm" onClick={showImageSupplyDialog}>Supply...</Button>
 							}
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label htmlFor="isToast">Toast:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								id="isToast"
+								checked={data.isToast}
+								onChange={(e) => {
+									data.isToast = e;
+									onChanged();
+								}}
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

@@ -15,7 +15,7 @@ import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 import RealmSelect from "../realms/RealmSelect";
 import {BsArrowRightSquare, BsTrash} from "react-icons/bs";
-import {IconButton, Switch} from "zavadil-react-common";
+import {DateTimeInput, IconButton, Switch} from "zavadil-react-common";
 import {ImagezImagePreview} from "../images/ImagezImage";
 import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
@@ -39,6 +39,15 @@ export default function TopicDetail() {
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
+	const onChanged = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setChanged(true);
+		},
+		[data]
+	);
+
 	useEffect(
 		() => {
 			if (!activeTab) return;
@@ -60,6 +69,7 @@ export default function TopicDetail() {
 			if (!id) {
 				setData({
 					isLocked: false,
+					isToast: false,
 					name: '',
 					articleCount: 0,
 					articleCountInternal: 0,
@@ -143,15 +153,15 @@ export default function TopicDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Locked:</Form.Label>
+							<Form.Label htmlFor="isLocked">Locked:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<Switch
+								id="isLocked"
 								checked={data.isLocked}
 								onChange={(e) => {
 									data.isLocked = e;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -166,8 +176,7 @@ export default function TopicDetail() {
 								onChange={
 									(e) => {
 										data.realmId = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}
 								}
 							/>
@@ -186,10 +195,43 @@ export default function TopicDetail() {
 									value={data.processingState}
 									onChange={(e) => {
 										data.processingState = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}}
 								/>
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Published:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<div className="d-flex align-items-center gap-2">
+								<DateTimeInput
+									value={data.publishDate}
+									onChange={(e) => {
+										data.publishDate = e;
+										onChanged();
+									}}
+								/>
+								{
+									data.publishDate ? <Button
+											variant="warning"
+											onClick={
+												() => {
+													data.publishDate = null;
+													onChanged();
+												}
+											}>Unpublish</Button>
+										: <Button
+											variant="success"
+											onClick={
+												() => {
+													data.publishDate = new Date();
+													onChanged();
+												}
+											}>Publish</Button>
+								}
 							</div>
 						</Col>
 					</Row>
@@ -206,8 +248,7 @@ export default function TopicDetail() {
 												checked={data.mainImageIsIllustrative}
 												onChange={(e) => {
 													data.mainImageIsIllustrative = e;
-													setData({...data});
-													setChanged(true);
+													onChanged();
 												}}
 												label="Illustrative photo"
 
@@ -224,8 +265,7 @@ export default function TopicDetail() {
 												onClick={
 													() => {
 														data.mainImageId = null;
-														setData({...data});
-														setChanged(true);
+														onChanged();
 													}
 												}
 											>Remove</IconButton>
@@ -239,6 +279,21 @@ export default function TopicDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label htmlFor="isToast">Toast:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								id="isToast"
+								checked={data.isToast}
+								onChange={(e) => {
+									data.isToast = e;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Name:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -247,8 +302,7 @@ export default function TopicDetail() {
 								value={data.name}
 								onChange={(e) => {
 									data.name = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -264,8 +318,7 @@ export default function TopicDetail() {
 								value={StringUtil.getNonEmpty(data.summary)}
 								onChange={(e) => {
 									data.summary = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>

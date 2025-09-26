@@ -155,7 +155,9 @@ create table topic (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     is_locked boolean default false,
+    is_toast boolean default false,
     name varchar(255),
+    publish_date timestamp(6) with time zone,
     main_image_id int null
     	constraint fk_topic_image
         references image,
@@ -183,6 +185,9 @@ create index idx_topic_load_categorization_queue
 create index idx_topic_article_count_external
     on topic (article_count_external desc);
 
+create index idx_topic_load_image_supply_queue
+    on topic (processing_state, is_locked, is_toast, article_count_internal, publish_date, last_updated_on);
+
 create index idx_topic_article_count_last_updated
     on topic (last_updated_on desc);
 
@@ -201,6 +206,7 @@ create table article (
     publish_date timestamp(6) with time zone,
     summary text,
     title varchar(255),
+    is_toast boolean default false,
     main_image_id int null
     	constraint fk_article_image
         references image,

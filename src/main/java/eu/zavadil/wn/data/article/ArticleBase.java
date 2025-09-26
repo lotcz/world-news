@@ -26,6 +26,9 @@ public class ArticleBase extends EntityBase {
 	@JsonProperty("isLocked")
 	private boolean isLocked = false;
 
+	@JsonProperty("isToast")
+	private boolean isToast = false;
+
 	@JsonProperty("mainImageIsIllustrative")
 	private boolean mainImageIsIllustrative = true;
 

@@ -1,5 +1,7 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.spring.common.exceptions.BadRequestException;
+import eu.zavadil.java.spring.common.exceptions.ResourceNotFoundException;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.data.EmbeddingDistance;
@@ -61,7 +63,15 @@ public class TopicService {
 		return this.topicStubRepository.findById(id).orElse(null);
 	}
 
+	public TopicStub requireById(int id) {
+		return this.topicStubRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Topic Stub", id));
+	}
+
 	public void deleteById(int id) {
+		TopicStub topic = this.requireById(id);
+		if (topic.getArticleCountInternal() > 0) {
+			throw new BadRequestException("Cannot delete topic with internal articles! Unpublish instead.");
+		}
 		this.topicRepository.deleteById(id);
 	}
 
@@ -101,4 +111,8 @@ public class TopicService {
 		return similar.get(0).getEntity();
 	}
 
+	public Page<Topic> loadImageSupplyQueue(int size) {
+		return this.topicRepository.loadImageSupplyQueue(size);
+	}
 }
+

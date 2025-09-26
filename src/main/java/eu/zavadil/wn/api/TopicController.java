@@ -41,7 +41,7 @@ public class TopicController {
 
 	@GetMapping("{id}")
 	public TopicStub load(@PathVariable int id) {
-		return this.topicService.loadById(id);
+		return this.topicService.requireById(id);
 	}
 
 	@PutMapping("{id}")
@@ -89,5 +89,12 @@ public class TopicController {
 		@RequestParam(defaultValue = "10") int size
 	) {
 		return this.topicService.findSimilarToRealm(realmId, size);
+	}
+
+	@GetMapping("image-supply-queue")
+	public JsonPage<Topic> loadImageSupplyQueue(
+		@RequestParam(defaultValue = "10") int size
+	) {
+		return JsonPageImpl.of(this.topicService.loadImageSupplyQueue(size));
 	}
 }

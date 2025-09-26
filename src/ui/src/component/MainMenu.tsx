@@ -25,7 +25,13 @@ function MainMenu() {
 
 	return (
 		<div className="main-menu p-3">
-			<h4>Manage</h4>
+			<h4>Editorial</h4>
+			<div className="ps-3">
+				<div>
+					<NavLink to="/supply-images" className="text-nowrap">Supply Images</NavLink>
+				</div>
+			</div>
+			<h4 className="mt-2">Manage</h4>
 			<div className="ps-3">
 				<div>
 					<NavLink to="/topics">Topics</NavLink>
@@ -33,9 +39,6 @@ function MainMenu() {
 				<div>
 					<NavLink to="/articles">Articles</NavLink>
 				</div>
-
-				<hr/>
-
 				<div>
 					<NavLink to="/ai-log">AI Log</NavLink>
 				</div>

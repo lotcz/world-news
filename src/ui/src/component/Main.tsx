@@ -23,6 +23,7 @@ import WebsitesList from "./websites/WebsitesList";
 import WebsiteDetail from "./websites/WebsiteDetail";
 import BannersList from "./banners/BannersList";
 import BannerDetail from "./banners/BannerDetail";
+import TopicsImageSupplyQueue from "./topics/TopicsImageSupplyQueue";
 
 function Main() {
 	return (
@@ -32,6 +33,7 @@ function Main() {
 				<div className="flex-grow-1 pb-4">
 					<Routes>
 						<Route path="/" element={<Dashboard/>}/>
+						<Route path="supply-images" element={<TopicsImageSupplyQueue/>}/>
 						<Route path="ai-log">
 							<Route path="" element={<AiLogList/>}/>
 							<Route path="detail">
