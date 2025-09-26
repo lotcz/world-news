@@ -5,7 +5,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, DeleteButton, SaveButton} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {Website} from "../../types/Website";
 import {LanguageSelect} from "../languages/LanguageSelect";
@@ -24,6 +24,7 @@ export default function WebsiteDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const confirmDialog = useContext(ConfirmDialogContext);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<Website>();
@@ -107,6 +108,25 @@ export default function WebsiteDetail() {
 		[restClient, data, userAlerts, navigate]
 	);
 
+	const deleteWebsite = useCallback(
+		() => {
+			if (!data?.id) return;
+			confirmDialog.confirm(
+				'Confirm',
+				'Really delete this website?',
+				() => restClient
+					.websites
+					.delete(Number(data.id))
+					.then(
+						(f) => {
+							navigate(-1);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+			);
+		},
+		[restClient, data, userAlerts, navigate, confirmDialog]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -118,6 +138,9 @@ export default function WebsiteDetail() {
 					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
 					<SaveButton disabled={!changed} onClick={saveData}>Save</SaveButton>
+					{
+						data.id && <DeleteButton onClick={deleteWebsite}>Delete</DeleteButton>
+					}
 				</Stack>
 			</div>
 			<Form className="p-3">
@@ -201,7 +224,7 @@ export default function WebsiteDetail() {
 						<Tab eventKey="banners" title="Banners"/>
 						<Tab eventKey="realms" title="Realms"/>
 					</Tabs>
-					<div className="px-2 py-1">
+					<div className="px-2">
 						{
 							activeTab === "banners" && <WebsiteBannersList websiteId={data.id}/>
 						}

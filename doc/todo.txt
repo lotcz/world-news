@@ -1,5 +1,3 @@
-- banners
-  - publish/unpublish (no delete)
 - auto publish internal articles
 - no delete for internal articles
 - article queue for image assignment for published articles

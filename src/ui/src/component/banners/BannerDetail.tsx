@@ -5,7 +5,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {DateTimeInput, SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, DeleteButton, SaveButton} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {BannerStub} from "../../types/Banner";
 import {WebsiteIdSelect} from "../websites/WebsiteSelect";
@@ -23,6 +23,7 @@ export default function BannerDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const confirmDialog = useContext(ConfirmDialogContext);
 	const [data, setData] = useState<BannerStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -81,6 +82,25 @@ export default function BannerDetail() {
 		[restClient, data, userAlerts, navigate]
 	);
 
+	const deleteBanner = useCallback(
+		() => {
+			if (!data?.id) return;
+			confirmDialog.confirm(
+				'Confirm',
+				'Really delete this banner?',
+				() => restClient
+					.banners
+					.delete(Number(data.id))
+					.then(
+						(f) => {
+							navigate(-1);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+			);
+		},
+		[restClient, data, userAlerts, navigate, confirmDialog]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -92,6 +112,9 @@ export default function BannerDetail() {
 					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
 					<SaveButton disabled={!changed} onClick={saveData}>Save</SaveButton>
+					{
+						data.id && <DeleteButton onClick={deleteBanner}>Delete</DeleteButton>
+					}
 				</Stack>
 			</div>
 			<Form className="p-3">

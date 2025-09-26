@@ -11,7 +11,7 @@ export type WebsiteBannersListProps = {
 }
 
 const HEADER: SelectableTableHeader<Banner> = [
-	{name: 'name', label: 'name'},
+	{name: 'name', label: 'Name'},
 	{name: 'type', label: 'Type'},
 	{name: 'publishedDate', label: 'Published', renderer: (b) => DateUtil.formatDateTimeForHumans(b.publishDate)},
 ];
@@ -45,24 +45,22 @@ export default function WebsiteBannersList({websiteId}: WebsiteBannersListProps)
 
 	return (
 		<div>
-			<div className="pt-2 gap-3">
-				{
-					(data === null) ? <TablePlaceholder/>
-						: (
-							<TableWithSelect
-								showSelect={false}
-								header={HEADER}
-								paging={paging}
-								totalItems={data.totalItems}
-								onPagingChanged={setPaging}
-								onClick={navigateToDetail}
-								items={data.content}
-								hover={true}
-								striped={true}
-							/>
-						)
-				}
-			</div>
+			{
+				(data === null) ? <TablePlaceholder/>
+					: (
+						<TableWithSelect
+							showSelect={false}
+							header={HEADER}
+							paging={paging}
+							totalItems={data.totalItems}
+							onPagingChanged={setPaging}
+							onClick={navigateToDetail}
+							items={data.content}
+							hover={true}
+							striped={true}
+						/>
+					)
+			}
 		</div>
 	);
 }
