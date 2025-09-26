@@ -1,4 +1,4 @@
-- advertising
+- banners
 
 - create spoke web in CodeIgniter
 

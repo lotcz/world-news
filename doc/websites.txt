@@ -13,7 +13,7 @@ Revenue sources/Monetization
   - Programmatic Ads:
     - Google AdSense
     - Media.net
-    - Sklik
+    - partner.seznam.cz
   - Direct Ad Sales
   - own ad system
   - No Sponsored Content!

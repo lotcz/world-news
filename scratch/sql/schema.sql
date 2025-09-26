@@ -311,3 +311,27 @@ create table website_realm (
         on delete cascade,
     primary key (website_id, realm_id)
 );
+
+create type tp_banner_type AS ENUM ('Fullscreen', 'Content', 'Horizontal', 'Vertical', 'Popup');
+create cast	(varchar AS tp_banner_type) WITH INOUT AS IMPLICIT;
+
+create table banner (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255) not null,
+    type tp_banner_type not null,
+    content_html text,
+    website_id integer not null
+        constraint fk_banner_website
+        references website
+        on delete cascade
+);
+
+ALTER TABLE banner
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
+create index idx_banner_website_name
+    on banner (website_id, name);
+
+
