@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.article;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityBase;
 import eu.zavadil.java.util.HashUtils;
@@ -60,6 +61,11 @@ public class ArticleBase extends EntityBase {
 	}
 
 	private Instant publishDate;
+
+	@JsonIgnore
+	public boolean isPublished() {
+		return this.publishDate != null;
+	}
 
 	private static final int URL_SIZE = 255;
 

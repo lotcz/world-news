@@ -1,5 +1,7 @@
 package eu.zavadil.wn.service;
 
+import eu.zavadil.java.spring.common.exceptions.BadRequestException;
+import eu.zavadil.java.spring.common.exceptions.ResourceNotFoundException;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.data.ArticleEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
@@ -72,11 +74,27 @@ public class ArticleService {
 		return this.articleRepository.loadByTagId(tagId, pr);
 	}
 
-	public ArticleStub loadById(int id) {
+	public ArticleStub loadStubById(int id) {
 		return this.articleStubRepository.findById(id).orElse(null);
 	}
 
+	public ArticleStub requireStubById(int id) {
+		return this.articleStubRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Article Stub", id));
+	}
+
+	public Article loadById(int id) {
+		return this.articleRepository.findById(id).orElse(null);
+	}
+
+	public Article requireById(int id) {
+		return this.articleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Article", id));
+	}
+
 	public void deleteById(int id) {
+		Article article = this.requireById(id);
+		if (article.isInternal()) {
+			throw new BadRequestException("Internal articles cannot be deleted! Unpublish them instead.");
+		}
 		this.articleRepository.deleteById(id);
 	}
 

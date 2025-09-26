@@ -2,9 +2,9 @@ package eu.zavadil.wn.worker.compile;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.wn.ai.assistant.AiAssistantService;
+import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.aiLog.AiOperation;
 import eu.zavadil.wn.data.aiLog.EntityType;
-import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -99,6 +100,11 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		this.annotateWorker.updateSummary(compiled);
 		//this.annotateWorker.updateTags(compiled);
 		compiled.setProcessingState(ProcessingState.Done);
+
+		if (!compiled.isPublished()) {
+			compiled.setPublishDate(Instant.now());
+		}
+
 		this.articleService.save(compiled);
 
 		// update topic with title and summary from new article

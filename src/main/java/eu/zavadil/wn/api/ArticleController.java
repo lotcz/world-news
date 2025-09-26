@@ -71,7 +71,7 @@ public class ArticleController {
 
 	@GetMapping("{id}")
 	public ArticleStub load(@PathVariable int id) {
-		return this.articleService.loadById(id);
+		return this.articleService.requireStubById(id);
 	}
 
 	@PutMapping("{id}")

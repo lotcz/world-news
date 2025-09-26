@@ -1,5 +1,3 @@
-- auto publish internal articles
-- no delete for internal articles
 - article queue for image assignment for published articles
 
 - create spoke web in CodeIgniter
