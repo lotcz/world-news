@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
 import {SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
-import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -12,7 +12,7 @@ const HEADER: SelectableTableHeader<Banner> = [
 	{name: 'name', label: 'Name'},
 	{name: 'type', label: 'Type'},
 	{name: 'website.name', label: 'Website'},
-	{name: 'publishDate', label: 'Published'}
+	{name: 'publishDate', label: 'Published', renderer: (b) => DateUtil.formatDateTimeForHumans(b.publishDate)}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'name'}]};

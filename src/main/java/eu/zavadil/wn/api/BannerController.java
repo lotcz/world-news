@@ -53,8 +53,8 @@ public class BannerController {
 	}
 
 	@GetMapping("by-website/{websiteId}")
-	public JsonPage<Banner> loadPaged(
-		@RequestParam int websiteId,
+	public JsonPage<Banner> loadPagedByWebsite(
+		@PathVariable int websiteId,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size,
 		@RequestParam(defaultValue = "") String sorting

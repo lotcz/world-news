@@ -1,5 +1,5 @@
-import {Col, Form, Row, Spinner, Stack} from "react-bootstrap";
-import {useNavigate, useParams} from "react-router";
+import {Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
+import {useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -9,7 +9,10 @@ import {SaveButton} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {Website} from "../../types/Website";
 import {LanguageSelect} from "../languages/LanguageSelect";
+import WebsiteBannersList from "./WebsiteBannersList";
 
+const TAB_PARAM_NAME = 'tab';
+const DEFAULT_TAB = 'banners';
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -21,6 +24,8 @@ export default function WebsiteDetail() {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<Website>();
 	const [changed, setChanged] = useState<boolean>(false);
 
@@ -31,6 +36,22 @@ export default function WebsiteDetail() {
 			setChanged(true);
 		},
 		[data]
+	);
+
+	useEffect(
+		() => {
+			if (!activeTab) return;
+			searchParams.set(TAB_PARAM_NAME, activeTab);
+			setSearchParams(searchParams, {replace: true});
+		},
+		[activeTab]
+	);
+
+	useEffect(
+		() => {
+			setActiveTab(StringUtil.getNonEmpty(searchParams.get(TAB_PARAM_NAME), DEFAULT_TAB));
+		},
+		[id]
 	);
 
 	const reload = useCallback(
@@ -122,18 +143,20 @@ export default function WebsiteDetail() {
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Language:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<LanguageSelect
-								language={data.language}
-								onChange={
-									(e) => {
-										if (e) {
-											data.language = e;
-											onChanged();
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<LanguageSelect
+									language={data.language}
+									onChange={
+										(e) => {
+											if (e) {
+												data.language = e;
+												onChanged();
+											}
 										}
 									}
-								}
-							/>
+								/>
+							</div>
 						</Col>
 					</Row>
 					<Row className="align-items-center">
@@ -169,6 +192,25 @@ export default function WebsiteDetail() {
 					</Row>
 				</Stack>
 			</Form>
+			{
+				data.id && <div>
+					<Tabs
+						activeKey={activeTab}
+						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
+					>
+						<Tab eventKey="banners" title="Banners"/>
+						<Tab eventKey="realms" title="Realms"/>
+					</Tabs>
+					<div className="px-2 py-1">
+						{
+							activeTab === "banners" && <WebsiteBannersList websiteId={data.id}/>
+						}
+						{
+							activeTab === "realms" && <div>TBD - for now, websites consume all realms</div>
+						}
+					</div>
+				</div>
+			}
 		</div>
 	)
 }

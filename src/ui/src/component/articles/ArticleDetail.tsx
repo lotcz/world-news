@@ -1,5 +1,5 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
-import {useNavigate, useParams, useSearchParams} from "react-router";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -7,7 +7,7 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
 import {ConfirmDialogContext, DateTimeInput, DeleteButton, IconButton, SaveButton, Switch} from "zavadil-react-common";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
-import {BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
+import {BsArrowRightSquare, BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
@@ -223,6 +223,9 @@ export default function ArticleDetail() {
 									onChanged();
 								}}
 							/>
+							{
+								data.sourceId && <Link to={`/article-sources/detail/${data.sourceId}`}><BsArrowRightSquare/></Link>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">
@@ -240,13 +243,15 @@ export default function ArticleDetail() {
 								/>
 								{
 									data.publishDate ? <Button
+											variant="warning"
 											onClick={
 												() => {
 													data.publishDate = null;
 													onChanged();
 												}
-											}>Reset</Button>
+											}>Unpublish</Button>
 										: <Button
+											variant="success"
 											onClick={
 												() => {
 													data.publishDate = new Date();
@@ -426,7 +431,6 @@ export default function ArticleDetail() {
 					</div>
 				</div>
 			}
-
 		</div>
 	)
 }

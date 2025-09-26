@@ -20,6 +20,6 @@ public interface BannerRepository extends EntityRepository<Banner> {
 			from Banner b
 			where b.website.id = :websiteId
 		""")
-	Page<Banner> loadByWebsiteId(int websiteId, PageRequest pr);
+	Page<Banner> loadByWebsiteId(@Param("websiteId") int websiteId, PageRequest pr);
 
 }
