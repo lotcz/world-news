@@ -1,6 +1,9 @@
-- create images using ChatGPT/DALL-E
-- create spoke web in CodeIgniter
 - advertising
+
+- create spoke web in CodeIgniter
+
+- reset and start new db
+- test
 
 2.0
 ===
@@ -15,7 +18,9 @@
 - semantic search (in summary)
 - topic relevance/popularity
 - tag groups - if certain set of tags occurs together, merge it into a single tag
-- rethink tags - add tags to topic only, generate from summary
+- rethink tags
+  - add tags to topic only, generate from summary
+  - merge with realms?
 - community grammar nazi contest
 - mobile app
 - monitor news sources by country and allow comparison (potential use in propaganda debunk)

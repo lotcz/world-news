@@ -31,7 +31,8 @@ Pravesestalo.cz
   - stalo se tento den... (historicke okenko)
   - get some inspiration from publico.cz
   - publish interesting leaked materials
-  
+  - weather forecast
+
 justhappening.eu or justhappened.eu
 koncovka .today nebo .online nebo .news
 "daily news" search on YT is almost empty

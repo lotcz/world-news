@@ -28,6 +28,15 @@ function MainMenu() {
 			<h3 className="mt-2">Manage</h3>
 			<div className="ps-3">
 				<div>
+					<NavLink to="/topics">Topics</NavLink>
+				</div>
+				<div>
+					<NavLink to="/articles">Articles</NavLink>
+				</div>
+
+				<hr/>
+
+				<div>
 					<NavLink to="/ai-log">AI Log</NavLink>
 				</div>
 				<div>
@@ -43,13 +52,10 @@ function MainMenu() {
 					<NavLink to="/article-sources">Article Sources</NavLink>
 				</div>
 				<div>
-					<NavLink to="/topics">Topics</NavLink>
-				</div>
-				<div>
-					<NavLink to="/articles">Articles</NavLink>
-				</div>
-				<div>
 					<NavLink to="/images">Images</NavLink>
+				</div>
+				<div>
+					<NavLink to="/websites">Websites</NavLink>
 				</div>
 			</div>
 			<h3 className="mt-2"><Localize text="System"/></h3>

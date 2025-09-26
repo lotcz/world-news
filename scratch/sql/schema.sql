@@ -277,3 +277,37 @@ create table topic_image (
         on delete cascade,
     primary key (topic_id, image_id)
 );
+
+create table website (
+    id integer primary key GENERATED ALWAYS AS IDENTITY,
+    created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
+    name varchar(255) not null,
+    url varchar(255) not null,
+    description text,
+    language_id integer not null
+        constraint fk_website_language
+        references language
+);
+
+ALTER TABLE website
+ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
+create unique index idx_website_name
+    on website (name);
+
+create unique index idx_website_url
+    on website (url);
+
+
+create table website_realm (
+    website_id integer not null
+        constraint fk_website_realm_website
+        references website
+        on delete cascade,
+    realm_id integer not null
+        constraint fk_website_realm_realm
+        references realm
+        on delete cascade,
+    primary key (website_id, realm_id)
+);

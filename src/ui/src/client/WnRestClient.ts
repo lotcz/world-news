@@ -11,6 +11,7 @@ import {TagsClient} from "./TagsClient";
 import {TopicsClient} from "./TopicsClient";
 import {RealmsClient} from "./RealmsClient";
 import {ImagesClient} from "./ImagesClient";
+import {Website} from "../types/Website";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -32,6 +33,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public images: ImagesClient;
 
+	public websites: LookupClient<Website>;
+
 	constructor() {
 		super(conf.API_URL);
 
@@ -44,6 +47,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.articles = new ArticlesClient(this);
 		this.aiLog = new AiLogClient(this);
 		this.images = new ImagesClient(this);
+		this.websites = new LookupClient<Website>(this, 'websites');
 	}
 
 	version(): Promise<string> {

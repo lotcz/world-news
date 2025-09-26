@@ -19,6 +19,8 @@ import TopicDetail from "./topics/TopicDetail";
 import AiLogDetail from "./ailog/AiLogDetail";
 import ImagesList from "./images/ImagesList";
 import ImageDetail from "./images/ImageDetail";
+import WebsitesList from "./websites/WebsitesList";
+import WebsiteDetail from "./websites/WebsiteDetail";
 
 function Main() {
 	return (
@@ -94,6 +96,14 @@ function Main() {
 								<Route path=":id" element={<ImageDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<ImagesList/>}/>
+						</Route>
+						<Route path="websites">
+							<Route path="" element={<WebsitesList/>}/>
+							<Route path="detail">
+								<Route path="add" element={<WebsiteDetail/>}/>
+								<Route path=":id" element={<WebsiteDetail/>}/>
+							</Route>
+							<Route path=":pagingString" element={<WebsitesList/>}/>
 						</Route>
 						<Route path="*" element={<span>404</span>}/>
 					</Routes>

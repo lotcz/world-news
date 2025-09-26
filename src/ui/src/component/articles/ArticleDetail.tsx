@@ -1,16 +1,14 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
-import {ConfirmDialogContext, DateTimeInput, IconButton, Switch} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, DeleteButton, IconButton, SaveButton, Switch} from "zavadil-react-common";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import {BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
-import ArticleSourceInfo from "../articleSources/ArticleSourceInfo";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
 import ArticleTagsList from "./ArticleTagsList";
@@ -20,6 +18,7 @@ import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
 import {ImagezImagePreview} from "../images/ImagezImage";
 import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
+import ArticleSourceSelect from "../articleSources/ArticleSourceSelect";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';
@@ -40,6 +39,16 @@ export default function ArticleDetail() {
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [saving, setSaving] = useState<boolean>(false);
+
+	const onChanged = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setChanged(true);
+		},
+		[data]
+	);
 
 	useEffect(
 		() => {
@@ -81,6 +90,7 @@ export default function ArticleDetail() {
 		() => {
 			if (!data) return;
 			const inserting = NumberUtil.isEmpty(data.id);
+			setSaving(true);
 			restClient
 				.articles
 				.saveStub(data)
@@ -94,6 +104,7 @@ export default function ArticleDetail() {
 						setChanged(false);
 					})
 				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false))
 		},
 		[restClient, data, userAlerts, navigate]
 	);
@@ -123,9 +134,8 @@ export default function ArticleDetail() {
 				onClose: () => supplyImageDialog.hide(),
 				onSelected: (id) => {
 					data.mainImageId = id;
-					setData({...data});
 					supplyImageDialog.hide();
-					setChanged(true);
+					onChanged();
 				},
 				description: data.summary,
 				entityType: 'Topic',
@@ -145,17 +155,12 @@ export default function ArticleDetail() {
 				<Stack direction="horizontal" gap={2}>
 					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
-					<Button
+					<SaveButton
 						disabled={!changed}
 						onClick={saveData}
-						className="d-flex gap-2 align-items-center text-nowrap"
-					>
-						<div className="d-flex align-items-center gap-2">
-							<FaFloppyDisk/>
-							<div>Save</div>
-						</div>
-					</Button>
-					<Button variant="danger" onClick={deleteArticle}>Delete</Button>
+						loading={saving}
+					>Save</SaveButton>
+					<DeleteButton onClick={deleteArticle}>Delete</DeleteButton>
 				</Stack>
 			</div>
 			<Form className="p-3">
@@ -169,8 +174,7 @@ export default function ArticleDetail() {
 								checked={data.isLocked}
 								onChange={(e) => {
 									data.isLocked = e;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -185,8 +189,7 @@ export default function ArticleDetail() {
 									value={data.processingState}
 									onChange={(e) => {
 										data.processingState = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}}
 								/>
 							</div>
@@ -202,8 +205,7 @@ export default function ArticleDetail() {
 									id={data.languageId}
 									onChange={(e) => {
 										data.languageId = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}}
 								/>
 							</div>
@@ -211,20 +213,48 @@ export default function ArticleDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Source:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<ArticleSourceSelect
+								articleSourceId={data.sourceId}
+								onChange={(e) => {
+									data.sourceId = e;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Published:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
-							<div>
+							<div className="d-flex align-items-center gap-2">
 								<DateTimeInput
 									value={data.publishDate}
 									onChange={(e) => {
 										data.publishDate = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}}
 								/>
+								{
+									data.publishDate ? <Button
+											onClick={
+												() => {
+													data.publishDate = null;
+													onChanged();
+												}
+											}>Reset</Button>
+										: <Button
+											onClick={
+												() => {
+													data.publishDate = new Date();
+													onChanged();
+												}
+											}>Publish</Button>
+								}
 							</div>
-							<ArticleSourceInfo articleSourceId={data.sourceId}/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">
@@ -255,8 +285,7 @@ export default function ArticleDetail() {
 								value={StringUtil.getNonEmpty(data.originalUrl)}
 								onChange={(e) => {
 									data.originalUrl = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 							{
@@ -281,8 +310,7 @@ export default function ArticleDetail() {
 												checked={data.mainImageIsIllustrative}
 												onChange={(e) => {
 													data.mainImageIsIllustrative = e;
-													setData({...data});
-													setChanged(true);
+													onChanged();
 												}}
 												label="Illustrative photo"
 
@@ -299,8 +327,7 @@ export default function ArticleDetail() {
 												onClick={
 													() => {
 														data.mainImageId = null;
-														setData({...data});
-														setChanged(true);
+														onChanged();
 													}
 												}
 											>Remove</IconButton>
@@ -322,8 +349,7 @@ export default function ArticleDetail() {
 								value={data.title}
 								onChange={(e) => {
 									data.title = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -339,8 +365,7 @@ export default function ArticleDetail() {
 								value={StringUtil.getNonEmpty(data.summary)}
 								onChange={(e) => {
 									data.summary = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -356,8 +381,7 @@ export default function ArticleDetail() {
 								value={StringUtil.getNonEmpty(data.body)}
 								onChange={(e) => {
 									data.body = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -369,11 +393,10 @@ export default function ArticleDetail() {
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<Form.Control
 								type="text"
-								value={StringUtil.getNonEmpty(data.originalUid)}
+								value={StringUtil.getNonEmpty(data.uid)}
 								onChange={(e) => {
-									data.originalUid = e.target.value;
-									setData({...data});
-									setChanged(true);
+									data.uid = e.target.value;
+									onChanged();
 								}}
 							/>
 						</Col>

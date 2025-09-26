@@ -1,0 +1,16 @@
+import {EntityWithName} from "zavadil-ts-common";
+import {Language} from "./Language";
+
+export type WebsiteBase = EntityWithName & {
+	name: string;
+	url: string;
+	description?: string | null;
+}
+
+export type WebsiteStub = WebsiteBase & {
+	languageId: number;
+}
+
+export type Website = WebsiteBase & {
+	language: Language;
+}

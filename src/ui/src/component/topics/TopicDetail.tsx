@@ -260,7 +260,7 @@ export default function TopicDetail() {
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								as="textarea"
-								rows={5}
+								rows={7}
 								value={StringUtil.getNonEmpty(data.summary)}
 								onChange={(e) => {
 									data.summary = e.target.value;

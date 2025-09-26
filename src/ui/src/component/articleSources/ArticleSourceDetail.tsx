@@ -41,8 +41,14 @@ export default function ArticleSourceDetail() {
 				return;
 			}
 			setData(undefined);
-			restClient.articleSources.loadSingle(Number(id))
-				.then(setData)
+			restClient.articleSources
+				.loadSingle(Number(id))
+				.then(
+					(ars) => {
+						setData({...ars});
+						setChanged(false);
+					}
+				)
 				.catch((e: Error) => userAlerts.err(e))
 		},
 		[id, restClient, userAlerts]

@@ -48,7 +48,7 @@ export default function LanguageDetail() {
 						if (inserting) {
 							navigate(`/languages/detail/${f.id}`);
 						} else {
-							setData(f);
+							setData({...f});
 						}
 						setChanged(false);
 					})
