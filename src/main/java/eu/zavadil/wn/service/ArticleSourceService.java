@@ -4,7 +4,7 @@ import eu.zavadil.java.caching.Lazy;
 import eu.zavadil.java.spring.common.entity.cache.RepositoryLookupTableCache;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.java.util.StringUtils;
-import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.articleSource.ArticleSourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;

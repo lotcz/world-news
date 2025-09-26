@@ -10,7 +10,7 @@ import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsParams;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsResponse;
 import eu.zavadil.wn.ai.embeddings.repository.EmbeddingRepositoryBase;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 
 import java.util.List;
 

@@ -14,7 +14,7 @@ public interface TagRepository extends EntityRepository<Tag> {
 
 	@Query("""
 				select t
-				from Tag t
+				from Banner t
 				where t.name LIKE %:search%
 		""")
 	Page<Tag> searchInternal(@Param("search") String search, PageRequest pr);
@@ -26,7 +26,7 @@ public interface TagRepository extends EntityRepository<Tag> {
 	@Query("""
 			select t
 			from ArticleTagStub ats
-			join Tag t on (t.id = ats.id.tagId)
+			join Banner t on (t.id = ats.id.tagId)
 			where ats.id.articleId = :articleId
 		""")
 	List<Tag> loadByArticleId(int articleId);

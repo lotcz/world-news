@@ -6,6 +6,8 @@ export class EnumerationsClient {
 
 	public importType: LazyAsync<string[]>;
 
+	public bannerType: LazyAsync<string[]>;
+
 	public processingState: LazyAsync<string[]>;
 
 	constructor(client: RestClient) {
@@ -13,6 +15,10 @@ export class EnumerationsClient {
 
 		this.importType = new LazyAsync<string[]>(
 			() => this.client.getJson('enumerations/import-type')
+		);
+
+		this.bannerType = new LazyAsync<string[]>(
+			() => this.client.getJson('enumerations/banner-type')
 		);
 
 		this.processingState = new LazyAsync<string[]>(

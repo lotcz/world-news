@@ -1,4 +1,4 @@
-package eu.zavadil.wn.data;
+package eu.zavadil.wn.data.aiLog;
 
 public enum EntityType {
 	Article,

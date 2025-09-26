@@ -1,7 +1,7 @@
 package eu.zavadil.wn.data.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.image.Image;
 import eu.zavadil.wn.data.language.Language;

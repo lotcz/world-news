@@ -5,7 +5,7 @@ import eu.zavadil.wn.ai.embeddings.cache.EmbeddingsCache;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.repository.TopicEmbeddingsRepository;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.topic.TopicBase;
 import eu.zavadil.wn.data.topic.TopicStubRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -24,8 +24,8 @@ function MainMenu() {
 	);
 
 	return (
-		<div className="main-menu px-3">
-			<h3 className="mt-2">Manage</h3>
+		<div className="main-menu p-3">
+			<h4>Manage</h4>
 			<div className="ps-3">
 				<div>
 					<NavLink to="/topics">Topics</NavLink>
@@ -57,8 +57,11 @@ function MainMenu() {
 				<div>
 					<NavLink to="/websites">Websites</NavLink>
 				</div>
+				<div>
+					<NavLink to="/banners">Banners</NavLink>
+				</div>
 			</div>
-			<h3 className="mt-2"><Localize text="System"/></h3>
+			<h4 className="mt-2"><Localize text="System"/></h4>
 			<div className="ps-3">
 				<div className="text-nowrap">
 					<NavLink to="/"><Localize text="System State"/></NavLink>

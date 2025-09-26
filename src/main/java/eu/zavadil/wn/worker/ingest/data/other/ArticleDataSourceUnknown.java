@@ -1,7 +1,7 @@
 package eu.zavadil.wn.worker.ingest.data.other;
 
 import eu.zavadil.java.iterators.SmartIterator;
-import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.worker.ingest.data.ArticleData;
 import eu.zavadil.wn.worker.ingest.data.ArticleDataSource;

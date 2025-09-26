@@ -5,7 +5,7 @@ import eu.zavadil.wn.ai.embeddings.cache.EmbeddingsCache;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.engine.AiEmbeddingsEngine;
 import eu.zavadil.wn.ai.embeddings.repository.RealmEmbeddingsRepository;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.realm.RealmCache;
 import org.springframework.beans.factory.annotation.Autowired;

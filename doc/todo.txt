@@ -1,4 +1,8 @@
 - banners
+  - publish/unpublish (no delete)
+- auto publish internal articles
+- no delete for internal articles
+- article queue for image assignment for published articles
 
 - create spoke web in CodeIgniter
 
@@ -18,6 +22,10 @@
 - semantic search (in summary)
 - topic relevance/popularity
 - tag groups - if certain set of tags occurs together, merge it into a single tag
+- analytics
+  - log page views (link to article)
+- accept direct advertising
+- user paid program
 - rethink tags
   - add tags to topic only, generate from summary
   - merge with realms?

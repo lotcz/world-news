@@ -1,8 +1,6 @@
 package eu.zavadil.wn.data.aiLog;
 
 import eu.zavadil.java.spring.common.entity.EntityBase;
-import eu.zavadil.wn.data.AiOperation;
-import eu.zavadil.wn.data.EntityType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;

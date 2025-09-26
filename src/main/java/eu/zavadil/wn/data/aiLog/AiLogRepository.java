@@ -1,7 +1,6 @@
 package eu.zavadil.wn.data.aiLog;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
-import eu.zavadil.wn.data.EntityType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;

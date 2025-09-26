@@ -4,7 +4,7 @@ import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.wn.ai.AiLogService;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.aiLog.AiLog;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

@@ -32,6 +32,7 @@ Pravesestalo.cz
   - get some inspiration from publico.cz
   - publish interesting leaked materials
   - weather forecast
+  - articles without image appear as "toasts"
 
 justhappening.eu or justhappened.eu
 koncovka .today nebo .online nebo .news

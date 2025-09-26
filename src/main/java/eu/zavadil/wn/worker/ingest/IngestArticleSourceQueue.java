@@ -1,7 +1,7 @@
 package eu.zavadil.wn.worker.ingest;
 
 import eu.zavadil.java.spring.common.queues.PagedSmartQueue;
-import eu.zavadil.wn.data.ImportType;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.service.ArticleSourceService;

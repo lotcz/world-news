@@ -1,6 +1,6 @@
 import {createContext} from "react";
 import conf from "../config/conf.json";
-import {LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
+import {EntityClientWithStub, LookupClient, RestClientWithOAuth} from "zavadil-ts-common";
 import {Language} from "../types/Language";
 import {ClientStats, WnStats} from "../types/Stats";
 import {ArticleSource} from "../types/ArticleSource";
@@ -12,6 +12,7 @@ import {TopicsClient} from "./TopicsClient";
 import {RealmsClient} from "./RealmsClient";
 import {ImagesClient} from "./ImagesClient";
 import {Website} from "../types/Website";
+import {Banner, BannerStub} from "../types/Banner";
 
 export class WnRestClient extends RestClientWithOAuth {
 
@@ -35,6 +36,8 @@ export class WnRestClient extends RestClientWithOAuth {
 
 	public websites: LookupClient<Website>;
 
+	public banners: EntityClientWithStub<Banner, BannerStub>;
+
 	constructor() {
 		super(conf.API_URL);
 
@@ -48,6 +51,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		this.aiLog = new AiLogClient(this);
 		this.images = new ImagesClient(this);
 		this.websites = new LookupClient<Website>(this, 'websites');
+		this.banners = new EntityClientWithStub<Banner, BannerStub>(this, 'banners');
 	}
 
 	version(): Promise<string> {

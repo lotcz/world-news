@@ -3,7 +3,6 @@ package eu.zavadil.wn.data.articleSource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import eu.zavadil.java.util.StringUtils;
-import eu.zavadil.wn.data.ImportType;
 import eu.zavadil.wn.data.ProcessingState;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

@@ -21,6 +21,8 @@ import ImagesList from "./images/ImagesList";
 import ImageDetail from "./images/ImageDetail";
 import WebsitesList from "./websites/WebsitesList";
 import WebsiteDetail from "./websites/WebsiteDetail";
+import BannersList from "./banners/BannersList";
+import BannerDetail from "./banners/BannerDetail";
 
 function Main() {
 	return (
@@ -104,6 +106,14 @@ function Main() {
 								<Route path=":id" element={<WebsiteDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<WebsitesList/>}/>
+						</Route>
+						<Route path="banners">
+							<Route path="" element={<BannersList/>}/>
+							<Route path="detail">
+								<Route path="add" element={<BannerDetail/>}/>
+								<Route path=":id" element={<BannerDetail/>}/>
+							</Route>
+							<Route path=":pagingString" element={<BannersList/>}/>
 						</Route>
 						<Route path="*" element={<span>404</span>}/>
 					</Routes>

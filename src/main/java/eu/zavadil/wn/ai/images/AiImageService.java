@@ -1,7 +1,7 @@
 package eu.zavadil.wn.ai.images;
 
 import eu.zavadil.wn.ai.AiLogService;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

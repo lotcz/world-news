@@ -322,6 +322,7 @@ create table banner (
     name varchar(255) not null,
     type tp_banner_type not null,
     content_html text,
+    publish_date timestamp(6) with time zone,
     website_id integer not null
         constraint fk_banner_website
         references website
@@ -333,5 +334,3 @@ ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create index idx_banner_website_name
     on banner (website_id, name);
-
-

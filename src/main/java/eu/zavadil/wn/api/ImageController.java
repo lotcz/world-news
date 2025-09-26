@@ -9,7 +9,7 @@ import eu.zavadil.wn.ai.images.AiImageResponseType;
 import eu.zavadil.wn.ai.images.AiImageService;
 import eu.zavadil.wn.cc.CreativeCommons;
 import eu.zavadil.wn.cc.ImageSearchResult;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.image.Image;
 import eu.zavadil.wn.imagez.ImageHealthPayload;
 import eu.zavadil.wn.imagez.ImagezSettingsPayload;

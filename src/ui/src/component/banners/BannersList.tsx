@@ -6,23 +6,23 @@ import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {Website} from "../../types/Website";
+import {Banner} from "../../types/Banner";
 
-const HEADER: SelectableTableHeader<Website> = [
+const HEADER: SelectableTableHeader<Banner> = [
 	{name: 'name', label: 'Name'},
-	{name: 'url', label: 'Url'},
-	{name: 'description', label: 'Description'},
-	{name: 'language.name', label: 'Language'}
+	{name: 'type', label: 'Type'},
+	{name: 'website.name', label: 'Website'},
+	{name: 'publishDate', label: 'Published'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'name'}]};
 
-export default function WebsitesList() {
+export default function BannersList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<Website> | null>(null);
+	const [data, setData] = useState<Page<Banner> | null>(null);
 
 	const paging = useMemo(
 		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
@@ -33,18 +33,18 @@ export default function WebsitesList() {
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
-		navigate("/websites/detail/add")
+		navigate("/banners/detail/add")
 	};
 
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/websites/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/banners/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);
 
-	const navigateToDetail = (w: Website) => {
-		navigate(`/websites/detail/${w.id}`);
+	const navigateToDetail = (b: Banner) => {
+		navigate(`/banners/detail/${b.id}`);
 	}
 
 	const applySearch = useCallback(
@@ -61,7 +61,7 @@ export default function WebsitesList() {
 		() => {
 			setData(null);
 			restClient
-				.websites
+				.banners
 				.loadPage(paging)
 				.then(setData)
 				.catch((e: Error) => {

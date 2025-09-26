@@ -2,8 +2,8 @@ package eu.zavadil.wn.worker.compile;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.wn.ai.assistant.AiAssistantService;
-import eu.zavadil.wn.data.AiOperation;
-import eu.zavadil.wn.data.EntityType;
+import eu.zavadil.wn.data.aiLog.AiOperation;
+import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.language.Language;

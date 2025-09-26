@@ -44,7 +44,7 @@ public class WebsiteController {
 
 	@GetMapping("{id}")
 	public Website load(@PathVariable int id) {
-		return this.websiteService.get(id);
+		return this.websiteService.loadById(id);
 	}
 
 	@PutMapping("{id}")

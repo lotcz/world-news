@@ -7,8 +7,9 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
 import {SaveButton} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
-import {Website} from "../../types/Website";
-import {LanguageSelect} from "../languages/LanguageSelect";
+import {BannerStub} from "../../types/Banner";
+import {WebsiteIdSelect} from "../websites/WebsiteSelect";
+import BannerTypeSelect from "./BannerTypeSelect";
 
 
 const COL_1_MD = 3;
@@ -16,12 +17,12 @@ const COL_2_MD = 5;
 const COL_1_LG = 1;
 const COL_2_LG = 6;
 
-export default function WebsiteDetail() {
+export default function BannerDetail() {
 	const {id} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Website>();
+	const [data, setData] = useState<BannerStub>();
 	const [changed, setChanged] = useState<boolean>(false);
 
 	const onChanged = useCallback(
@@ -37,24 +38,17 @@ export default function WebsiteDetail() {
 		() => {
 			setData(undefined);
 			if (!id) {
-				restClient.languages
-					.loadAll()
-					.then(
-						(languages) => {
-							setData({
-								name: '',
-								url: '',
-								language: languages[0]
-							});
-						}
-					).catch((e) => userAlerts.err(e));
-				return;
+				setData({
+					name: '',
+					type: 'Content'
+				});
 			}
-			restClient.websites
-				.loadSingle(Number(id))
+			restClient
+				.banners
+				.loadSingleStub(Number(id))
 				.then(
-					(w) => {
-						setData({...w});
+					(b) => {
+						setData({...b});
 						setChanged(false);
 					}
 				)
@@ -70,14 +64,14 @@ export default function WebsiteDetail() {
 			if (!data) return;
 			const inserting = NumberUtil.isEmpty(data.id);
 			restClient
-				.websites
-				.save(data)
+				.banners
+				.saveStub(data)
 				.then(
-					(f) => {
+					(b) => {
 						if (inserting) {
-							navigate(`/websites/detail/${f.id}`, {replace: true});
+							navigate(`/banners/detail/${b.id}`, {replace: true});
 						} else {
-							setData(f);
+							setData({...b});
 						}
 						setChanged(false);
 					})
@@ -103,6 +97,22 @@ export default function WebsiteDetail() {
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Website:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<WebsiteIdSelect
+								id={data.websiteId}
+								onChange={
+									(e) => {
+										data.websiteId = e;
+										onChanged();
+									}
+								}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Name:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -120,48 +130,31 @@ export default function WebsiteDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Language:</Form.Label>
+							<Form.Label>Type:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<LanguageSelect
-								language={data.language}
+							<BannerTypeSelect
+								value={data.type}
 								onChange={
-									(e) => {
-										if (e) {
-											data.language = e;
-											onChanged();
-										}
+									(value) => {
+										data.type = StringUtil.toString(value);
+										onChanged();
 									}
 								}
 							/>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>URL:</Form.Label>
-						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
-							<Form.Control
-								type="text"
-								value={StringUtil.toString(data.url)}
-								onChange={(e) => {
-									data.url = e.target.value;
-									onChanged();
-								}}
-							/>
-						</Col>
-					</Row>
 					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Description:</Form.Label>
+							<Form.Label>Content HTML:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								as="textarea"
 								rows={5}
-								value={StringUtil.toString(data.description)}
+								value={StringUtil.toString(data.contentHtml)}
 								onChange={(e) => {
-									data.description = StringUtil.emptyToNull(e.target.value);
+									data.contentHtml = StringUtil.emptyToNull(e.target.value);
 									onChanged();
 								}}
 							/>
