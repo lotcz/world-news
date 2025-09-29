@@ -17,7 +17,6 @@ function RealmsList({activeTab}: RealmsListProps) {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
-	//const [activeTab, setActiveTab] = useState<string>("tree");
 	const [paging, setPaging] = useState<PagingRequest>(PagingUtil.pagingRequestFromString(pagingString));
 	const [searchInput, setSearchInput] = useState<string>('');
 

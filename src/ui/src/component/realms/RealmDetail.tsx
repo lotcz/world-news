@@ -8,7 +8,7 @@ import {Realm} from "../../types/Realm";
 import RealmChildrenList from "./RealmChildrenList";
 import RealmSelect from "./RealmSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {ConfirmDialogContext, SaveButton, Switch} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, SaveButton, Switch} from "zavadil-react-common";
 import {BsArrowUpSquare} from "react-icons/bs";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 import RealmTopicsList from "./RealmTopicsList";
@@ -32,6 +32,15 @@ export default function RealmDetail() {
 	const [data, setData] = useState<Realm>();
 	const [saving, setSaving] = useState<boolean>(false);
 	const [changed, setChanged] = useState<boolean>(false);
+
+	const onChanged = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setChanged(true);
+		},
+		[data]
+	);
 
 	useEffect(
 		() => {
@@ -145,8 +154,7 @@ export default function RealmDetail() {
 								checked={data.isHidden}
 								onChange={(e) => {
 									data.isHidden = e;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -161,14 +169,47 @@ export default function RealmDetail() {
 								onChange={
 									(e) => {
 										data.parentId = e;
-										setData({...data});
-										setChanged(true);
+										onChanged();
 									}
 								}
 							/>
 							{
 								data.parentId && <Link to={`/realms/detail/${data.parentId}`}><BsArrowUpSquare/></Link>
 							}
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Published:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							<div className="d-flex align-items-center gap-2">
+								<DateTimeInput
+									value={data.publishDate}
+									onChange={(e) => {
+										data.publishDate = e;
+										onChanged();
+									}}
+								/>
+								{
+									data.publishDate ? <Button
+											variant="warning"
+											onClick={
+												() => {
+													data.publishDate = null;
+													onChanged();
+												}
+											}>Unpublish</Button>
+										: <Button
+											variant="success"
+											onClick={
+												() => {
+													data.publishDate = new Date();
+													onChanged();
+												}
+											}>Publish</Button>
+								}
+							</div>
 						</Col>
 					</Row>
 					<Row className="align-items-center">
@@ -181,8 +222,7 @@ export default function RealmDetail() {
 								value={data.name}
 								onChange={(e) => {
 									data.name = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -198,8 +238,7 @@ export default function RealmDetail() {
 								value={data.summary}
 								onChange={(e) => {
 									data.summary = e.target.value;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 							/>
 						</Col>

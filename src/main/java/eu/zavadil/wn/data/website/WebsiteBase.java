@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+
 @Slf4j
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -26,5 +28,19 @@ public class WebsiteBase extends EntityWithNameBase {
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
+
+	private static final int TOKEN_SIZE = 255;
+
+	@Column(length = TOKEN_SIZE)
+	@Size(max = TOKEN_SIZE)
+	private String secretImportToken;
+
+	private boolean useSsl;
+
+	private Instant importLastStarted;
+
+	private Instant importLastHeartbeat;
+
+	private Instant importLastPublishDate;
 
 }

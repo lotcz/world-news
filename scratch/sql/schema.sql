@@ -101,7 +101,8 @@ create table realm (
        	references realm,
     name varchar(255),
     summary text,
-    topic_count int not null default 0
+    topic_count int not null default 0,
+    publish_date timestamp(6) with time zone
 );
 
 ALTER TABLE realm
@@ -293,11 +294,17 @@ create table website (
     description text,
     language_id integer not null
         constraint fk_website_language
-        references language
+        references language,
+    use_ssl boolean default false,
+	secret_import_token varchar(255),
+	import_last_started timestamp(6) with time zone,
+	import_last_heartbeat timestamp(6) with time zone,
+	import_last_publish_date timestamp(6) with time zone
 );
 
-ALTER TABLE website
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
+
+alter table website add column
 
 create unique index idx_website_name
     on website (name);

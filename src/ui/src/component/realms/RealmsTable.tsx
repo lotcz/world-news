@@ -12,8 +12,7 @@ const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
 	{name: 'topicCount', label: 'Topics'},
-	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'},
+	{name: 'publishDate', label: 'Published'},
 	{name: '', label: ''}
 ];
 
@@ -69,8 +68,7 @@ function RealmsTable({paging, onItemSelected, onPageRequested}: RealmsTableProps
 												<td>{item.name}</td>
 												<td>{item.summary}</td>
 												<td>{item.topicCount}</td>
-												<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
-												<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+												<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 												<td><IsHiddenIcon hidden={item.isHidden}/></td>
 											</tr>
 										);

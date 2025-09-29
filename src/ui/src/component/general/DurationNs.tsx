@@ -1,12 +1,10 @@
-import {DateUtil} from "zavadil-ts-common";
+import {Duration} from "zavadil-react-common";
 
 export type DurationNsProps = {
 	ns?: number | null;
 };
 
-function DurationNs({ns}: DurationNsProps) {
+export default function DurationNs({ns}: DurationNsProps) {
 	if (ns === undefined || ns === null) return <></>;
-	return <span>{DateUtil.formatDuration(ns / 1000000)}</span>;
+	return <Duration ms={(ns / 1000000)}/>;
 }
-
-export default DurationNs;

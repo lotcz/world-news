@@ -13,6 +13,7 @@ const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
 	{name: 'topicCount', label: 'Topics'},
+	{name: 'publishDate', label: 'Published'},
 	{name: '', label: ''}
 ];
 

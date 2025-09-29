@@ -4,6 +4,7 @@ import {IconButton} from "zavadil-react-common";
 import {BiSolidMinusSquare, BiSolidPlusSquare, BiSquare} from "react-icons/bi";
 import {Stack} from "react-bootstrap";
 import IsHiddenIcon from "../general/IsHiddenIcon";
+import {DateUtil} from "zavadil-ts-common";
 
 export type RealmsTreeRowProps = {
 	level: number;
@@ -49,6 +50,7 @@ function RealmsTreeRow({level, tree, expandedIds, onItemSelected, onExpanded, on
 					</td>
 					<td>{tree.realm.summary}</td>
 					<td>{tree.totalTopicCount}</td>
+					<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(tree.realm.publishDate)}</td>
 					<td><IsHiddenIcon hidden={tree.realm.isHidden}/></td>
 				</tr>
 			}

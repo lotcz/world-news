@@ -5,7 +5,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {ConfirmDialogContext, DeleteButton, SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTime, DeleteButton, Elapsed, SaveButton, Switch} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {Website} from "../../types/Website";
 import {LanguageSelect} from "../languages/LanguageSelect";
@@ -66,7 +66,8 @@ export default function WebsiteDetail() {
 							setData({
 								name: '',
 								url: '',
-								language: languages[0]
+								language: languages[0],
+								useSsl: false
 							});
 						}
 					).catch((e) => userAlerts.err(e));
@@ -184,6 +185,21 @@ export default function WebsiteDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label htmlFor="useSsl">SSL:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								id="useSsl"
+								checked={data.useSsl}
+								onChange={(e) => {
+									data.useSsl = e;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>URL:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -192,6 +208,21 @@ export default function WebsiteDetail() {
 								value={StringUtil.toString(data.url)}
 								onChange={(e) => {
 									data.url = e.target.value;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Secret token:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								type="text"
+								value={StringUtil.toString(data.secretImportToken)}
+								onChange={(e) => {
+									data.secretImportToken = e.target.value;
 									onChanged();
 								}}
 							/>
@@ -211,6 +242,21 @@ export default function WebsiteDetail() {
 									onChanged();
 								}}
 							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Import:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<div className="d-flex align-items-center gap-2">
+								<div>Last import:</div>
+								<DateTime value={data.importLastStarted}/>
+								<div>Last heartbeat:</div>
+								<strong><Elapsed date={data.importLastHeartbeat}/></strong>
+								<div>Last publish date:</div>
+								<DateTime value={data.importLastPublishDate}/>
+							</div>
 						</Col>
 					</Row>
 				</Stack>

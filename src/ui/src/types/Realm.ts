@@ -5,6 +5,7 @@ export type Realm = EntityWithName & {
 	parentId?: number | null;
 	summary?: string;
 	topicCount: number;
+	publishDate?: Date | null;
 }
 
 export type RealmTree = {

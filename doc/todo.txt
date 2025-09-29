@@ -33,6 +33,7 @@
 - creative commons
   - register and implement OAuth flow
 - separate entity for external article?
+- allow users to report bad article
 
 Social
   - Facebook

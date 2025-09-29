@@ -5,6 +5,11 @@ export type WebsiteBase = EntityWithName & {
 	name: string;
 	url: string;
 	description?: string | null;
+	secretImportToken?: string | null;
+	useSsl: boolean;
+	importLastStarted?: Date | null;
+	importLastHeartbeat?: Date | null;
+	importLastPublishDate?: Date | null;
 }
 
 export type WebsiteStub = WebsiteBase & {

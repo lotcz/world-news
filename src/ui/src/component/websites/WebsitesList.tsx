@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
-import {SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
+import {Elapsed, SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
 import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -12,7 +12,8 @@ const HEADER: SelectableTableHeader<Website> = [
 	{name: 'name', label: 'Name'},
 	{name: 'url', label: 'Url'},
 	{name: 'description', label: 'Description'},
-	{name: 'language.name', label: 'Language'}
+	{name: 'language.name', label: 'Language'},
+	{name: 'importLastHeartbeat', label: 'Heartbeat', renderer: (w) => <Elapsed date={w.importLastHeartbeat}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'name'}]};

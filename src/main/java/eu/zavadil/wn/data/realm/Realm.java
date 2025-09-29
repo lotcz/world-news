@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.realm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import jakarta.persistence.Column;
@@ -8,6 +9,8 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.Instant;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -21,6 +24,13 @@ public class Realm extends EntityWithNameBase {
 
 	@JsonProperty("isHidden")
 	private boolean isHidden;
+
+	private Instant publishDate;
+
+	@JsonIgnore
+	public boolean isPublished() {
+		return this.publishDate != null;
+	}
 
 	@Column(name = "parent_id")
 	private Integer parentId;

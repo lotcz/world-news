@@ -34,11 +34,27 @@ Pravesestalo.cz
   - weather forecast
   - articles without image appear as "toasts"
 
+- investigative articles with content quoting Reporter, Neovlivni or Odkryto
+
 justhappening.eu or justhappened.eu
 koncovka .today nebo .online nebo .news
 "daily news" search on YT is almost empty
 
+Kdysi se stalo
+==============
+
+cover czech history with longer well prepared stories
+- Sametovka
+- 90s
+- Mrazek
+- LTO
+- Běla
+- Gross
+- Paroubek
+
+
 El poblitico
+pivnizpravy.cz (domain available on wedos ?)
 
 Satire and parody
   - El poblitico (with merch)
