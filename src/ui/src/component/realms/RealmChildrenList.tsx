@@ -57,7 +57,7 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 					<tbody>
 					{
 						(data.length === 0) ? <tr>
-								<td colSpan={4}>Nothing.</td>
+								<td colSpan={5}>Nothing.</td>
 							</tr> :
 							data.map((r, index) => {
 								return (

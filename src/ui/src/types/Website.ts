@@ -10,6 +10,7 @@ export type WebsiteBase = EntityWithName & {
 	importLastStarted?: Date | null;
 	importLastHeartbeat?: Date | null;
 	importLastArticleUpdatedOn?: Date | null;
+	importLastBannerUpdatedOn?: Date | null;
 }
 
 export type WebsiteStub = WebsiteBase & {

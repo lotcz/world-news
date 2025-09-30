@@ -5,7 +5,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {ConfirmDialogContext, DateTime, DeleteButton, Elapsed, SaveButton, Switch} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTime, DateTimeInput, DeleteButton, Elapsed, SaveButton, Switch} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {Website} from "../../types/Website";
 import {LanguageSelect} from "../languages/LanguageSelect";
@@ -16,7 +16,7 @@ const DEFAULT_TAB = 'banners';
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
-const COL_1_LG = 1;
+const COL_1_LG = 2;
 const COL_2_LG = 6;
 
 export default function WebsiteDetail() {
@@ -148,7 +148,7 @@ export default function WebsiteDetail() {
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
 					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label>Name:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -165,7 +165,7 @@ export default function WebsiteDetail() {
 						</Col>
 					</Row>
 					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label>Language:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
@@ -185,7 +185,7 @@ export default function WebsiteDetail() {
 						</Col>
 					</Row>
 					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label htmlFor="useSsl">SSL:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -200,7 +200,7 @@ export default function WebsiteDetail() {
 						</Col>
 					</Row>
 					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label>URL:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -215,7 +215,7 @@ export default function WebsiteDetail() {
 						</Col>
 					</Row>
 					<Row className="align-items-center">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label>Secret token:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -230,7 +230,7 @@ export default function WebsiteDetail() {
 						</Col>
 					</Row>
 					<Row className="align-items-start">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
 							<Form.Label>Description:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -245,18 +245,51 @@ export default function WebsiteDetail() {
 							/>
 						</Col>
 					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
+							<Form.Label>Import articles since:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<DateTimeInput
+									value={data.importLastArticleUpdatedOn}
+									onChange={
+										(d) => {
+											data.importLastArticleUpdatedOn = d;
+											onChanged();
+										}
+									}
+								/>
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
+							<Form.Label>Import banners since:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<DateTimeInput
+									value={data.importLastBannerUpdatedOn}
+									onChange={
+										(d) => {
+											data.importLastBannerUpdatedOn = d;
+											onChanged();
+										}
+									}
+								/>
+							</div>
+						</Col>
+					</Row>
 					<Row className="align-items-start">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Import:</Form.Label>
+						<Col md={COL_1_MD} lg={COL_1_LG} className="d-flex justify-content-end">
+							<Form.Label>Last import started:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<div className="d-flex align-items-center gap-2">
-								<div>Last import:</div>
-								<DateTime value={data.importLastStarted}/>
+								<strong><DateTime value={data.importLastStarted}/></strong>
 								<div>Last heartbeat:</div>
 								<strong><Elapsed date={data.importLastHeartbeat}/></strong>
-								<div>Last publish date:</div>
-								<DateTime value={data.importLastArticleUpdatedOn}/>
 							</div>
 						</Col>
 					</Row>

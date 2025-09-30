@@ -6,6 +6,7 @@ import eu.zavadil.wn.data.banner.Banner;
 import eu.zavadil.wn.data.banner.BannerRepository;
 import eu.zavadil.wn.data.banner.BannerStub;
 import eu.zavadil.wn.data.banner.BannerStubRepository;
+import eu.zavadil.wn.data.website.Website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,4 +48,7 @@ public class BannerService {
 		return this.bannerRepository.loadByWebsiteId(websiteId, pr);
 	}
 
+	public Page<Banner> loadBannersForWebsiteImport(Website website, int size) {
+		return this.bannerRepository.loadBannersForImport(website.getId(), website.getImportLastBannerUpdatedOn(), size);
+	}
 }
