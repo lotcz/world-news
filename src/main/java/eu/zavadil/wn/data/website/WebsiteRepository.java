@@ -11,11 +11,12 @@ public interface WebsiteRepository extends EntityRepository<Website> {
 	@Query("""
 			select w
 			from Website w
-			where w.name LIKE %:search%
+			where w.name ILIKE %:search%
+				or w.description ILIKE %:search%
+				or w.url ILIKE %:search%
 		""")
 	Page<Website> search(@Param("search") String search, Pageable pr);
 
 	Page<Website> findAllByLanguageId(@Param("languageId") int languageId, Pageable pr);
-
 
 }

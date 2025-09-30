@@ -12,7 +12,8 @@ public interface ImageRepository extends EntityRepository<Image> {
 	@Query("""
 			select i
 			from Image i
-			where i.name LIKE %:search%
+			where i.name ILIKE %:search%
+				or i.description ILIKE %:search%
 		""")
 	Page<Image> search(String search, Pageable pr);
 

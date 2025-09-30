@@ -1,7 +1,11 @@
 package eu.zavadil.wn.data.realm;
 
 import eu.zavadil.java.spring.common.entity.cache.RepositoryNamedLookupCache;
+import eu.zavadil.java.spring.common.paging.PagingUtils;
+import eu.zavadil.java.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +17,18 @@ public class RealmCache extends RepositoryNamedLookupCache<Realm> {
 	@Autowired
 	public RealmCache(RealmRepository repository) {
 		super(repository, Realm::new);
+	}
+
+	public Page<Realm> search(String search, PageRequest pr) {
+		List<Realm> filtered = StringUtils.isBlank(search)
+			? this.all()
+			: this.all().stream()
+			.filter(
+				(item) -> StringUtils.safeContainsIgnoreCase(item.getName(), search)
+					|| StringUtils.safeContainsIgnoreCase(item.getSummary(), search)
+			)
+			.toList();
+		return PagingUtils.getPage(filtered, pr);
 	}
 
 	public List<Integer> pathToRoot(Realm realm) {

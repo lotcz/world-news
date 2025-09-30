@@ -16,7 +16,8 @@ public interface TopicRepository extends EntityRepository<Topic> {
 	@Query("""
 			select t
 			from Topic t
-			where t.name LIKE %:search%
+			where t.name ILIKE %:search%
+				or t.summary ILIKE %:search%
 		""")
 	Page<Topic> search(@Param("search") String search, Pageable pr);
 

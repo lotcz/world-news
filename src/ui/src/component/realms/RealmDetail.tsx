@@ -13,6 +13,7 @@ import {BsArrowUpSquare} from "react-icons/bs";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 import RealmTopicsList from "./RealmTopicsList";
 import BackIconLink from "../general/BackIconLink";
+import CountBadge from "../general/CountBadge";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'sub-realms';
@@ -254,7 +255,15 @@ export default function RealmDetail() {
 						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
 					>
 						<Tab title="Sub-realms" eventKey="sub-realms"/>
-						<Tab title="Topics" eventKey="topics"/>
+						<Tab
+							title={
+								<div className="d-flex align-items-center gap-2">
+									<div>Topics</div>
+									<CountBadge count={data.topicCount}/>
+								</div>
+							}
+							eventKey="topics"
+						/>
 						<Tab title="Similar Topics" eventKey="similar-topics"/>
 					</Tabs>
 					<div className="p-3">

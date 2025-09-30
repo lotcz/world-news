@@ -19,7 +19,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -46,7 +45,6 @@ public class TopicService {
 
 	private void onTopicSaved(TopicBase topic) {
 		this.topicEmbeddingsService.updateEmbedding(topic);
-		topic.setLastUpdatedOn(Instant.now());
 		this.articleRepository.markInternalArticles(topic.getId(), topic.getLastUpdatedOn());
 	}
 

@@ -13,9 +13,10 @@ import java.time.Instant;
 public interface BannerRepository extends EntityRepository<Banner> {
 
 	@Query("""
-				select t
-				from Banner t
-				where t.name LIKE %:search%
+				select b
+				from Banner b
+				where b.name ILIKE %:search%
+					or b.contentHtml ILIKE %:search%
 		""")
 	Page<Banner> search(@Param("search") String search, Pageable pr);
 

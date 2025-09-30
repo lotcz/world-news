@@ -15,7 +15,7 @@ public interface TagRepository extends EntityRepository<Tag> {
 	@Query("""
 				select t
 				from Banner t
-				where t.name LIKE %:search%
+				where t.name ILIKE %:search%
 		""")
 	Page<Tag> searchInternal(@Param("search") String search, Pageable pr);
 
