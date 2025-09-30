@@ -20,14 +20,14 @@ const HEADER = [
 	{name: '', label: ''},
 ];
 
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'createdOn', desc: true}]}
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]}
 
 function ArticlesList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<Article> | null>(null);
+	const [data, setData] = useState<Page<Article>>();
 
 	const paging = useMemo(
 		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
@@ -64,14 +64,12 @@ function ArticlesList() {
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(undefined);
 			restClient
 				.articles
 				.loadPage(paging)
 				.then(setData)
-				.catch((e: Error) => {
-					setData(null);
-					userAlerts.err(e);
-				});
+				.catch((e: Error) => userAlerts.err(e));
 		},
 		[paging, restClient, userAlerts]
 	);
@@ -104,7 +102,7 @@ function ArticlesList() {
 
 			<div className="pt-2 px-3">
 				{
-					(data === null) ? <TablePlaceholder/>
+					(data === undefined) ? <TablePlaceholder/>
 						: (
 							<AdvancedTable
 								header={HEADER}

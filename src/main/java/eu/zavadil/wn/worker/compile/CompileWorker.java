@@ -50,7 +50,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	public void compile(Topic topic) {
-		if (topic.isLocked()) return;
+		if (topic.isLocked() || topic.isToast()) return;
 
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
@@ -72,7 +72,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				}
 			);
 
-		if (compiled.isLocked()) return;
+		if (compiled.isLocked() || compiled.isToast()) return;
 
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {

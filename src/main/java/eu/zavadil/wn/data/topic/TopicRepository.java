@@ -29,6 +29,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			where t.processingState = 'Waiting'
 				and t.articleCountExternal > 1
 				and t.isLocked = false
+				and t.isToast = false
 		""")
 	Page<Topic> loadCompilationQueue(Pageable pr);
 

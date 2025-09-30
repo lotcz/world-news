@@ -16,6 +16,8 @@ const HEADER: SelectableTableHeader<Image> = [
 	{name: 'license', label: 'License'},
 ];
 
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'createdOn', desc: true}]};
+
 export type SupplyImageExistingProps = {
 	search: string;
 	onSearchChanged: (search: string) => any;
@@ -26,7 +28,7 @@ export default function SupplyImageExisting({onSelected, search, onSearchChanged
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Page<Image> | null>(null);
-	const [paging, setPaging] = useState<PagingRequest>({page: 0, size: 10});
+	const [paging, setPaging] = useState<PagingRequest>(DEFAULT_PAGING);
 
 	const loadPageHandler = useCallback(
 		() => {

@@ -1,4 +1,3 @@
-- dont compile body of isToast topics or articles
 - create spoke web in CodeIgniter
 
 - reset and start new db
