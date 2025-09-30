@@ -299,7 +299,7 @@ create table website (
 	secret_import_token varchar(255),
 	import_last_started timestamp(6) with time zone,
 	import_last_heartbeat timestamp(6) with time zone,
-	import_last_publish_date timestamp(6) with time zone
+	import_last_article_updated_on timestamp(6) with time zone
 );
 
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";

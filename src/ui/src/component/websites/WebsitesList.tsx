@@ -61,6 +61,7 @@ export default function WebsitesList() {
 	const loadPageHandler = useCallback(
 		() => {
 			setData(null);
+			restClient.websites.reset();
 			restClient
 				.websites
 				.loadPage(paging)

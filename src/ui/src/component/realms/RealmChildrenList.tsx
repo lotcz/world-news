@@ -4,7 +4,7 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Realm} from "../../types/Realm";
-import {TablePlaceholder} from "zavadil-react-common";
+import {DateTime, TablePlaceholder} from "zavadil-react-common";
 
 export type RealmSimilarTopicsListProps = {
 	realmId: number;
@@ -51,6 +51,7 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 						<th>Name</th>
 						<th>Summary</th>
 						<th>Topics</th>
+						<th>Published</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -65,6 +66,7 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 										<td>{r.name}</td>
 										<td>{r.summary}</td>
 										<td>{r.topicCount}</td>
+										<td><DateTime value={r.publishDate}/></td>
 									</tr>
 								);
 							})

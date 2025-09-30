@@ -2,7 +2,7 @@ package eu.zavadil.wn.data.aiLog;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,9 +19,9 @@ public interface AiLogRepository extends EntityRepository<AiLog> {
 	Page<AiLog> filter(
 		@Param("fromDate") Instant fromDate,
 		@Param("toDate") Instant toDate,
-		PageRequest pr
+		Pageable pr
 	);
 
-	Page<AiLog> findAllByEntityTypeAndEntityId(EntityType entityType, int entityId, PageRequest pr);
+	Page<AiLog> findAllByEntityTypeAndEntityId(EntityType entityType, int entityId, Pageable pr);
 
 }

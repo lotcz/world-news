@@ -2,9 +2,9 @@ package eu.zavadil.wn.data.article;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
 import eu.zavadil.wn.data.ProcessingState;
-import eu.zavadil.wn.data.articleSource.ImportType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,13 +22,13 @@ public interface ArticleRepository extends EntityRepository<Article> {
 				or a.originalUrl LIKE %:search%
 				or a.uid LIKE %:search%
 		""")
-	Page<Article> search(@Param("search") String search, PageRequest pr);
+	Page<Article> search(@Param("search") String search, Pageable pr);
 
 	List<Article> findAllByTopicId(@Param("topicId") int topicId);
 
-	Page<Article> findAllByTopicId(@Param("topicId") int topicId, PageRequest pr);
+	Page<Article> findAllByTopicId(@Param("topicId") int topicId, Pageable pr);
 
-	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, PageRequest pr);
+	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, Pageable pr);
 
 	@Query("""
 			select a
@@ -36,7 +36,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			join ArticleTagStub ats on (a.id = ats.id.articleId)
 			where ats.id.tagId = :tagId
 		""")
-	Page<Article> loadByTagId(int tagId, PageRequest pr);
+	Page<Article> loadByTagId(int tagId, Pageable pr);
 
 	Optional<Article> findFirstBySourceIdAndUid(int sourceId, String uid);
 
@@ -46,7 +46,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	Page<Article> findAllByProcessingStateAndLastUpdatedOnLessThanOrderByLastUpdatedOnAsc(
 		ProcessingState state,
 		Instant lastUpdatedOn,
-		PageRequest pr
+		Pageable pr
 	);
 
 	@Query("""
@@ -54,25 +54,47 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			from Article a
 			where a.processingState = 'Waiting'
 		""")
-	Page<Article> loadAnnotationQueue(PageRequest pr);
+	Page<Article> loadAnnotationQueue(Pageable pr);
 
 	@Query("""
 			select a
 			from Article a
+			join a.topic t
 			where a.processingState = 'Done'
-				and a.mainImage is null
-				and a.source.id in (select s.id from ArticleSource s where s.importType = :importType)
+				and a.source.id = :articleSourceId
+				and t.realm.id in :realmIds
 		""")
-	Page<Article> loadImageSupplyQueueInternal(ImportType importType, PageRequest pr);
+	Page<Article> loadArticlesForImportAll(
+		@Param("articleSourceId") int articleSourceId,
+		@Param("realmIds") List<Integer> realmIds,
+		Pageable pr
+	);
 
-	/**
-	 * Unused - we prefer to assign image to topic
-	 */
-	default Page<Article> loadImageSupplyQueue(int size) {
-		return this.loadImageSupplyQueueInternal(
-			ImportType.Internal,
-			PageRequest.of(0, size, Sort.by("lastUpdatedOn"))
-		);
+	@Query("""
+			select a
+			from Article a
+			join a.topic t
+			where a.processingState = 'Done'
+				and a.source.id = :articleSourceId
+				and t.realm.id in :realmIds
+				and a.lastUpdatedOn > :lastArticleUpdatedOn
+		""")
+	Page<Article> loadArticlesForImportFromLastUpdated(
+		@Param("articleSourceId") int articleSourceId,
+		@Param("realmIds") List<Integer> realmIds,
+		@Param("lastArticleUpdatedOn") Instant lastArticleUpdatedOn,
+		Pageable pr
+	);
+
+	default Page<Article> loadArticlesForImport(
+		int articleSourceId,
+		List<Integer> realmIds,
+		Instant lastArticleUpdatedOn,
+		int size
+	) {
+		PageRequest pr = PageRequest.of(0, size, Sort.by("lastUpdatedOn"));
+		return lastArticleUpdatedOn == null ? this.loadArticlesForImportAll(articleSourceId, realmIds, pr)
+			: this.loadArticlesForImportFromLastUpdated(articleSourceId, realmIds, lastArticleUpdatedOn, pr);
 	}
 
 }

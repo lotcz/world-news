@@ -10,6 +10,7 @@ import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.realm.RealmCache;
 import eu.zavadil.wn.data.realm.RealmTree;
+import eu.zavadil.wn.data.website.Website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -115,4 +116,12 @@ public class RealmService {
 		if (similar.isEmpty()) return null;
 		return similar.get(0).getEntity();
 	}
+
+	public List<Realm> findAllPublishedForWebsite(Website website) {
+		// todo: find realms for website, even those not published
+		return this.realmCache.all().stream()
+			.filter(Realm::isPublished)
+			.toList();
+	}
+
 }

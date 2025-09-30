@@ -49,7 +49,7 @@ function MainMenu() {
 					<NavLink to="/tags">Tags</NavLink>
 				</div>
 				<div>
-					<NavLink to="/realms/tree">Realms</NavLink>
+					<NavLink to="/realms">Realms</NavLink>
 				</div>
 				<div className="text-nowrap">
 					<NavLink to="/article-sources">Article Sources</NavLink>

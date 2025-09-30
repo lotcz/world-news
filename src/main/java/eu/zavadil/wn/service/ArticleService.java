@@ -13,6 +13,9 @@ import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleRepository;
 import eu.zavadil.wn.data.article.ArticleStub;
 import eu.zavadil.wn.data.article.ArticleStubRepository;
+import eu.zavadil.wn.data.articleSource.ArticleSource;
+import eu.zavadil.wn.data.realm.Realm;
+import eu.zavadil.wn.data.website.Website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +41,12 @@ public class ArticleService {
 
 	@Autowired
 	TopicEmbeddingsService topicEmbeddingsService;
+
+	@Autowired
+	RealmService realmService;
+
+	@Autowired
+	ArticleSourceService articleSourceService;
 
 	@Transactional
 	public Article save(Article article) {
@@ -137,4 +146,18 @@ public class ArticleService {
 			);
 	}
 
+	public Page<Article> loadArticlesForWebsiteImport(Website website, int size) {
+		List<Realm> realms = this.realmService.findAllPublishedForWebsite(website);
+		if (realms.isEmpty())
+			throw new BadRequestException(String.format("No published realms for website %s", website.getUrl()));
+		List<Integer> realmIds = realms.stream().map(Realm::getId).toList();
+		ArticleSource internalSource = this.articleSourceService.getInternalArticleSource();
+		return this.articleRepository
+			.loadArticlesForImport(
+				internalSource.getId(),
+				realmIds,
+				website.getImportLastArticleUpdatedOn(),
+				size
+			);
+	}
 }

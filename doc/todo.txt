@@ -1,3 +1,5 @@
+- propagate image from topic to internal article and vice versa
+- dont compile body of isToast topics or articles
 - create spoke web in CodeIgniter
 
 - reset and start new db
@@ -34,6 +36,7 @@
   - register and implement OAuth flow
 - separate entity for external article?
 - allow users to report bad article
+- allow granular permissions in OAuth
 
 Social
   - Facebook

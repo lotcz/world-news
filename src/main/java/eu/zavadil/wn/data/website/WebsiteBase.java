@@ -41,6 +41,6 @@ public class WebsiteBase extends EntityWithNameBase {
 
 	private Instant importLastHeartbeat;
 
-	private Instant importLastPublishDate;
+	private Instant importLastArticleUpdatedOn;
 
 }

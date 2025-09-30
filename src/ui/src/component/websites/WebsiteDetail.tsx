@@ -73,6 +73,7 @@ export default function WebsiteDetail() {
 					).catch((e) => userAlerts.err(e));
 				return;
 			}
+			restClient.websites.reset();
 			restClient.websites
 				.loadSingle(Number(id))
 				.then(
@@ -255,7 +256,7 @@ export default function WebsiteDetail() {
 								<div>Last heartbeat:</div>
 								<strong><Elapsed date={data.importLastHeartbeat}/></strong>
 								<div>Last publish date:</div>
-								<DateTime value={data.importLastPublishDate}/>
+								<DateTime value={data.importLastArticleUpdatedOn}/>
 							</div>
 						</Col>
 					</Row>

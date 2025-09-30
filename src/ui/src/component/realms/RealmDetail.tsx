@@ -12,6 +12,7 @@ import {ConfirmDialogContext, DateTimeInput, SaveButton, Switch} from "zavadil-r
 import {BsArrowUpSquare} from "react-icons/bs";
 import RealmSimilarTopicsList from "./RealmSimilarTopicsList";
 import RealmTopicsList from "./RealmTopicsList";
+import BackIconLink from "../general/BackIconLink";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'sub-realms';
@@ -131,7 +132,7 @@ export default function RealmDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<Button variant="link" onClick={() => navigate(-1)}>Back</Button>
+					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
 					<SaveButton
 						disabled={!changed}

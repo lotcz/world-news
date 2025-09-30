@@ -4,6 +4,7 @@ import eu.zavadil.java.spring.common.entity.EntityRepository;
 import eu.zavadil.wn.data.ProcessingState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,9 +18,9 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			from Topic t
 			where t.name LIKE %:search%
 		""")
-	Page<Topic> search(@Param("search") String search, PageRequest pr);
+	Page<Topic> search(@Param("search") String search, Pageable pr);
 
-	Page<Topic> findAllByRealmId(int realmId, PageRequest pr);
+	Page<Topic> findAllByRealmId(int realmId, Pageable pr);
 
 	@Query("""
 			select t
@@ -28,7 +29,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 				and t.articleCountExternal > 1
 				and t.isLocked = false
 		""")
-	Page<Topic> loadCompilationQueue(PageRequest pr);
+	Page<Topic> loadCompilationQueue(Pageable pr);
 
 	@Query("""
 			select t
@@ -38,7 +39,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 				and t.articleCountInternal > 0
 				and t.isLocked = false
 		""")
-	Page<Topic> loadCategorizationQueue(PageRequest pr);
+	Page<Topic> loadCategorizationQueue(Pageable pr);
 
 	/**
 	 * topics cleanup
@@ -46,7 +47,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 	Page<Topic> findAllByArticleCountAndLastUpdatedOnBefore(
 		int articleCount,
 		Instant before,
-		PageRequest pr
+		Pageable pr
 	);
 
 	@Query("""
@@ -58,7 +59,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 				and t.isToast = false
 				and t.articleCountInternal > 0
 		""")
-	Page<Topic> loadImageSupplyQueueInternal(ProcessingState processingState, PageRequest pr);
+	Page<Topic> loadImageSupplyQueueInternal(ProcessingState processingState, Pageable pr);
 
 	default Page<Topic> loadImageSupplyQueue(int size) {
 		return this.loadImageSupplyQueueInternal(

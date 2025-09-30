@@ -9,7 +9,7 @@ export type WebsiteBase = EntityWithName & {
 	useSsl: boolean;
 	importLastStarted?: Date | null;
 	importLastHeartbeat?: Date | null;
-	importLastPublishDate?: Date | null;
+	importLastArticleUpdatedOn?: Date | null;
 }
 
 export type WebsiteStub = WebsiteBase & {

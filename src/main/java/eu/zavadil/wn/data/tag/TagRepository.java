@@ -3,7 +3,7 @@ package eu.zavadil.wn.data.tag;
 import eu.zavadil.java.spring.common.entity.EntityRepository;
 import eu.zavadil.java.util.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,9 +17,9 @@ public interface TagRepository extends EntityRepository<Tag> {
 				from Banner t
 				where t.name LIKE %:search%
 		""")
-	Page<Tag> searchInternal(@Param("search") String search, PageRequest pr);
+	Page<Tag> searchInternal(@Param("search") String search, Pageable pr);
 
-	default Page<Tag> search(String search, PageRequest pr) {
+	default Page<Tag> search(String search, Pageable pr) {
 		return this.searchInternal(StringUtils.safeUpperCase(search), pr);
 	}
 
@@ -37,5 +37,5 @@ public interface TagRepository extends EntityRepository<Tag> {
 
 	List<Tag> findAllBySynonymOfId(int tagId);
 
-	Page<Tag> findAllBySynonymOfNotNullAndArticleCountGreaterThan(int minArticleCount, PageRequest pr);
+	Page<Tag> findAllBySynonymOfNotNullAndArticleCountGreaterThan(int minArticleCount, Pageable pr);
 }
