@@ -9,10 +9,9 @@ import eu.zavadil.wn.ai.embeddings.data.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
-import eu.zavadil.wn.data.topic.Topic;
-import eu.zavadil.wn.data.topic.TopicRepository;
-import eu.zavadil.wn.data.topic.TopicStub;
-import eu.zavadil.wn.data.topic.TopicStubRepository;
+import eu.zavadil.wn.data.article.ArticleRepository;
+import eu.zavadil.wn.data.topic.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,13 +19,18 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TopicService {
 
 	@Autowired
 	TopicRepository topicRepository;
+
+	@Autowired
+	ArticleRepository articleRepository;
 
 	@Autowired
 	TopicStubRepository topicStubRepository;
@@ -40,17 +44,23 @@ public class TopicService {
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
 
+	private void onTopicSaved(TopicBase topic) {
+		this.topicEmbeddingsService.updateEmbedding(topic);
+		topic.setLastUpdatedOn(Instant.now());
+		this.articleRepository.markInternalArticles(topic.getId(), topic.getLastUpdatedOn());
+	}
+
 	@Transactional
 	public Topic save(Topic topic) {
 		Topic saved = this.topicRepository.save(topic);
-		this.topicEmbeddingsService.updateEmbedding(saved);
+		this.onTopicSaved(saved);
 		return saved;
 	}
 
 	@Transactional
 	public TopicStub save(TopicStub topic) {
 		TopicStub saved = this.topicStubRepository.save(topic);
-		this.topicEmbeddingsService.updateEmbedding(saved);
+		this.onTopicSaved(saved);
 		return saved;
 	}
 

@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
+import {DateTime, SelectableTableHeader, TablePlaceholder, TableWithSelect} from "zavadil-react-common";
 import {Page, PagingRequest} from "zavadil-ts-common";
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -11,16 +11,16 @@ export type TopicArticlesListProps = {
 	topicId: number;
 }
 
-const HEADER = [
-	{name: 'id', label: 'ID'},
+const HEADER: SelectableTableHeader<Article> = [
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
-	{name: '', label: ''},
+	{name: 'publishDate', label: 'Published', renderer: (item: Article) => <DateTime value={item.publishDate}/>},
+	{name: '', label: '', renderer: (item: Article) => <IsLockedIcon locked={item.isLocked}/>}
 ];
 
-function TopicArticlesList({topicId}: TopicArticlesListProps) {
+export default function TopicExternalArticlesList({topicId}: TopicArticlesListProps) {
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -35,7 +35,7 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 		() => {
 			restClient
 				.articles
-				.loadByTopic(topicId, paging)
+				.loadExternalByTopic(topicId, paging)
 				.then(setArticles)
 				.catch((e: Error) => {
 					setArticles(null);
@@ -53,37 +53,20 @@ function TopicArticlesList({topicId}: TopicArticlesListProps) {
 				{
 					(articles === null) ? <TablePlaceholder/>
 						: (
-							<AdvancedTable
+							<TableWithSelect
+								showSelect={false}
 								header={HEADER}
 								paging={paging}
 								totalItems={articles.totalItems}
 								onPagingChanged={setPaging}
+								items={articles.content}
+								onClick={navigateToDetail}
 								hover={true}
 								striped={true}
-							>
-								{
-									(articles.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>No articles.</td>
-										</tr> :
-										articles.content.map((article, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(article)}>
-													<td>{article.id}</td>
-													<td>{article.source?.name}</td>
-													<td>{article.processingState}</td>
-													<td>{article.title}</td>
-													<td>{article.summary}</td>
-													<td><IsLockedIcon locked={article.isLocked}/></td>
-												</tr>
-											);
-										})
-								}
-							</AdvancedTable>
+							/>
 						)
 				}
 			</div>
 		</div>
 	);
 }
-
-export default TopicArticlesList;

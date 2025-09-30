@@ -9,6 +9,7 @@ import {Topic} from "../../types/Topic";
 import RefreshIconButton from "../general/RefreshIconButton";
 import IsLockedIcon from "../general/IsLockedIcon";
 import {ImagezImageThumb} from "../images/ImagezImage";
+import ArticleCountBadge from "../articles/ArticleCountBadge";
 
 const HEADER = [
 	{name: 'mainImageId', label: ''},
@@ -137,8 +138,8 @@ function TopicsList() {
 													<td>{item.name}</td>
 													<td>{item.summary}</td>
 													<td>{item.realm?.name}</td>
-													<td>{item.articleCountInternal}</td>
-													<td>{item.articleCountExternal}</td>
+													<td><ArticleCountBadge count={item.articleCountInternal} internal/></td>
+													<td><ArticleCountBadge count={item.articleCountExternal}/></td>
 													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
 													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
 													<td><IsLockedIcon locked={item.isLocked}/></td>

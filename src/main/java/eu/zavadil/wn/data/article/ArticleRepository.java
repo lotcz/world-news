@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,10 +25,6 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> search(@Param("search") String search, Pageable pr);
 
-	List<Article> findAllByTopicId(@Param("topicId") int topicId);
-
-	Page<Article> findAllByTopicId(@Param("topicId") int topicId, Pageable pr);
-
 	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, Pageable pr);
 
 	@Query("""
@@ -39,6 +36,47 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	Page<Article> loadByTagId(int tagId, Pageable pr);
 
 	Optional<Article> findFirstBySourceIdAndUid(int sourceId, String uid);
+
+	List<Article> findAllByTopicId(@Param("topicId") int topicId);
+
+	Page<Article> findAllByTopicId(@Param("topicId") int topicId, Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.topic.id = :topicId
+				and a.source.importType = 'Internal'
+		""")
+	Page<Article> loadInternalByTopicId(int topicId, Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.topic.id = :topicId
+				and a.source.importType <> 'Internal'
+		""")
+	Page<Article> loadExternalByTopicId(int topicId, Pageable pr);
+
+	// MARK AS CHANGED
+
+	@Modifying
+	@Query("""
+		update Article a
+		set a.lastUpdatedOn = :lastUpdatedOn
+		where a.topic.id = :topicId
+			and a.source.importType = 'Internal'
+		""")
+	void markInternalArticlesUnsafe(@Param("topicId") int topicId, Instant lastUpdatedOn);
+
+	/**
+	 * Set lastUpdatedOn on all internal articles to trigger redownload
+	 */
+	@Modifying
+	default void markInternalArticles(int topicId, Instant lastUpdatedOn) {
+		this.markInternalArticlesUnsafe(topicId, lastUpdatedOn == null ? Instant.now() : lastUpdatedOn);
+	}
+
+	// QUEUES
 
 	/**
 	 * stuck articles
@@ -55,6 +93,8 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			where a.processingState = 'Waiting'
 		""")
 	Page<Article> loadAnnotationQueue(Pageable pr);
+
+	// IMPORT
 
 	@Query("""
 			select a

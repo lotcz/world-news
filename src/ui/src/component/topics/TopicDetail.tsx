@@ -6,7 +6,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicStub} from "../../types/Topic";
-import TopicArticlesList from "./TopicArticlesList";
+import TopicInternalArticlesList from "./TopicInternalArticlesList";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
 import RefreshIconButton from "../general/RefreshIconButton";
 import TopicAiLogList from "./TopicAiLogList";
@@ -19,9 +19,11 @@ import {DateTimeInput, IconButton, Switch} from "zavadil-react-common";
 import {ImagezImagePreview} from "../images/ImagezImage";
 import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
+import TopicExternalArticlesList from "./TopicExternalArticlesList";
+import ArticleCountBadge from "../articles/ArticleCountBadge";
 
 const TAB_PARAM_NAME = 'tab';
-const DEFAULT_TAB = 'articles';
+const DEFAULT_TAB = 'internal-articles';
 
 const COL_1_MD = 3;
 const COL_2_MD = 5;
@@ -331,7 +333,24 @@ export default function TopicDetail() {
 						activeKey={activeTab}
 						onSelect={(key) => setActiveTab(StringUtil.getNonEmpty(key, DEFAULT_TAB))}
 					>
-						<Tab title="Articles" eventKey="articles"/>
+						<Tab
+							title={
+								<div className="d-flex align-items-center gap-2">
+									<div>Internal Articles</div>
+									<ArticleCountBadge count={data.articleCountInternal} internal/>
+								</div>
+							}
+							eventKey="internal-articles"
+						/>
+						<Tab
+							title={
+								<div className="d-flex align-items-center gap-2">
+									<div>External Articles</div>
+									<ArticleCountBadge count={data.articleCountExternal}/>
+								</div>
+							}
+							eventKey="external-articles"
+						/>
 						<Tab title="AI Log" eventKey="ai-log"/>
 						<Tab title="Similar Topics" eventKey="similar-topics"/>
 						<Tab title="Similar Articles" eventKey="similar-articles"/>
@@ -339,7 +358,10 @@ export default function TopicDetail() {
 					</Tabs>
 					<div className="px-3 py-1">
 						{
-							activeTab === 'articles' && <TopicArticlesList topicId={data.id}/>
+							activeTab === 'internal-articles' && <TopicInternalArticlesList topicId={data.id}/>
+						}
+						{
+							activeTab === 'external-articles' && <TopicExternalArticlesList topicId={data.id}/>
 						}
 						{
 							activeTab === 'ai-log' && <TopicAiLogList topicId={data.id}/>
@@ -359,3 +381,4 @@ export default function TopicDetail() {
 		</div>
 	)
 }
+

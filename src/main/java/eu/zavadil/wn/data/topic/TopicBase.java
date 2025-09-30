@@ -6,6 +6,7 @@ import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import eu.zavadil.wn.data.ProcessingState;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PreUpdate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.JdbcType;
@@ -48,4 +49,12 @@ public class TopicBase extends EntityWithNameBase {
 
 	@Column(updatable = false, insertable = false)
 	private int articleCount = 0;
+
+	/**
+	 * Ensures that lastUpdatedOn is updated in the memory on every update
+	 */
+	@PreUpdate
+	public void freshLastUpdatedOn() {
+		this.setLastUpdatedOn(Instant.now());
+	}
 }

@@ -75,6 +75,14 @@ public class ArticleService {
 		return this.articleRepository.findAllByTopicId(topicId, pr);
 	}
 
+	public Page<Article> loadInternalByTopicId(int topicId, PageRequest pr) {
+		return this.articleRepository.loadInternalByTopicId(topicId, pr);
+	}
+
+	public Page<Article> loadExternalByTopicId(int topicId, PageRequest pr) {
+		return this.articleRepository.loadExternalByTopicId(topicId, pr);
+	}
+
 	public Page<Article> loadBySourceId(int sourceId, PageRequest pr) {
 		return this.articleRepository.findAllBySourceId(sourceId, pr);
 	}

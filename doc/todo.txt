@@ -1,9 +1,18 @@
-- propagate image from topic to internal article and vice versa
+- case insensitive search
 - dont compile body of isToast topics or articles
 - create spoke web in CodeIgniter
 
 - reset and start new db
 - test
+
+Social
+  - Facebook
+  - Discord
+  - Instagram
+  - X
+  - YouTube
+  - BlueSky
+
 
 2.0
 ===
@@ -38,13 +47,6 @@
 - allow users to report bad article
 - allow granular permissions in OAuth
 
-Social
-  - Facebook
-  - Discord
-  - Instagram
-  - X
-  - YouTube
-  - BlueSky
 
 Timelines
   - create timelines of long-running stories

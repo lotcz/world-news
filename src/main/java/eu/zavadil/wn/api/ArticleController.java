@@ -43,6 +43,26 @@ public class ArticleController {
 		return JsonPageImpl.of(this.articleService.loadByTopicId(topicId, PagingUtils.of(page, size, sorting)));
 	}
 
+	@GetMapping("by-topic/{topicId}/internal")
+	public JsonPage<Article> loadInternalByTopic(
+		@PathVariable int topicId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
+	) {
+		return JsonPageImpl.of(this.articleService.loadInternalByTopicId(topicId, PagingUtils.of(page, size, sorting)));
+	}
+
+	@GetMapping("by-topic/{topicId}/external")
+	public JsonPage<Article> loadExternalByTopic(
+		@PathVariable int topicId,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
+	) {
+		return JsonPageImpl.of(this.articleService.loadExternalByTopicId(topicId, PagingUtils.of(page, size, sorting)));
+	}
+
 	@GetMapping("by-source/{sourceId}")
 	public JsonPage<Article> loadBySource(
 		@PathVariable int sourceId,
