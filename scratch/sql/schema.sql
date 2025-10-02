@@ -2,6 +2,7 @@ create type tp_entity_type AS ENUM ('Article', 'Topic');
 create cast	(varchar AS tp_entity_type) WITH INOUT AS IMPLICIT;
 
 alter type tp_entity_type add value IF NOT EXISTS 'Realm';
+alter type tp_entity_type add value IF NOT EXISTS 'Banner';
 
 create type tp_operation AS ENUM ('CreateTitle', 'CreateSummary');
 create cast	(varchar AS tp_operation) WITH INOUT AS IMPLICIT;

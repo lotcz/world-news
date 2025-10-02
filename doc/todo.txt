@@ -1,3 +1,5 @@
+- banner generator
+- mark articles as featured
 - create spoke web in CodeIgniter
 
 - reset and start new db
@@ -30,8 +32,11 @@ Social
 - accept direct advertising
 - user paid program
 - rethink tags
-  - add tags to topic only, generate from summary
-  - merge with realms?
+  - merge with realms
+  - topic/article can have multiple realms
+  - no auto generation
+  - realms on topic only propagate to internal articles
+
 - community grammar nazi contest
 - mobile app
 - monitor news sources by country and allow comparison (potential use in propaganda debunk)
@@ -44,7 +49,7 @@ Social
 - separate entity for external article?
 - allow users to report bad article
 - allow granular permissions in OAuth
-
+- cover trends on social media - Twitter, Facebook, Instagram, YouTube,...
 
 Timelines
   - create timelines of long-running stories

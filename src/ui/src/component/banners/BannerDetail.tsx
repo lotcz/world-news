@@ -11,6 +11,7 @@ import {BannerStub} from "../../types/Banner";
 import {WebsiteIdSelect} from "../websites/WebsiteSelect";
 import BannerTypeSelect from "./BannerTypeSelect";
 import {BsArrowRightSquare} from "react-icons/bs";
+import BannerGenerator from "./BannerGenerator";
 
 
 const COL_1_MD = 3;
@@ -26,6 +27,7 @@ export default function BannerDetail() {
 	const confirmDialog = useContext(ConfirmDialogContext);
 	const [data, setData] = useState<BannerStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [generatorOpen, setGeneratorOpen] = useState<boolean>(false);
 
 	const onChanged = useCallback(
 		() => {
@@ -44,6 +46,7 @@ export default function BannerDetail() {
 					name: '',
 					type: 'Content'
 				});
+				return;
 			}
 			restClient
 				.banners
@@ -214,7 +217,7 @@ export default function BannerDetail() {
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Content HTML:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex flex-column gap-2">
 							<Form.Control
 								as="textarea"
 								rows={5}
@@ -224,10 +227,26 @@ export default function BannerDetail() {
 									onChanged();
 								}}
 							/>
+							<div>
+								<Button onClick={() => setGeneratorOpen(true)}>Create...</Button>
+							</div>
 						</Col>
 					</Row>
 				</Stack>
 			</Form>
+			{
+				data && generatorOpen && <BannerGenerator
+					type={data.type}
+					onCreated={
+						(html) => {
+							data.contentHtml = html;
+							onChanged();
+							setGeneratorOpen(false)
+						}
+					}
+					onCanceled={() => setGeneratorOpen(false)}
+				/>
+			}
 		</div>
 	)
 }
