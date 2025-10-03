@@ -10,7 +10,13 @@ export class ImagezClient extends RestClient {
 		this.secretToken = settings.secretToken;
 	}
 
+	getImagezOrignalUrlByName(name: string): string {
+		return this.getUrl(`images/original/${name}`).toString()
+	}
+
 	getImagezResizedUrlByName(name: string, type: string, width: number, height: number, ext?: string): string {
+		if (type === 'original') return this.getImagezOrignalUrlByName(name);
+		
 		let raw = `${this.secretToken}-${name}-${width}-${height}-${type}`;
 		if (StringUtil.notBlank(ext)) {
 			raw += `-${ext}`;
