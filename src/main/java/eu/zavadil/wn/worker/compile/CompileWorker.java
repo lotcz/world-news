@@ -6,6 +6,7 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.aiLog.AiOperation;
 import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.article.Article;
+import eu.zavadil.wn.data.article.ArticleType;
 import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.ArticleService;
@@ -50,7 +51,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	public void compile(Topic topic) {
-		if (topic.isLocked() || topic.isToast()) return;
+		if (topic.isLocked() || (topic.getArticleType() == ArticleType.Toast)) return;
 
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
@@ -72,7 +73,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				}
 			);
 
-		if (compiled.isLocked() || compiled.isToast()) return;
+		if (compiled.isLocked() || (compiled.getArticleType() == ArticleType.Toast)) return;
 
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
 		for (Article article : articles) {

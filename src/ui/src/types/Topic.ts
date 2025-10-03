@@ -4,7 +4,7 @@ import {Image} from "./Image";
 
 export type TopicBase = EntityWithName & {
 	isLocked: boolean;
-	isToast: boolean;
+	articleType: string;
 	publishDate?: Date | null;
 	summary?: string;
 	processingState?: string | null;

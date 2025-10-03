@@ -157,8 +157,8 @@ create table topic (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     is_locked boolean default false,
-    is_toast boolean default false,
     name varchar(255),
+    article_type tp_article_type not null default 'Normal',
     publish_date timestamp(6) with time zone,
     main_image_id int null
     	constraint fk_topic_image
@@ -178,23 +178,26 @@ create table topic (
 ALTER TABLE topic
 ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
-create index idx_topic_load_compilation_queue
-    on topic (is_locked, processing_state, article_count_external);
-
-create index idx_topic_load_categorization_queue
-    on topic (realm_id, processing_state, is_locked, article_count_internal);
-
 create index idx_topic_article_count_external
     on topic (article_count_external desc);
-
-create index idx_topic_load_image_supply_queue
-    on topic (processing_state, is_locked, is_toast, article_count_internal, publish_date, last_updated_on);
 
 create index idx_topic_article_count_last_updated
     on topic (last_updated_on desc);
 
-create index idx_topic_realm
-    on topic (realm_id);
+create index idx_topic_load_compilation_queue
+    on topic (processing_state, article_type, is_locked, article_count_external);
+
+create index idx_topic_load_categorization_queue
+    on topic (processing_state, realm_id, is_locked, article_count_internal);
+
+create index idx_topic_load_image_supply_queue
+    on topic (processing_state, is_locked, article_type, article_count_internal, publish_date, last_updated_on);
+
+
+
+create type tp_article_type AS ENUM ('Normal', 'Toast', 'Featured');
+create cast	(varchar AS tp_article_type) WITH INOUT AS IMPLICIT;
+
 
 create table article (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
@@ -208,7 +211,7 @@ create table article (
     publish_date timestamp(6) with time zone,
     summary text,
     title varchar(255),
-    is_toast boolean default false,
+    article_type tp_article_type not null default 'Normal',
     main_image_id int null
     	constraint fk_article_image
         references image,
@@ -240,11 +243,8 @@ create unique index idx_article_original_url
 create unique index idx_article_source_uid
     on article (source_id, uid);
 
-create unique index idx_article_source_uid
-    on article (source_id, uid);
-
 create index idx_article_topic
-    on article (topic_id);
+    on article (topic_id, last_updated_on desc);
 
 create table article_tag (
     article_id integer not null

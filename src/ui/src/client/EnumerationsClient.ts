@@ -10,6 +10,8 @@ export class EnumerationsClient {
 
 	public processingState: LazyAsync<string[]>;
 
+	public articleType: LazyAsync<string[]>;
+
 	constructor(client: RestClient) {
 		this.client = client;
 
@@ -23,6 +25,10 @@ export class EnumerationsClient {
 
 		this.processingState = new LazyAsync<string[]>(
 			() => this.client.getJson('enumerations/processing-state')
+		);
+
+		this.articleType = new LazyAsync<string[]>(
+			() => this.client.getJson('enumerations/article-type')
 		);
 
 	}

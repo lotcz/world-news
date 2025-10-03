@@ -6,7 +6,7 @@ import {Image} from "./Image";
 
 export type ArticleBase = EntityBase & {
 	isLocked: boolean;
-	isToast: boolean;
+	articleType: string;
 	title?: string;
 	publishDate?: Date | null;
 	originalUrl?: string | null;

@@ -2,6 +2,7 @@ package eu.zavadil.wn.api;
 
 import eu.zavadil.java.util.EnumUtils;
 import eu.zavadil.wn.data.ProcessingState;
+import eu.zavadil.wn.data.article.ArticleType;
 import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.banner.BannerType;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,4 +34,9 @@ public class EnumerationsController {
 		return EnumUtils.namesOf(ProcessingState.class);
 	}
 
+	@GetMapping("article-type")
+	public List<String> articleTypes() {
+		return EnumUtils.namesOf(ArticleType.class);
+	}
+	
 }

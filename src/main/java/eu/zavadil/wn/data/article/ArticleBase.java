@@ -26,8 +26,9 @@ public class ArticleBase extends EntityBase {
 	@JsonProperty("isLocked")
 	private boolean isLocked = false;
 
-	@JsonProperty("isToast")
-	private boolean isToast = false;
+	@Column(nullable = false)
+	@JdbcType(PostgreSQLEnumJdbcType.class)
+	private ArticleType articleType = ArticleType.Normal;
 
 	@JsonProperty("mainImageIsIllustrative")
 	private boolean mainImageIsIllustrative = true;

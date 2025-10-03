@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
 import eu.zavadil.wn.data.ProcessingState;
+import eu.zavadil.wn.data.article.ArticleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
@@ -21,8 +22,9 @@ public class TopicBase extends EntityWithNameBase {
 	@JsonProperty("isLocked")
 	private boolean isLocked = false;
 
-	@JsonProperty("isToast")
-	private boolean isToast = false;
+	@Column(nullable = false)
+	@JdbcType(PostgreSQLEnumJdbcType.class)
+	private ArticleType articleType = ArticleType.Normal;
 
 	private Instant publishDate;
 

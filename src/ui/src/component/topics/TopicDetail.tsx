@@ -21,6 +21,7 @@ import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 import TopicExternalArticlesList from "./TopicExternalArticlesList";
 import ArticleCountBadge from "../articles/ArticleCountBadge";
+import ArticleTypeSelect from "../articles/ArticleTypeSelect";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'internal-articles';
@@ -71,7 +72,7 @@ export default function TopicDetail() {
 			if (!id) {
 				setData({
 					isLocked: false,
-					isToast: false,
+					articleType: 'Normal',
 					name: '',
 					articleCount: 0,
 					articleCountInternal: 0,
@@ -281,17 +282,19 @@ export default function TopicDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label htmlFor="isToast">Toast:</Form.Label>
+							<Form.Label>
+								Type:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
-							<Switch
-								id="isToast"
-								checked={data.isToast}
-								onChange={(e) => {
-									data.isToast = e;
-									onChanged();
-								}}
-							/>
+							<div>
+								<ArticleTypeSelect
+									value={data.articleType}
+									onChange={(e) => {
+										data.articleType = StringUtil.toString(e);
+										onChanged();
+									}}
+								/>
+							</div>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

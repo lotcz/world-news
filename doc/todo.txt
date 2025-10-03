@@ -1,6 +1,6 @@
-- banner generator
 - mark articles as featured
-- create spoke web in CodeIgniter
+  - article type? (normal/toast/featured)
+- mark category as featured
 
 - reset and start new db
 - test

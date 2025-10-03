@@ -29,7 +29,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			where t.processingState = 'Waiting'
 				and t.articleCountExternal > 1
 				and t.isLocked = false
-				and t.isToast = false
+				and t.articleType != 'Toast'
 		""")
 	Page<Topic> loadCompilationQueue(Pageable pr);
 
@@ -58,7 +58,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			where t.processingState = :processingState
 				and t.mainImage is null
 				and t.publishDate is not null
-				and t.isToast = false
+				and t.articleType != 'Toast'
 				and t.articleCountInternal > 0
 		""")
 	Page<Topic> loadImageSupplyQueueInternal(ProcessingState processingState, Pageable pr);
