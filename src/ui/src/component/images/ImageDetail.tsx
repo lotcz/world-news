@@ -48,7 +48,7 @@ export default function ImageDetail() {
 		[id]
 	);
 
-	const onChange = useCallback(
+	const onChanged = useCallback(
 		() => {
 			if (!data) return;
 			setData({...data});
@@ -149,7 +149,7 @@ export default function ImageDetail() {
 								value={StringUtil.getNonEmpty(data.originalUrl)}
 								onChange={(e) => {
 									data.originalUrl = StringUtil.emptyToNull(e.target.value);
-									onChange();
+									onChanged();
 								}}
 							/>
 							{
@@ -168,7 +168,7 @@ export default function ImageDetail() {
 									value={data.name}
 									onChange={(e) => {
 										data.name = e.target.value;
-										onChange();
+										onChanged();
 									}}
 								/>
 								<div className="pt-2">
@@ -189,8 +189,7 @@ export default function ImageDetail() {
 								checked={data.isAiGenerated}
 								onChange={(e) => {
 									data.isAiGenerated = e;
-									setData({...data});
-									setChanged(true);
+									onChanged();
 								}}
 								label="Image was created with AI"
 							/>
@@ -207,7 +206,7 @@ export default function ImageDetail() {
 								value={StringUtil.getNonEmpty(data.description)}
 								onChange={(e) => {
 									data.description = e.target.value;
-									onChange();
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -222,7 +221,7 @@ export default function ImageDetail() {
 								value={StringUtil.getNonEmpty(data.source)}
 								onChange={(e) => {
 									data.source = StringUtil.emptyToNull(e.target.value);
-									onChange();
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -237,7 +236,7 @@ export default function ImageDetail() {
 								value={StringUtil.getNonEmpty(data.author)}
 								onChange={(e) => {
 									data.author = StringUtil.emptyToNull(e.target.value);
-									onChange();
+									onChanged();
 								}}
 							/>
 						</Col>
@@ -252,7 +251,7 @@ export default function ImageDetail() {
 								value={StringUtil.getNonEmpty(data.license)}
 								onChange={(e) => {
 									data.license = StringUtil.emptyToNull(e.target.value);
-									onChange();
+									onChanged();
 								}}
 							/>
 						</Col>

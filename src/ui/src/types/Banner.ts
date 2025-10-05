@@ -5,6 +5,7 @@ export type BannerBase = EntityWithName & {
 	publishDate?: Date | null;
 	description?: string | null;
 	contentHtml?: string | null;
+	requiresCookiesConsent: boolean;
 	type: string;
 }
 

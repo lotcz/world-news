@@ -20,8 +20,10 @@ public class BannerBase extends EntityWithNameBase {
 
 	@Column(columnDefinition = "TEXT")
 	private String description;
-	
+
 	private String contentHtml;
 
 	private Instant publishDate;
+
+	private boolean requiresCookiesConsent = false;
 }

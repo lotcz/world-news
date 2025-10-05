@@ -339,6 +339,7 @@ create table banner (
     type tp_banner_type not null,
     content_html text,
     publish_date timestamp(6) with time zone,
+    requires_cookies_consent boolean default false,
     website_id integer not null
         constraint fk_banner_website
         references website

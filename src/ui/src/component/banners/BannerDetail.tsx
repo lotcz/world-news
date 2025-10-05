@@ -5,7 +5,7 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {ConfirmDialogContext, DateTimeInput, DeleteButton, SaveButton} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, DeleteButton, SaveButton, Switch} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
 import {BannerStub} from "../../types/Banner";
 import {WebsiteIdSelect} from "../websites/WebsiteSelect";
@@ -44,7 +44,8 @@ export default function BannerDetail() {
 			if (!id) {
 				setData({
 					name: '',
-					type: 'Content'
+					type: 'Content',
+					requiresCookiesConsent: false
 				});
 				return;
 			}
@@ -211,6 +212,22 @@ export default function BannerDetail() {
 											}>Publish</Button>
 								}
 							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label htmlFor="requiresCookiesConsent">Cookies:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Switch
+								id="requiresCookiesConsent"
+								checked={data.requiresCookiesConsent}
+								onChange={(e) => {
+									data.requiresCookiesConsent = e;
+									onChanged();
+								}}
+								label="Requires cookies consent"
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">
