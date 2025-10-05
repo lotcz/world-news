@@ -65,6 +65,9 @@ create unique index idx_language_code
 create type tp_import_type AS ENUM ('Unknown', 'Rss', 'Internal');
 create cast	(varchar AS tp_import_type) WITH INOUT AS IMPLICIT;
 
+create type tp_processing_state AS ENUM ('NotReady', 'Waiting', 'Processing', 'Done', 'Error');
+create cast	(varchar AS tp_processing_state) WITH INOUT AS IMPLICIT;
+
 create table article_source (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
@@ -135,10 +138,6 @@ create unique index idx_tag_name
 create index idx_tag_synonym
     on tag (synonym_of_id);
 
-create type tp_processing_state AS ENUM ('NotReady', 'Waiting', 'Processing', 'Done', 'Error');
-create cast	(varchar AS tp_processing_state) WITH INOUT AS IMPLICIT;
-
-
 create table image (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
@@ -151,6 +150,9 @@ create table image (
     source varchar(100),
     license varchar(100)
 );
+
+create type tp_article_type AS ENUM ('Normal', 'Toast', 'Featured');
+create cast	(varchar AS tp_article_type) WITH INOUT AS IMPLICIT;
 
 create table topic (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
@@ -192,12 +194,6 @@ create index idx_topic_load_categorization_queue
 
 create index idx_topic_load_image_supply_queue
     on topic (processing_state, is_locked, article_type, article_count_internal, publish_date, last_updated_on);
-
-
-
-create type tp_article_type AS ENUM ('Normal', 'Toast', 'Featured');
-create cast	(varchar AS tp_article_type) WITH INOUT AS IMPLICIT;
-
 
 create table article (
     id integer primary key GENERATED ALWAYS AS IDENTITY,
@@ -261,7 +257,6 @@ create table article_tag (
 create index idx_article_tag_tag_id
     on article_tag (tag_id);
 
-
 create table article_image (
     article_id integer not null
         constraint fkt3rm1gwoysmll8kpy7lt1vpwc
@@ -304,16 +299,13 @@ create table website (
 	import_last_banner_updated_on timestamp(6) with time zone
 );
 
-ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
-
-alter table website add column
+alter table website ALTER COLUMN name TYPE VARCHAR(255) COLLATE "en_US.utf8";
 
 create unique index idx_website_name
     on website (name);
 
 create unique index idx_website_url
     on website (url);
-
 
 create table website_realm (
     website_id integer not null
