@@ -175,3 +175,8 @@ INSERT INTO realm (id, name, summary, parent_id, is_hidden, publish_date) OVERRI
 INSERT INTO realm (id, name, summary, parent_id, is_hidden, publish_date) OVERRIDING SYSTEM VALUE VALUES (53, 'Helldivers 2', 'Helldivers 2', 5, false, null);
 INSERT INTO realm (id, name, summary, parent_id, is_hidden, publish_date) OVERRIDING SYSTEM VALUE VALUES (46, 'Speedrunning', 'Speedrunning, hraní počítačových her na rychlost.', 5, false, null);
 INSERT INTO realm (id, name, summary, parent_id, is_hidden, publish_date) OVERRIDING SYSTEM VALUE VALUES (47, 'Platformers', 'Počítačové hry typu Platformers - skákačky.', 5, false, null);
+
+SELECT setval(
+    pg_get_serial_sequence('realm', 'id'),
+    (SELECT MAX(id) FROM realm)
+);
