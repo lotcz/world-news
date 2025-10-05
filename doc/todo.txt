@@ -1,11 +1,11 @@
 - reset and start new db
 - test
 
-- mobile admin
 
 2.0
 ===
 
+- mobile admin
 
 - improve OAuth server (see todo.txt in there)
 - use bigserial/Long as IDs
@@ -28,6 +28,7 @@
   - no auto generation
   - realms on topic only propagate to internal articles
   - mark realm as featured for prominent display in spoke
+- call website's import page from world news
 
 - community grammar nazi contest
 - mobile app

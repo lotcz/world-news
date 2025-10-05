@@ -1,10 +1,6 @@
 Websites
 
-- GDPR consent (research and implement correctly)
-- Privacy policy
-
 - monitor which realms or tags is user interested in then offer him to be notified about it
-
 - paid program allows seeing external sources
 - openstreetmap integration
 - 3D planetary overview

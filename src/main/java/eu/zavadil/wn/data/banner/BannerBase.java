@@ -26,4 +26,5 @@ public class BannerBase extends EntityWithNameBase {
 	private Instant publishDate;
 
 	private boolean requiresCookiesConsent = false;
+	
 }
