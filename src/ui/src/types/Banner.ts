@@ -3,6 +3,7 @@ import {Website} from "./Website";
 
 export type BannerBase = EntityWithName & {
 	publishDate?: Date | null;
+	description?: string | null;
 	contentHtml?: string | null;
 	type: string;
 }

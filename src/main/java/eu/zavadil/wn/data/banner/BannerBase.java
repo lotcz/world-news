@@ -1,6 +1,7 @@
 package eu.zavadil.wn.data.banner;
 
 import eu.zavadil.java.spring.common.entity.EntityWithNameBase;
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,9 @@ public class BannerBase extends EntityWithNameBase {
 	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private BannerType type = BannerType.Content;
 
+	@Column(columnDefinition = "TEXT")
+	private String description;
+	
 	private String contentHtml;
 
 	private Instant publishDate;

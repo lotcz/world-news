@@ -335,6 +335,7 @@ create table banner (
     created_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     last_updated_on timestamp(6) with time zone not null default CURRENT_TIMESTAMP,
     name varchar(255) not null,
+    description text,
     type tp_banner_type not null,
     content_html text,
     publish_date timestamp(6) with time zone,

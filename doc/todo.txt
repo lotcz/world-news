@@ -1,21 +1,11 @@
-- mark articles as featured
-  - article type? (normal/toast/featured)
-- mark category as featured
-
 - reset and start new db
 - test
 
-Social
-  - Facebook
-  - Discord
-  - Instagram
-  - X
-  - YouTube
-  - BlueSky
-
+- mobile admin
 
 2.0
 ===
+
 
 - improve OAuth server (see todo.txt in there)
 - use bigserial/Long as IDs
@@ -27,8 +17,9 @@ Social
 - semantic search (in summary)
 - topic relevance/popularity
 - tag groups - if certain set of tags occurs together, merge it into a single tag
-- analytics
-  - log page views (link to article)
+- own analytics
+  - log page views (link to website/article/category)
+- banners language (sklik only allows czech)
 - accept direct advertising
 - user paid program
 - rethink tags
@@ -36,6 +27,7 @@ Social
   - topic/article can have multiple realms
   - no auto generation
   - realms on topic only propagate to internal articles
+  - mark realm as featured for prominent display in spoke
 
 - community grammar nazi contest
 - mobile app
@@ -89,3 +81,10 @@ Ingestion
     - https://servis.lidovky.cz/rss.aspx
     - https://servis.idnes.cz/rss.aspx?c=zpravodaj
     - https://www.antiyoutuber.cz/rss
+
+3.0
+===
+
+worldnews inc.
+
+register worldnews.cz or .eu with email

@@ -215,6 +215,22 @@ export default function BannerDetail() {
 					</Row>
 					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Description HTML:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<Form.Control
+								as="textarea"
+								rows={3}
+								value={StringUtil.getNonEmpty(data.description)}
+								onChange={(e) => {
+									data.description = e.target.value;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Content HTML:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex flex-column gap-2">

@@ -2,7 +2,7 @@ Websites
 
 - GDPR consent (research and implement correctly)
 - Privacy policy
-- Terms and Conditions
+
 - monitor which realms or tags is user interested in then offer him to be notified about it
 
 - paid program allows seeing external sources
