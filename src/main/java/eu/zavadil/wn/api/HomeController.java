@@ -18,7 +18,21 @@ public class HomeController {
 	/**
 	 * Serve frontpage for some in-app urls
 	 */
-	@GetMapping(value = {"/templates/**", "documents/**"})
+	@GetMapping(
+		value = {
+			"supply-images/**",
+			"topics/**",
+			"articles/**",
+			"ai-log/**",
+			"languages/**",
+			"tags/**",
+			"realms/**",
+			"article-sources/**",
+			"images/**",
+			"websites/**",
+			"banners/**"
+		}
+	)
 	public @ResponseBody ResponseEntity<InputStreamResource> fallback() {
 		InputStream is = HomeController.class.getResourceAsStream("/public/index.html");
 		if (is == null) throw new ResourceNotFoundException("index.html");

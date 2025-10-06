@@ -20,6 +20,10 @@ public class SecurityConfig {
 	@Getter
 	private String apiBaseUrl;
 
+	@Value("${server.allowedOrigin}")
+	@Getter
+	private String allowedOrigin;
+
 	@Autowired
 	AuthenticationFilter authenticationFilter;
 
@@ -30,13 +34,15 @@ public class SecurityConfig {
 	 */
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
+		String allowedOrigin = this.allowedOrigin;
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry
 					.addMapping("/**")
-					.allowedOrigins("http://localhost:3000")
-					.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+					.allowedOrigins(allowedOrigin)
+					.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+					.allowedHeaders("*");
 			}
 		};
 	}

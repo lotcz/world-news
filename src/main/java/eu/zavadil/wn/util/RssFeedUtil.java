@@ -70,7 +70,10 @@ public class RssFeedUtil {
 
 			byte[] data;
 			try (InputStream raw = conn.getInputStream();
-				 InputStream in = new BOMInputStream(wrapStream(raw, conn.getContentEncoding()), false)) {
+				 InputStream in = BOMInputStream.builder()
+					 .setInputStream(wrapStream(raw, conn.getContentEncoding()))
+					 .setInclude(false)
+					 .get()) {
 				data = in.readAllBytes();
 			}
 
