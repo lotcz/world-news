@@ -1,0 +1,13 @@
+HUBBLE
+
+	- oauth.zavadil.eu
+	- qr.zavadil.eu
+
+WORLDNEWS
+
+	- worldnews.zavadil.eu
+
+
+ACTIVE24
+
+	- imagez.zavadil.eu

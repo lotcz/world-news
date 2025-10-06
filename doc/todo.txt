@@ -8,6 +8,8 @@
 - mobile admin
 
 - improve OAuth server (see todo.txt in there)
+  - run as OAUTH prod
+
 - use bigserial/Long as IDs
 - add Topic Extension worker to extend existing topic with new info when available
 - add manual instructions to topic for compilation
@@ -22,12 +24,15 @@
 - banners language (sklik only allows czech)
 - accept direct advertising
 - user paid program
+
 - rethink tags
   - merge with realms
   - topic/article can have multiple realms
   - no auto generation
   - realms on topic only propagate to internal articles
   - mark realm as featured for prominent display in spoke
+  - drop tags and article_tag tables (and triggers)
+
 - call website's import page from world news
 
 - community grammar nazi contest
@@ -43,6 +48,7 @@
 - allow users to report bad article
 - allow granular permissions in OAuth
 - cover trends on social media - Twitter, Facebook, Instagram, YouTube,...
+- implement link between website and realm
 
 Timelines
   - create timelines of long-running stories

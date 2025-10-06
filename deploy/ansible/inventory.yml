@@ -1,0 +1,9 @@
+prod:
+  hosts:
+    worldnews.zavadil.eu:
+      target_dir: /opt/world-news
+      application_files: conf/prod
+      service_name: world-news
+      spring_env: prod
+      proxy_port: 8081
+      domain: worldnews.zavadil.eu
