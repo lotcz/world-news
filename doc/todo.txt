@@ -1,6 +1,8 @@
-- reset and start new db
-- test
-
+- create separate used for app
+- limit connections to my IP
+- test imagez
+- test everything
+- deploy pravesestalo.cz
 
 2.0
 ===
