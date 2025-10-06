@@ -3,6 +3,8 @@
 - test imagez
 - test everything
 - deploy pravesestalo.cz
+- set up cron for imports
+- run workers automatically
 
 2.0
 ===
