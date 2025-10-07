@@ -78,4 +78,9 @@ public class RealmController {
 	) {
 		return this.realmService.findSimilarToTopic(topicId, size);
 	}
+
+	@GetMapping("visible-parent/{realmId}")
+	public Realm loadVisibleParent(@PathVariable int realmId) {
+		return this.realmService.findVisibleParent(realmId);
+	}
 }

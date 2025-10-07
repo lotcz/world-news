@@ -124,4 +124,15 @@ public class RealmService {
 			.toList();
 	}
 
+	public Realm findVisibleParent(Realm realm) {
+		if (realm.isHidden()) {
+			if (realm.getParentId() == null) return null;
+			return this.findVisibleParent(realm.getParentId());
+		}
+		return realm;
+	}
+
+	public Realm findVisibleParent(int realmId) {
+		return this.findVisibleParent(this.realmCache.get(realmId));
+	}
 }

@@ -1,8 +1,50 @@
-- test imagez
-- test everything
-- deploy pravesestalo.cz
-- set up cron for imports
 - run workers automatically
+
+Article Approval queue and form
+
+- disable auto publication
+- allow article content review and changing topic image on single page
+- select topic manually
+- merge topics
+- mark articles already used/compiled into internal
+- stop recompilation (lock all?)
+- allow multiple topic select to unpublish en mass
+
+Images
+
+- link to original work from CC
+- error in CC search: Error: Page size must not be less than one
+- author contact?
+- cc create date
+- insert new image from clipboard
+- AI images Gateway timeout
+- add crop featere before upload
+- allow auto-cropping to top with imagez
+- store original image dimensions
+- allow uploading different file to existing Image
+- show where image is used on image detail
+
+Website detail
+
+- add banner from website detail form
+
+Articles
+
+- allow showing only internal articles on Articles page
+- also allow showing only published
+
+Topics
+
+- show number of published internal articles
+- show number of unused external articles
+- allow selecting articles from Similar articles and moving it to current topic
+
+Realms
+
+- show topic locks
+- show topic publish date
+- show number of published internal articles
+- show number of unused external articles
 
 2.0
 ===
@@ -14,13 +56,13 @@
 
 - use bigserial/Long as IDs
 - add Topic Extension worker to extend existing topic with new info when available
-- add manual instructions to topic for compilation
-- introduce virtual writer to do the AI compilation work with flavor
+- add manual instructions to realm for compilation
+  - realm specific authors
+  - introduce virtual writer to do the AI compilation work with flavor
 - full-text search in summary and body
 - warn when leaving unsaved form (use global solution handling browser beforeunload and all navigation calls)
 - semantic search (in summary)
 - topic relevance/popularity
-- tag groups - if certain set of tags occurs together, merge it into a single tag
 - own analytics
   - log page views (link to website/article/category)
 - banners language (sklik only allows czech)

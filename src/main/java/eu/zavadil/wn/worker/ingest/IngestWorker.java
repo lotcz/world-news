@@ -178,6 +178,7 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 	@Async
 	public void ingestDataSourceAsync(ArticleSource articleSource) {
 		this.ingestDataSource(articleSource);
+		this.articleSourceService.reset();
 	}
 
 	@Async

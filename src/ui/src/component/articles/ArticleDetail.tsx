@@ -402,7 +402,7 @@ export default function ArticleDetail() {
 						<Col md={COL_2_MD} lg={COL_2_LG}>
 							<Form.Control
 								as="textarea"
-								rows={15}
+								rows={20}
 								value={StringUtil.getNonEmpty(data.body)}
 								onChange={(e) => {
 									data.body = e.target.value;
