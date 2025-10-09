@@ -1,4 +1,13 @@
-- run workers automatically
+- don't update existing existing external articles
+- wait with compilation until topic approved
+- topic approval/article approval
+- dont compile if article come from the same source
+
+Topic Approval
+
+- show topic for approval before compilation
+- only with >1 external articles from >1 different sources
+- only from published realms
 
 Article Approval queue and form
 
@@ -23,6 +32,12 @@ Images
 - store original image dimensions
 - allow uploading different file to existing Image
 - show where image is used on image detail
+- downloading image doesnt show errors
+- preview in aspects as in web
+
+Article Sources
+
+- detail does not refresh state
 
 Website detail
 
@@ -46,6 +61,8 @@ Realms
 - show number of published internal articles
 - show number of unused external articles
 
+- run workers automatically
+
 2.0
 ===
 
@@ -68,6 +85,7 @@ Realms
 - banners language (sklik only allows czech)
 - accept direct advertising
 - user paid program
+- allow to redownload whole realm by setting change date of all articles/topics
 
 - rethink tags
   - merge with realms
