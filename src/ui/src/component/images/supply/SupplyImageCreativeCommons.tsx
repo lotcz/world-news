@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useState} from 'react';
 import {Button, Form} from 'react-bootstrap';
-import {SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
+import {DateTime, SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
 import {Page, PagingRequest, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../../util/WnUserAlerts";
@@ -8,14 +8,15 @@ import {Image, ImageSearchResult} from "../../../types/Image";
 import {Img} from "../Img";
 
 const HEADER: SelectableTableHeader<ImageSearchResult> = [
-	{name: '', label: '', renderer: (isr) => <Img url={isr.url} alt={isr.id} maxHeight={85}/>},
-	{name: 'title', label: 'Name'},
-	{name: 'source', label: 'Source'},
-	{name: 'creator', label: 'Creator', renderer: (isr) => StringUtil.ellipsis(isr.creator, 50)},
-	{name: 'filetype', label: 'Type'},
-	{name: 'license', label: 'License'},
-	{name: 'width', label: 'Width'},
-	{name: 'height', label: 'Height'}
+	{name: '', label: '', renderer: (isr) => <Img url={isr.thumbnail} alt={isr.id} maxHeight={85} maxWidth={100}/>},
+	{name: 'title', label: 'Name', sort: false},
+	{name: 'source', label: 'Source', sort: false},
+	{name: 'creator', label: 'Creator', sort: false, renderer: (isr) => StringUtil.ellipsis(isr.creator, 25)},
+	{name: 'filetype', label: 'Type', sort: false},
+	{name: 'license', label: 'License', sort: false},
+	{name: 'width', label: 'Width', sort: false},
+	{name: 'height', label: 'Height', sort: false},
+	{name: 'indexed_on', label: 'Indexed', sort: false, renderer: (isr) => <DateTime value={isr.indexed_on}/>}
 ];
 
 export type SupplyImageCreativeCommonsProps = {
@@ -82,7 +83,7 @@ function SupplyImageCreativeCommons({onSelected, search, onSearchChanged, paging
 							<TextInputWithReset
 								value={search}
 								onChange={onSearchChanged}
-								onReset={() => onPagingChanged({page: 0, size: 0})}
+								onReset={() => onPagingChanged({page: 0, size: 10})}
 							/>
 						</Form>
 					</div>

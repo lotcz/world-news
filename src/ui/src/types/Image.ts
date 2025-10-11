@@ -12,15 +12,19 @@ export type Image = EntityBase & {
 
 export type ImageSearchResult = {
 	id: string;
-	title: string;
-	creator?: string;
+	title?: string | null;
+	creator?: string | null;
+	creator_url?: string | null;
+	detail_url?: string | null;
 	license?: string;
 	source?: string;
 	url: string;
 	thumbnail: string;
 	filetype: string;
+	attribution: string;
 	width: number;
 	height: number;
+	indexed_on?: Date;
 }
 
 export type ImageHealth = {

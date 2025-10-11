@@ -22,7 +22,6 @@ Article Approval queue and form
 Images
 
 - link to original work from CC
-- error in CC search: Error: Page size must not be less than one
 - author contact?
 - cc create date
 - insert new image from clipboard

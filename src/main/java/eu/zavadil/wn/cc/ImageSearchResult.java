@@ -11,6 +11,10 @@ public class ImageSearchResult {
 
 	private String creator;
 
+	private String creator_url;
+
+	private String detail_url;
+
 	private String license;
 
 	private String source;
@@ -20,6 +24,10 @@ public class ImageSearchResult {
 	private String thumbnail;
 
 	private String filetype;
+
+	private String indexed_on;
+
+	private String attribution;
 
 	private int width;
 

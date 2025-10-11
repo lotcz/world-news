@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * https://api.openverse.org/v1/
+ */
 @Service
 public class CreativeCommonsClientHttp extends HttpApiClientBase implements CreativeCommons {
 
@@ -23,6 +26,7 @@ public class CreativeCommonsClientHttp extends HttpApiClientBase implements Crea
 		params.put("page", String.valueOf(pr.getPageNumber() + 1));
 		params.put("page_size", String.valueOf(pr.getPageSize()));
 		params.put("license_type", "commercial");
+		params.put("unstable__sort_by", "indexed_on");
 		ImageSearchResultPage page = this.get("images", params, ImageSearchResultPage.class);
 		return new PageImpl<>(page.getResults(), pr, page.getResultCount());
 	}
