@@ -1,7 +1,7 @@
 - don't update existing existing external articles
 - wait with compilation until topic approved
 - topic approval/article approval
-- dont compile if article come from the same source
+- dont compile if articles come from the same source
 
 Topic Approval
 

@@ -1,5 +1,11 @@
 CREATE EXTENSION IF NOT EXISTS vector;
 
+/*
+	no index - exact results
+	HNSW - better for smaller tables
+	IVFFLAT - good for very large tables, easily miss records
+ */
+
 DROP TABLE IF EXISTS embeddings_cache;
 
 create table embeddings_cache (
@@ -17,7 +23,7 @@ create table article_embeddings (
         on delete cascade,
     embedding vector(1536) not null
 );
-
+/*
 DROP INDEX IF EXISTS article_embeddings_vector_ix;
 
 CREATE INDEX article_embeddings_vector_ix
@@ -25,6 +31,8 @@ CREATE INDEX article_embeddings_vector_ix
 	USING ivfflat (embedding vector_cosine_ops)
 	WITH (lists = 100);
 
+ANALYZE article_embeddings;
+*/
 DROP TABLE IF EXISTS topic_embeddings;
 
 CREATE TABLE topic_embeddings (
@@ -35,6 +43,7 @@ CREATE TABLE topic_embeddings (
 	embedding vector(1536) not null
 );
 
+/*
 DROP INDEX IF EXISTS topic_embeddings_vector_ix;
 
 CREATE INDEX topic_embeddings_vector_ix
@@ -42,6 +51,8 @@ CREATE INDEX topic_embeddings_vector_ix
 		USING ivfflat (embedding vector_cosine_ops)
 	WITH (lists = 100);
 
+ANALYZE topic_embeddings;
+*/
 DROP TABLE IF EXISTS realm_embeddings;
 
 CREATE TABLE realm_embeddings (
@@ -52,8 +63,12 @@ CREATE TABLE realm_embeddings (
 	embedding vector(1536) not null
 );
 
+/*
 DROP INDEX IF EXISTS realm_embeddings_vector_ix;
 
 CREATE INDEX realm_embeddings_vector_ix
 	ON realm_embeddings
 		USING hnsw (embedding vector_cosine_ops);
+
+ANALYZE realm_embeddings;
+*/
