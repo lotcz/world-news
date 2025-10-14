@@ -1,4 +1,4 @@
-- don't update existing existing external articles
+- don't update existing external articles
 - wait with compilation until topic approved
 - topic approval/article approval
 - dont compile if articles come from the same source
@@ -23,15 +23,14 @@ Images
 
 - link to original work from CC
 - author contact?
-- cc create date
 - insert new image from clipboard
 - AI images Gateway timeout
-- add crop featere before upload
+- add crop feature before upload
 - allow auto-cropping to top with imagez
 - store original image dimensions
 - allow uploading different file to existing Image
 - show where image is used on image detail
-- downloading image doesnt show errors
+- downloading image doesnt show error messages
 - preview in aspects as in web
 
 Article Sources

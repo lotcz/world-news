@@ -90,7 +90,7 @@ BEGIN
     ELSEIF TG_OP = 'INSERT' THEN
         CALL update_topic_article_count(NEW.topic_id);
         CALL update_source_article_count(NEW.source_id);
-    ELSIF (OLD.topic_id IS DISTINCT FROM NEW.topic_id) THEN
+    ELSEIF (OLD.topic_id IS DISTINCT FROM NEW.topic_id) THEN
         CALL update_topic_article_count(OLD.topic_id);
         CALL update_topic_article_count(NEW.topic_id);
         CALL update_source_article_count(OLD.source_id);
