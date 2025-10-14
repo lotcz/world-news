@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -16,10 +18,7 @@ public class Image extends EntityBase {
 	@JsonProperty("isAiGenerated")
 	private boolean isAiGenerated = false;
 
-	private static final int URL_SIZE = 255;
-
-	@Column(length = URL_SIZE)
-	@Size(max = URL_SIZE)
+	@Column(columnDefinition = "TEXT")
 	private String originalUrl;
 
 	private static final int NAME_SIZE = 255;
@@ -40,6 +39,9 @@ public class Image extends EntityBase {
 		this.author = this.truncateString(value, AUTHOR_SIZE);
 	}
 
+	@Column(columnDefinition = "TEXT")
+	private String authorUrl;
+
 	private static final int SOURCE_SIZE = 100;
 
 	@Column(length = SOURCE_SIZE)
@@ -49,6 +51,9 @@ public class Image extends EntityBase {
 	public void setSource(String value) {
 		this.source = this.truncateString(value, SOURCE_SIZE);
 	}
+
+	@Column(columnDefinition = "TEXT")
+	private String sourceUrl;
 
 	private static final int LICENSE_SIZE = 100;
 
@@ -60,4 +65,13 @@ public class Image extends EntityBase {
 		this.license = this.truncateString(value, LICENSE_SIZE);
 	}
 
+	private Integer originalWidth;
+
+	private Integer originalHeight;
+
+	@JdbcType(PostgreSQLEnumJdbcType.class)
+	private VerticalAlign verticalAlign;
+
+	@JdbcType(PostgreSQLEnumJdbcType.class)
+	private HorizontalAlign horizontalAlign;
 }

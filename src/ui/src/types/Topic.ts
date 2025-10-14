@@ -12,6 +12,8 @@ export type TopicBase = EntityWithName & {
 	articleCountInternal: number;
 	articleCountExternal: number;
 	mainImageIsIllustrative: boolean;
+	externalArticlesSourceCount: number;
+	externalArticlesUnusedCount: number;
 }
 
 export type TopicStub = TopicBase & {

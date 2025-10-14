@@ -51,4 +51,10 @@ public class TopicBase extends EntityWithNameBase {
 	@Column(updatable = false, insertable = false)
 	private int articleCount = 0;
 
+	@Column(updatable = false, insertable = false)
+	private int externalArticlesSourceCount = 0;
+
+	@Column(updatable = false, insertable = false)
+	private int externalArticlesUnusedCount = 0;
+	
 }

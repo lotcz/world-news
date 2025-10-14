@@ -105,4 +105,6 @@ public class ArticleBase extends EntityBase {
 	@JdbcType(PostgreSQLEnumJdbcType.class)
 	private ProcessingState processingState = ProcessingState.NotReady;
 
+	@JsonProperty("usedForCompilation")
+	private boolean usedForCompilation = false;
 }

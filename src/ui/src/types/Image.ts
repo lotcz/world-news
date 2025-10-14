@@ -5,9 +5,15 @@ export type Image = EntityBase & {
 	name: string;
 	description?: string | null;
 	author?: string | null;
+	authorUrl?: string | null;
 	source?: string | null;
+	sourceUrl?: string | null;
 	license?: string | null;
 	isAiGenerated: boolean;
+	verticalAlign?: string | null;
+	horizontalAlign?: string | null;
+	originalWidth?: number | null;
+	originalHeight?: number | null;
 }
 
 export type ImageSearchResult = {

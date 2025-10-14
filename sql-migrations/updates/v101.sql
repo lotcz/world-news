@@ -1,5 +1,6 @@
-alter table image add column source_url varchar(255);
-alter table image add column author_url varchar(255);
+alter table image alter column original_url type TEXT;
+alter table image add column source_url TEXT;
+alter table image add column author_url TEXT;
 alter table image add column original_width int;
 alter table image add column original_height int;
 
