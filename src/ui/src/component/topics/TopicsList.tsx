@@ -133,7 +133,13 @@ function TopicsList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td><ImagezImageThumb name={item.mainImage?.name}/></td>
+													<td>
+														<ImagezImageThumb
+															name={item.mainImage?.name}
+															verticalAlign={item.mainImage?.verticalAlign}
+															horizontalAlign={item.mainImage?.horizontalAlign}
+														/>
+													</td>
 													<td>{item.processingState}</td>
 													<td>{item.name}</td>
 													<td>{item.summary}</td>

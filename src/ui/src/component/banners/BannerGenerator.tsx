@@ -7,6 +7,8 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import ResizeTypeSelect from "../images/ResizeTypeSelect";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {ImagezImage} from "../images/ImagezImage";
+import VerticalAlignSelect from "../images/VerticalAlignSelect";
+import HorizontalAlignSelect from "../images/HorizontalAlignSelect";
 
 export type BannerGeneratorProps = {
 	type?: string | null;
@@ -31,6 +33,8 @@ export default function BannerGenerator({type, onCreated, onCanceled}: BannerGen
 	const [width, setWidth] = useState<string>('250');
 	const [height, setHeight] = useState<string>('450');
 	const [resizeType, setResizeType] = useState<string>('fit');
+	const [verticalAlign, setVerticalAlign] = useState<string>();
+	const [horizontalAlign, setHorizontalAlign] = useState<string>();
 
 	useEffect(
 		() => {
@@ -93,7 +97,7 @@ export default function BannerGenerator({type, onCreated, onCanceled}: BannerGen
 		[restClient, url, external, name, resizeType, width, height, userAlerts, onCreated]
 	);
 
-	return <Modal show={modalVisible} onHide={onCanceled}>
+	return <Modal show={modalVisible} onHide={onCanceled} size="xl">
 		<ModalHeader><Localize text={"Create banner"}/></ModalHeader>
 		<ModalBody>
 			<Stack direction="vertical" gap={2}>
@@ -179,6 +183,22 @@ export default function BannerGenerator({type, onCreated, onCanceled}: BannerGen
 				</Row>
 				<Row className="align-items-center">
 					<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Form.Label>Extension:</Form.Label>
+					</Col>
+					<Col md={COL_2_MD} lg={COL_2_LG}>
+						<Form.Control
+							type="text"
+							value={ext}
+							onChange={
+								(e) => {
+									setExt(e.target.value);
+								}
+							}
+						/>
+					</Col>
+				</Row>
+				<Row className="align-items-center">
+					<Col md={COL_1_MD} lg={COL_1_LG}>
 						<Form.Label>Resize:</Form.Label>
 					</Col>
 					<Col md={COL_2_MD} lg={COL_2_LG}>
@@ -192,12 +212,39 @@ export default function BannerGenerator({type, onCreated, onCanceled}: BannerGen
 						/>
 					</Col>
 				</Row>
+				<Row className="align-items-center">
+					<Col md={COL_1_MD} lg={COL_1_LG}>
+						<Form.Label>Align:</Form.Label>
+					</Col>
+					<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+						Vertical:
+						<VerticalAlignSelect
+							value={verticalAlign}
+							onChange={
+								(e) => {
+									setVerticalAlign(e || undefined);
+								}
+							}
+						/>
+						Horizontal:
+						<HorizontalAlignSelect
+							value={horizontalAlign}
+							onChange={
+								(e) => {
+									setHorizontalAlign(e || undefined);
+								}
+							}
+						/>
+					</Col>
+				</Row>
 				<div className="m-auto">
 					<ImagezImage
 						name={name}
 						type={resizeType}
 						width={Number(NumberUtil.parseNumber(width))}
 						height={Number(NumberUtil.parseNumber(height))}
+						verticalAlign={verticalAlign}
+						horizontalAlign={horizontalAlign}
 						ext={ext}
 					/>
 				</div>

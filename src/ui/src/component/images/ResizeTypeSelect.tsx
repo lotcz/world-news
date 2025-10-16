@@ -19,6 +19,7 @@ export default function ResizeTypeSelect({value, onChange}: ResizeTypeSelectProp
 		value={value}
 		options={data}
 		onChange={onChange}
+		showEmptyOption={true}
 	/>
 
 }

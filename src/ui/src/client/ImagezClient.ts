@@ -23,9 +23,9 @@ export class ImagezClient extends RestClient {
 		verticalAlign?: string | null,
 		horizontalAlign?: string | null
 	): string {
-		if (type === 'original') return this.getImagezOrignalUrlByName(name);
+		if (StringUtil.isBlank(type) || type === 'original') return this.getImagezOrignalUrlByName(name);
 
-		let raw = `${this.secretToken}-${name}-${width}-${height}-${type}`;
+		let raw = `${this.secretToken}-${name}-${width}-${height}-${StringUtil.safeLowercase(type)}`;
 		if (StringUtil.notBlank(ext)) {
 			raw += `-${ext}`;
 		}
@@ -35,6 +35,7 @@ export class ImagezClient extends RestClient {
 		if (StringUtil.notBlank(horizontalAlign)) {
 			raw += `-${StringUtil.safeLowercase(horizontalAlign)}`;
 		}
+
 		const token = HashUtil.crc32hex(raw);
 		return this.getUrl(
 			`images/resized/${name}`,
