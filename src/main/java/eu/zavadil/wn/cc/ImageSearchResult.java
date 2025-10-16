@@ -13,12 +13,12 @@ public class ImageSearchResult {
 
 	private String creator_url;
 
-	private String detail_url;
-
 	private String license;
 
 	private String source;
 
+	private String foreign_landing_url;
+	
 	private String url;
 
 	private String thumbnail;

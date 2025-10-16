@@ -40,9 +40,13 @@ function SupplyImageCreativeCommons({onSelected, search, onSearchChanged, paging
 				name: '',
 				description: i.title,
 				source: i.source,
+				sourceUrl: i.foreign_landing_url,
 				author: i.creator,
+				authorUrl: i.creator_url,
 				license: i.license,
-				isAiGenerated: false
+				isAiGenerated: false,
+				originalWidth: i.width,
+				originalHeight: i.height
 			}
 		);
 	}

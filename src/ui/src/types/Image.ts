@@ -18,13 +18,13 @@ export type Image = EntityBase & {
 
 export type ImageSearchResult = {
 	id: string;
+	url: string;
 	title?: string | null;
 	creator?: string | null;
 	creator_url?: string | null;
-	detail_url?: string | null;
 	license?: string;
 	source?: string;
-	url: string;
+	foreign_landing_url?: string | null;
 	thumbnail: string;
 	filetype: string;
 	attribution: string;

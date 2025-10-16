@@ -5,6 +5,9 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.ArticleType;
 import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.banner.BannerType;
+import eu.zavadil.wn.data.image.HorizontalAlign;
+import eu.zavadil.wn.data.image.VerticalAlign;
+import eu.zavadil.wn.imagez.ResizeType;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +41,20 @@ public class EnumerationsController {
 	public List<String> articleTypes() {
 		return EnumUtils.namesOf(ArticleType.class);
 	}
-	
+
+	@GetMapping("resize-type")
+	public List<String> resizeTypes() {
+		return EnumUtils.namesOf(ResizeType.class);
+	}
+
+	@GetMapping("vertical-align")
+	public List<String> verticalAlign() {
+		return EnumUtils.namesOf(VerticalAlign.class);
+	}
+
+	@GetMapping("horizontal-align")
+	public List<String> horizontalAlign() {
+		return EnumUtils.namesOf(HorizontalAlign.class);
+	}
+
 }

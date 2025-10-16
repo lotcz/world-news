@@ -10,11 +10,10 @@ import eu.zavadil.wn.ai.images.AiImageService;
 import eu.zavadil.wn.cc.CreativeCommons;
 import eu.zavadil.wn.cc.ImageSearchResult;
 import eu.zavadil.wn.data.aiLog.EntityType;
+import eu.zavadil.wn.data.image.HorizontalAlign;
 import eu.zavadil.wn.data.image.Image;
-import eu.zavadil.wn.imagez.ImageHealthPayload;
-import eu.zavadil.wn.imagez.ImagezSettingsPayload;
-import eu.zavadil.wn.imagez.ImagezSmartApi;
-import eu.zavadil.wn.imagez.ResizeRequest;
+import eu.zavadil.wn.data.image.VerticalAlign;
+import eu.zavadil.wn.imagez.*;
 import eu.zavadil.wn.service.ImageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -95,29 +94,31 @@ public class ImageController {
 	@GetMapping("imagez/url/resized/by-name/{name}")
 	public String imagezUrl(
 		@PathVariable String name,
-		@RequestParam String type,
+		@RequestParam ResizeType type,
 		@RequestParam int width,
 		@RequestParam int height,
-		@RequestParam(defaultValue = "") String ext
+		@RequestParam(defaultValue = "", required = false) String ext,
+		@RequestParam(defaultValue = "", required = false) VerticalAlign verticalAlign,
+		@RequestParam(defaultValue = "", required = false) HorizontalAlign horizontalAlign
 	) {
 		return this.imagez.getImageUrlResized(
 			name,
-			new ResizeRequest(type, width, height, ext)
+			new ResizeRequest(type, width, height, ext, verticalAlign, horizontalAlign)
 		).toString();
 	}
 
 	@GetMapping("imagez/url/resized/by-id/{id}")
 	public String imagezUrlById(
 		@PathVariable int id,
-		@RequestParam String type,
+		@RequestParam ResizeType type,
 		@RequestParam int width,
 		@RequestParam int height,
-		@RequestParam(defaultValue = "") String ext
+		@RequestParam(defaultValue = "", required = false) String ext
 	) {
 		Image image = this.imageService.requireById(id);
 		return this.imagez.getImageUrlResized(
 			image.getName(),
-			new ResizeRequest(type, width, height, ext)
+			new ResizeRequest(type, width, height, ext, image.getVerticalAlign(), image.getHorizontalAlign())
 		).toString();
 	}
 

@@ -150,7 +150,13 @@ export default function ImagesList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td><ImagezImageThumb name={item.name}/></td>
+													<td>
+														<ImagezImageThumb
+															name={item.name}
+															verticalAlign={item.verticalAlign}
+															horizontalAlign={item.horizontalAlign}
+														/>
+													</td>
 													<td>{item.name}</td>
 													<td>{item.description}</td>
 													<td>{item.source}</td>

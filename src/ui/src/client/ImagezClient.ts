@@ -14,17 +14,39 @@ export class ImagezClient extends RestClient {
 		return this.getUrl(`images/original/${name}`).toString()
 	}
 
-	getImagezResizedUrlByName(name: string, type: string, width: number, height: number, ext?: string): string {
+	getImagezResizedUrlByName(
+		name: string,
+		type: string,
+		width: number,
+		height: number,
+		ext?: string,
+		verticalAlign?: string | null,
+		horizontalAlign?: string | null
+	): string {
 		if (type === 'original') return this.getImagezOrignalUrlByName(name);
-		
+
 		let raw = `${this.secretToken}-${name}-${width}-${height}-${type}`;
 		if (StringUtil.notBlank(ext)) {
 			raw += `-${ext}`;
 		}
+		if (StringUtil.notBlank(verticalAlign)) {
+			raw += `-${StringUtil.safeLowercase(verticalAlign)}`;
+		}
+		if (StringUtil.notBlank(horizontalAlign)) {
+			raw += `-${StringUtil.safeLowercase(horizontalAlign)}`;
+		}
 		const token = HashUtil.crc32hex(raw);
 		return this.getUrl(
 			`images/resized/${name}`,
-			{type, width, height, ext, token}
+			{
+				type: StringUtil.safeLowercase(type),
+				width,
+				height,
+				ext,
+				token,
+				v: StringUtil.safeLowercase(verticalAlign),
+				h: StringUtil.safeLowercase(horizontalAlign)
+			}
 		).toString()
 	}
 

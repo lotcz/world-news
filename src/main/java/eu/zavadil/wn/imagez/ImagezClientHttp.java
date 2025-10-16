@@ -90,18 +90,29 @@ public class ImagezClientHttp extends HttpApiClientBase implements ImagezSmartAp
 			.addPath(name)
 			.addQuery("width", resizeRequest.getWidth())
 			.addQuery("height", resizeRequest.getHeight())
-			.addQuery("type", resizeRequest.getType());
+			.addQuery("type", resizeRequest.getType().toString().toLowerCase());
 		String tokenRaw = String.format(
 			"%s-%s-%d-%d-%s",
 			this.secretToken,
 			name,
 			resizeRequest.getWidth(),
 			resizeRequest.getHeight(),
-			resizeRequest.getType()
+			StringUtils.safeLowerCase(resizeRequest.getType().toString())
 		);
 		if (StringUtils.notBlank(resizeRequest.getExt())) {
-			builder.addQuery("ext", resizeRequest.getExt());
-			tokenRaw = String.format("%s-%s", tokenRaw, resizeRequest.getExt());
+			String ext = StringUtils.safeLowerCase(resizeRequest.getExt());
+			builder.addQuery("ext", ext);
+			tokenRaw = String.format("%s-%s", tokenRaw, ext);
+		}
+		if (resizeRequest.getVerticalAlign() != null) {
+			String v = StringUtils.safeLowerCase(resizeRequest.getVerticalAlign().toString());
+			builder.addQuery("v", v);
+			tokenRaw = String.format("%s-%s", tokenRaw, v);
+		}
+		if (resizeRequest.getHorizontalAlign() != null) {
+			String h = StringUtils.safeLowerCase(resizeRequest.getHorizontalAlign().toString());
+			builder.addQuery("h", h);
+			tokenRaw = String.format("%s-%s", tokenRaw, h);
 		}
 		String token = HashUtils.crc32Hex(tokenRaw);
 		return builder.addQuery("token", token).build();

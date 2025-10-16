@@ -1,4 +1,4 @@
-import {EntityClient, LazyAsync, Page, PagingRequest, PagingUtil, RestClient} from "zavadil-ts-common";
+import {EntityClient, LazyAsync, Page, PagingRequest, PagingUtil, RestClient, StringUtil} from "zavadil-ts-common";
 import {Image, ImageHealth, ImageSearchResult, ImagezSettingsPayload} from "../types/Image";
 import {ImagezClient} from "./ImagezClient";
 
@@ -19,20 +19,25 @@ export class ImagesClient extends EntityClient<Image> {
 		return this.client.getJson(`${this.name}/imagez/settings`);
 	}
 
-	getImagezResizedUrlByNameViaProxy(name: string, type: string, width: number, height: number, ext?: string): Promise<string> {
-		return this.client.get(`${this.name}/imagez/url/resized/by-name/${name}`, {type, width, height, ext})
-			.then(r => r.text());
-	}
-
 	getImagezResizedUrlById(id: number, type: string, width: number, height: number, ext?: string): Promise<string> {
-		return this.client.get(`${this.name}/imagez/url/resized/by-id/${id}`, {type, width, height, ext})
+		return this.client.get(`${this.name}/imagez/url/resized/by-id/${id}`, {type: StringUtil.capitalizeFirstLetter(type), width, height, ext})
 			.then(r => r.text());
 	}
 
 	// Imagez direct
 
-	getImagezResizedUrlByName(name: string, type: string, width: number, height: number, ext?: string): Promise<string> {
-		return this.imagez.get().then((imagez) => imagez.getImagezResizedUrlByName(name, type, width, height, ext));
+	getImagezResizedUrlByName(
+		name: string,
+		type: string,
+		width: number,
+		height: number,
+		ext?: string,
+		verticalAlign?: string | null,
+		horizontalAlign?: string | null
+	): Promise<string> {
+		return this.imagez.get().then(
+			(imagez) => imagez.getImagezResizedUrlByName(name, type, width, height, ext, verticalAlign, horizontalAlign)
+		);
 	}
 
 	getImagezHealth(name: string): Promise<ImageHealth> {

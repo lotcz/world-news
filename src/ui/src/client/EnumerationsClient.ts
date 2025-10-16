@@ -12,6 +12,12 @@ export class EnumerationsClient {
 
 	public articleType: LazyAsync<string[]>;
 
+	public resizeType: LazyAsync<string[]>;
+
+	public verticalAlign: LazyAsync<string[]>;
+
+	public horizontalAlign: LazyAsync<string[]>;
+
 	constructor(client: RestClient) {
 		this.client = client;
 
@@ -31,6 +37,17 @@ export class EnumerationsClient {
 			() => this.client.getJson('enumerations/article-type')
 		);
 
+		this.resizeType = new LazyAsync<string[]>(
+			() => this.client.getJson('enumerations/resize-type')
+		);
+
+		this.verticalAlign = new LazyAsync<string[]>(
+			() => this.client.getJson('enumerations/vertical-align')
+		);
+
+		this.horizontalAlign = new LazyAsync<string[]>(
+			() => this.client.getJson('enumerations/horizontal-align')
+		);
 	}
 
 }

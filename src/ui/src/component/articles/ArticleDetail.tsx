@@ -74,7 +74,8 @@ export default function ArticleDetail() {
 					isLocked: false,
 					articleType: 'Normal',
 					title: '',
-					mainImageIsIllustrative: true
+					mainImageIsIllustrative: true,
+					usedForCompilation: false
 				});
 				return;
 			}

@@ -1,24 +1,26 @@
 import {EnumSelect} from "zavadil-react-common";
 import {useContext, useEffect, useState} from "react";
 import {WnRestClientContext} from "../../client/WnRestClient";
+import {StringUtil} from "zavadil-ts-common";
 
-export type ResizeTypeSelectProps = {
-	value: string;
+export type VerticalAlignSelectProps = {
+	value?: string | null;
 	onChange: (value?: string | null) => any;
 }
 
-export default function ResizeTypeSelect({value, onChange}: ResizeTypeSelectProps) {
+export default function VerticalAlignSelect({value, onChange}: VerticalAlignSelectProps) {
 	const restClient = useContext(WnRestClientContext);
 	const [data, setData] = useState(Array<string>);
 
 	useEffect(() => {
-		restClient.enumerations.resizeType.get().then(setData);
+		restClient.enumerations.verticalAlign.get().then(setData);
 	}, []);
 
 	return <EnumSelect
 		value={value}
 		options={data}
-		onChange={onChange}
+		showEmptyOption={true}
+		onChange={(v) => onChange(StringUtil.blankToNull(v))}
 	/>
 
 }

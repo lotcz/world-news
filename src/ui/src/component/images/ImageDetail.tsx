@@ -8,8 +8,10 @@ import RefreshIconButton from "../general/RefreshIconButton";
 import {Image} from "../../types/Image";
 import {ConfirmDialogContext, DeleteButton, SaveButton, Switch} from "zavadil-react-common";
 import BackIconLink from "../general/BackIconLink";
-import {ImagezImagePreview} from "./ImagezImage";
+import {ImagezImage, ImagezImagePreview} from "./ImagezImage";
 import ExternalLink from "../general/ExternalLink";
+import VerticalAlignSelect from "./VerticalAlignSelect";
+import HorizontalAlignSelect from "./HorizontalAlignSelect";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'articles';
@@ -171,12 +173,86 @@ export default function ImageDetail() {
 										onChanged();
 									}}
 								/>
-								<div className="pt-2">
-									{
-										StringUtil.notBlank(data.name) && <ImagezImagePreview name={data.name}/>
-									}
-								</div>
+								{
+									StringUtil.notBlank(data.name) && <div className="pt-2 d-flex align-items-end gap-3">
+										<ImagezImagePreview
+											name={data.name}
+											verticalAlign={data.verticalAlign}
+											horizontalAlign={data.horizontalAlign}
+										/>
+										<ImagezImage
+											type="crop"
+											name={data.name}
+											verticalAlign={data.verticalAlign}
+											horizontalAlign={data.horizontalAlign}
+											width={205}
+											height={120}
+										/>
+										<ImagezImage
+											type="crop"
+											name={data.name}
+											verticalAlign={data.verticalAlign}
+											horizontalAlign={data.horizontalAlign}
+											width={100}
+											height={100}
+										/>
+									</div>
+								}
 							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Align:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+							Vertical:
+							<VerticalAlignSelect
+								value={data.verticalAlign}
+								onChange={(e) => {
+									data.verticalAlign = e;
+									onChanged();
+								}}
+							/>
+							Horizontal:
+							<HorizontalAlignSelect
+								value={data.horizontalAlign}
+								onChange={(e) => {
+									data.horizontalAlign = e;
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Width:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-1">
+							<Form.Control
+								type="text"
+								value={StringUtil.toString(data.originalWidth)}
+								onChange={(e) => {
+									data.originalWidth = NumberUtil.parseNumber(e.target.value);
+									onChanged();
+								}}
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Height:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-1">
+							<Form.Control
+								type="text"
+								value={StringUtil.toString(data.originalHeight)}
+								onChange={(e) => {
+									data.originalHeight = NumberUtil.parseNumber(e.target.value);
+									onChanged();
+								}}
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-start">
@@ -226,6 +302,24 @@ export default function ImageDetail() {
 							/>
 						</Col>
 					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Source URL:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-1">
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.sourceUrl)}
+								onChange={(e) => {
+									data.sourceUrl = StringUtil.emptyToNull(e.target.value);
+									onChanged();
+								}}
+							/>
+							{
+								StringUtil.notBlank(data.sourceUrl) && <ExternalLink url={data.sourceUrl}/>
+							}
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Author:</Form.Label>
@@ -239,6 +333,24 @@ export default function ImageDetail() {
 									onChanged();
 								}}
 							/>
+						</Col>
+					</Row>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Author URL:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-1">
+							<Form.Control
+								type="text"
+								value={StringUtil.getNonEmpty(data.authorUrl)}
+								onChange={(e) => {
+									data.authorUrl = StringUtil.emptyToNull(e.target.value);
+									onChanged();
+								}}
+							/>
+							{
+								StringUtil.notBlank(data.authorUrl) && <ExternalLink url={data.authorUrl}/>
+							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">

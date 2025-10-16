@@ -77,7 +77,9 @@ export default function TopicDetail() {
 					articleCount: 0,
 					articleCountInternal: 0,
 					articleCountExternal: 0,
-					mainImageIsIllustrative: true
+					mainImageIsIllustrative: true,
+					externalArticlesSourceCount: 0,
+					externalArticlesUnusedCount: 0
 				});
 				return;
 			}

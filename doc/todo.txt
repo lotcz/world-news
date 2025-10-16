@@ -1,3 +1,18 @@
+Images
+
+- link to original work from CC
+- author contact?
+- insert new image from clipboard
+- AI images Gateway timeout
+- add crop feature before upload
+- allow auto-cropping to top with imagez
+- store original image dimensions
+- allow uploading different file to existing Image
+- show where image is used on image detail
+- downloading image doesnt show error messages
+- preview in aspects as in web
+
+
 - don't update existing external articles
 - wait with compilation until topic approved
 - topic approval/article approval
@@ -19,19 +34,6 @@ Article Approval queue and form
 - stop recompilation (lock all?)
 - allow multiple topic select to unpublish en mass
 
-Images
-
-- link to original work from CC
-- author contact?
-- insert new image from clipboard
-- AI images Gateway timeout
-- add crop feature before upload
-- allow auto-cropping to top with imagez
-- store original image dimensions
-- allow uploading different file to existing Image
-- show where image is used on image detail
-- downloading image doesnt show error messages
-- preview in aspects as in web
 
 Article Sources
 
