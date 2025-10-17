@@ -28,9 +28,10 @@ public class TopicController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size,
 		@RequestParam(defaultValue = "") String search,
-		@RequestParam(defaultValue = "") String sorting
+		@RequestParam(defaultValue = "") String sorting,
+		@RequestParam(defaultValue = "false") boolean published
 	) {
-		return JsonPageImpl.of(this.topicService.search(search, PagingUtils.of(page, size, sorting)));
+		return JsonPageImpl.of(this.topicService.search(search, published, PagingUtils.of(page, size, sorting)));
 	}
 
 	@PostMapping("")

@@ -21,6 +21,6 @@ export default function CountBadge({bg, count}: CountBadgeProps) {
 	if (count === undefined || count === null) return <></>;
 
 	return (
-		<Badge bg={background}>{count}</Badge>
+		<Badge bg={background} text={`bg-${background}`} pill>{count}</Badge>
 	);
 }

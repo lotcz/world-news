@@ -21,6 +21,24 @@ public interface TopicRepository extends EntityRepository<Topic> {
 		""")
 	Page<Topic> search(@Param("search") String search, Pageable pr);
 
+	@Query("""
+			select t
+			from Topic t
+			where t.publishDate is not null
+		""")
+	Page<Topic> loadPublished(Pageable pr);
+
+	@Query("""
+			select t
+			from Topic t
+			where t.publishDate is not null
+				and (
+					t.name ILIKE %:search%
+					or t.summary ILIKE %:search%
+				)
+		""")
+	Page<Topic> searchPublished(@Param("search") String search, Pageable pr);
+
 	Page<Topic> findAllByRealmId(int realmId, Pageable pr);
 
 	@Query("""

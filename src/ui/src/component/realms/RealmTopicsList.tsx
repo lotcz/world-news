@@ -5,6 +5,7 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {DateUtil, Page, PagingRequest} from "zavadil-ts-common";
 import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
 import {Topic} from "../../types/Topic";
+import ArticleCountBadge from "../articles/ArticleCountBadge";
 
 export type RealmTopicsListProps = {
 	realmId: number;
@@ -13,12 +14,11 @@ export type RealmTopicsListProps = {
 const HEADER = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'articleCountInternal', label: 'Internal'},
-	{name: 'articleCountExternal', label: 'External'},
-	{name: 'lastUpdatedOn', label: 'Updated'}
+	{name: '', label: ''},
+	{name: 'publishDate', label: 'Published'}
 ];
 
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'createdOn', desc: true}]}
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'publishDate', desc: true}]}
 
 function RealmTopicsList({realmId}: RealmTopicsListProps) {
 	const navigate = useNavigate();
@@ -69,9 +69,15 @@ function RealmTopicsList({realmId}: RealmTopicsListProps) {
 									<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
 										<td>{item.name}</td>
 										<td>{item.summary}</td>
-										<td>{item.articleCountInternal}</td>
-										<td>{item.articleCountExternal}</td>
-										<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
+										<td>
+											<div className="d-flex gap-2">
+												<ArticleCountBadge count={item.articleCountInternal} internal/>
+												<ArticleCountBadge count={item.articleCountExternal}/>
+												<ArticleCountBadge count={item.externalArticlesSourceCount} bg="info"/>
+												<ArticleCountBadge count={item.externalArticlesUnusedCount} bg="warning"/>
+											</div>
+										</td>
+										<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 									</tr>
 								);
 							})

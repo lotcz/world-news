@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {Button, Form, Stack} from 'react-bootstrap';
+import {AdvancedTable, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
 import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -19,15 +19,16 @@ const HEADER = [
 	{name: 'realm.name', label: 'Realm'},
 	{name: 'articleCountInternal', label: 'Internal'},
 	{name: 'articleCountExternal', label: 'External'},
-	{name: 'lastUpdatedOn', label: 'Updated'},
-	{name: 'createdOn', label: 'Created'},
+	{name: 'externalArticlesSourceCount', label: 'Sources'},
+	{name: 'externalArticlesUnusedCount', label: 'Unused'},
+	{name: 'publishDate', label: 'Published'},
 	{name: '', label: ''}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
 
 function TopicsList() {
-	const {pagingString} = useParams();
+	const {pagingString, published} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -39,6 +40,11 @@ function TopicsList() {
 		[pagingString]
 	);
 
+	const onlyPublished = useMemo(
+		() => published === 'true',
+		[published]
+	);
+
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
@@ -46,10 +52,11 @@ function TopicsList() {
 	};
 
 	const navigateToPage = useCallback(
-		(p?: PagingRequest) => {
-			navigate(`/topics/${PagingUtil.pagingRequestToString(p)}`);
+		(p?: PagingRequest, pub?: boolean) => {
+			if (pub === undefined) pub = onlyPublished;
+			navigate(`/topics/${PagingUtil.pagingRequestToString(p)}/${pub}`);
 		},
-		[navigate]
+		[navigate, onlyPublished]
 	);
 
 	const navigateToDetail = (l: Topic) => {
@@ -66,35 +73,37 @@ function TopicsList() {
 		[paging, searchInput, navigateToPage]
 	);
 
+	const applyPublished = useCallback(
+		(pub: boolean) => {
+			paging.search = searchInput;
+			paging.page = 0;
+			navigateToPage(paging, pub);
+		},
+		[paging, searchInput, navigateToPage]
+	);
+
 	const loadPageHandler = useCallback(
 		() => {
+			setData(null);
 			restClient
 				.topics
-				.loadPage(paging)
+				.search(onlyPublished, paging)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(null);
 					userAlerts.err(e);
 				});
 		},
-		[paging, restClient, userAlerts]
+		[paging, restClient, userAlerts, onlyPublished]
 	);
 
-	useEffect(loadPageHandler, [paging]);
-
-	const reload = useCallback(
-		() => {
-			setData(null);
-			loadPageHandler();
-		},
-		[loadPageHandler]
-	);
+	useEffect(loadPageHandler, [paging, onlyPublished]);
 
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<RefreshIconButton onClick={reload}/>
+					<RefreshIconButton onClick={loadPageHandler}/>
 					<Button onClick={createNew} className="text-nowrap">+ Add</Button>
 					<div style={{width: '250px'}}>
 						<Form onSubmit={applySearch} id="topics-search-form">
@@ -111,12 +120,13 @@ function TopicsList() {
 						</Form>
 					</div>
 					<Button onClick={applySearch}>Search</Button>
+					<Switch checked={onlyPublished} onChange={(v) => applyPublished(v)} label="Published" id="published-switch"/>
 				</Stack>
 			</div>
 
 			<div className="pt-2 px-3 gap-3">
 				{
-					(data === null) ? <span><Spinner/></span>
+					(data === null) ? <TablePlaceholder/>
 						: (
 							<AdvancedTable
 								header={HEADER}
@@ -146,8 +156,9 @@ function TopicsList() {
 													<td>{item.realm?.name}</td>
 													<td><ArticleCountBadge count={item.articleCountInternal} internal/></td>
 													<td><ArticleCountBadge count={item.articleCountExternal}/></td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+													<td><ArticleCountBadge count={item.externalArticlesSourceCount} bg="info"/></td>
+													<td><ArticleCountBadge count={item.externalArticlesUnusedCount} bg="warning"/></td>
+													<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
 													<td><IsLockedIcon locked={item.isLocked}/></td>
 												</tr>
 											);

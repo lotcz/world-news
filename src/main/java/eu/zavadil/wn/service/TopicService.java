@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,9 +62,12 @@ public class TopicService {
 		return saved;
 	}
 
-	public Page<Topic> search(@Param("search") String search, PageRequest pr) {
-		return StringUtils.isBlank(search) ? this.topicRepository.findAll(pr)
-			: this.topicRepository.search(search, pr);
+	public Page<Topic> search(String search, boolean published, PageRequest pr) {
+		if (StringUtils.isBlank(search)) {
+			return published ? this.topicRepository.loadPublished(pr) : this.topicRepository.findAll(pr);
+		} else {
+			return published ? this.topicRepository.searchPublished(search, pr) : this.topicRepository.search(search, pr);
+		}
 	}
 
 	public TopicStub loadById(int id) {

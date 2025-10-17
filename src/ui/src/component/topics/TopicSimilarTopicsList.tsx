@@ -5,6 +5,7 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicEmbeddingDistance} from "../../types/EmbeddingDistance";
 import {TablePlaceholder} from "zavadil-react-common";
+import ArticleCountBadge from "../articles/ArticleCountBadge";
 
 export type TopicSimilarTopicsListProps = {
 	topicId: number;
@@ -50,6 +51,7 @@ function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
 						<th>Distance</th>
 						<th>Name</th>
 						<th>Summary</th>
+						<th></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -61,8 +63,16 @@ function TopicsSimilarTopicsList({topicId}: TopicSimilarTopicsListProps) {
 								return (
 									<tr key={index} role="button" onClick={() => navigateToDetail(ed)}>
 										<td>{ed.distance}</td>
-										<td>{ed.entity?.name}</td>
-										<td>{ed.entity?.summary}</td>
+										<td>{ed.entity.name}</td>
+										<td>{ed.entity.summary}</td>
+										<td>
+											<div className="d-flex gap-2">
+												<ArticleCountBadge count={ed.entity.articleCountInternal} internal/>
+												<ArticleCountBadge count={ed.entity.articleCountExternal}/>
+												<ArticleCountBadge count={ed.entity.externalArticlesSourceCount} bg="info"/>
+												<ArticleCountBadge count={ed.entity.externalArticlesUnusedCount} bg="warning"/>
+											</div>
+										</td>
 									</tr>
 								);
 							})

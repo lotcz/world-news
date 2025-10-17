@@ -83,6 +83,7 @@ function Main() {
 								<Route path="add" element={<TopicDetail/>}/>
 								<Route path=":id" element={<TopicDetail/>}/>
 							</Route>
+							<Route path=":pagingString/:published" element={<TopicsList/>}/>
 							<Route path=":pagingString" element={<TopicsList/>}/>
 						</Route>
 						<Route path="articles">

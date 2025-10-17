@@ -8,6 +8,11 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		super(client, `topics`);
 	}
 
+	search(published: boolean, pr?: PagingRequest): Promise<Page<Topic>> {
+		const params = PagingUtil.pagingRequestToQueryParams(pr);
+		return this.client.getJson(this.name, {...params, published});
+	}
+
 	loadByRealm(realmId: number, pr?: PagingRequest): Promise<Page<Topic>> {
 		return this.client.getJson(`${this.name}/by-realm/${realmId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
