@@ -1,12 +1,14 @@
 package eu.zavadil.wn.worker.compile;
 
 import eu.zavadil.java.queues.SmartQueueProcessorBase;
+import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.assistant.AiAssistantService;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.aiLog.AiOperation;
 import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleType;
+import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.ArticleService;
@@ -21,7 +23,9 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -51,7 +55,9 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	public void compile(Topic topic) {
-		if (topic.isLocked() || (topic.getArticleType() == ArticleType.Toast)) return;
+		if (topic.isLocked()) return;
+		if (topic.getArticleType() == ArticleType.Toast) return;
+		if (topic.getProcessingState() != ProcessingState.Waiting) return;
 
 		topic.setProcessingState(ProcessingState.Processing);
 		this.topicService.save(topic);
@@ -61,6 +67,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 
 		Article compiled = articles.stream()
 			.filter(Article::isInternal)
+			.filter(a -> !a.isLocked())
+			.filter(a -> a.getArticleType() != ArticleType.Toast)
 			.findFirst()
 			.orElseGet(
 				() -> {
@@ -73,15 +81,22 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 				}
 			);
 
-		if (compiled.isLocked() || (compiled.getArticleType() == ArticleType.Toast)) return;
+		List<Article> articlesForCompilation = articles.stream()
+			.filter(a -> !a.isInternal())
+			.filter(a -> StringUtils.notBlank(a.getBody()))
+			.filter(a -> a.getBody().length() > 100)
+			.toList();
+
+		Set<ArticleSource> sourcesForCompilation = articlesForCompilation.stream()
+			.map(Article::getSource)
+			.collect(Collectors.toSet());
+
+		if (sourcesForCompilation.size() < 2) return;
+
+		List<String> bodiesForCompilation = articlesForCompilation.stream().map(Article::getBody).toList();
 
 		List<String> userPrompt = new ArrayList<>(language.getUserPromptCompileArticles());
-		for (Article article : articles) {
-			if (!article.isInternal()) {
-				compiled.getTags().addAll(article.getTags());
-				userPrompt.add(article.getBody());
-			}
-		}
+		userPrompt.addAll(bodiesForCompilation);
 
 		String response = this.aiAssistantService.ask(
 			language.getSystemPrompt(),

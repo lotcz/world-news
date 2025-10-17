@@ -8,9 +8,10 @@ import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.ArticleSourceService;
-import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.worker.ingest.data.ArticleDataSource;
 import eu.zavadil.wn.worker.ingest.data.ArticleDataSourceContainer;
+import eu.zavadil.wn.worker.ingest.data.ExternalArticleData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -54,11 +55,11 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 		int updatedArticles = 0;
 		int newArticles = 0;
 
-		BasicIterator<ArticleData> iterator = articleDataSource.getIterator(articleSource);
+		BasicIterator<ExternalArticleData> iterator = articleDataSource.getIterator(articleSource);
 
 		while (iterator.hasNext()) {
 			totalArticles++;
-			ArticleData articleData = iterator.next();
+			ExternalArticleData articleData = iterator.next();
 			String url = StringUtils.safeTrim(articleData.getOriginalUrl());
 			if (StringUtils.isBlank(url)) {
 				log.warn("Article has no URL: {}", articleData);
@@ -71,20 +72,10 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 
 			Article article = this.articleService.loadByUid(articleSource.getId(), articleData.getUid());
 			if (article == null) {
-				newArticles++;
 				article = new Article();
 			} else {
-				if (article.isLocked()) continue;
-
-				boolean titleIdentical = StringUtils.safeEquals(article.getTitle(), articleData.getTitle())
-					|| StringUtils.isBlank(articleData.getTitle());
-				boolean bodyIdentical = StringUtils.safeEquals(article.getBody(), articleData.getBody())
-					|| StringUtils.isBlank(articleData.getBody());
-				if (titleIdentical && bodyIdentical) {
-					continue;
-				}
-
-				updatedArticles++;
+				// dont redownload existing articles
+				continue;
 			}
 
 			article.setSource(articleSource);
@@ -93,17 +84,32 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 			article.setLanguage(articleSource.getLanguage());
 			article.setTitle(articleData.getTitle());
 
-			if (StringUtils.notBlank(articleData.getBody())) {
-				String body = articleData.getBody();
-				// filter out lines
-				List<String> filters = articleSource.getFilterOutLines();
-				for (String filter : filters) {
-					if (StringUtils.notBlank(filter)) {
-						body = StringUtils.safeReplace(body, filter, "");
-					}
+			// process body
+			String body = articleData.getBody();
+
+			if (StringUtils.isBlank(body) || body.length() < 255) {
+				try {
+					body = ArticleScraper.scrape(url);
+				} catch (Exception e) {
+					log.error("Failed downloading article body from {}: {}", url, e.getMessage());
+					continue;
 				}
-				article.setBody(body);
 			}
+
+			// filter out lines
+			List<String> filters = articleSource.getFilterOutLines();
+			for (String filter : filters) {
+				if (StringUtils.notBlank(filter)) {
+					body = StringUtils.safeReplace(body, filter, "");
+				}
+			}
+
+			// dont save articles with no sensible body
+			if (StringUtils.isBlank(body) || body.length() < 100) {
+				continue;
+			}
+
+			article.setBody(body);
 
 			if (articleData.getPublishDate() != null) {
 				article.setPublishDate(articleData.getPublishDate());
@@ -113,6 +119,7 @@ public class IngestWorker extends SmartQueueProcessorBase<ArticleSource> impleme
 
 			article.setProcessingState(ProcessingState.Waiting);
 			this.articleService.save(article);
+			newArticles++;
 		}
 
 		articleSource.setProcessingState(ProcessingState.Done);

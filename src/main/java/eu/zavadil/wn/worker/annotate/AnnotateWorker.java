@@ -4,9 +4,9 @@ import eu.zavadil.java.queues.SmartQueueProcessorBase;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.assistant.AiAssistantService;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
+import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.aiLog.AiOperation;
 import eu.zavadil.wn.data.aiLog.EntityType;
-import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
@@ -198,8 +198,9 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			article.setProcessingState(ProcessingState.Done);
 
 			if (topic != null) {
-				// if topic was assigned, mark it for compilation now
-				topic.setProcessingState(ProcessingState.Waiting);
+				// dont mark it for compilation now
+				//topic.setProcessingState(ProcessingState.Waiting);
+
 				this.topicService.save(topic);
 			}
 		} catch (Exception e) {

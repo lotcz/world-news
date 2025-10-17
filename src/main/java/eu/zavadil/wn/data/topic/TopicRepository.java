@@ -27,7 +27,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			select t
 			from Topic t
 			where t.processingState = 'Waiting'
-				and t.articleCountExternal > 1
+				and t.externalArticlesSourceCount > 1
 				and t.isLocked = false
 				and t.articleType != 'Toast'
 		""")

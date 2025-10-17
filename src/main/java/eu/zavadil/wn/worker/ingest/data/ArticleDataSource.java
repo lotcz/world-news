@@ -5,6 +5,6 @@ import eu.zavadil.wn.data.articleSource.ArticleSource;
 
 public interface ArticleDataSource {
 
-	BasicIterator<ArticleData> getIterator(ArticleSource articleSource);
+	BasicIterator<ExternalArticleData> getIterator(ArticleSource articleSource);
 
 }

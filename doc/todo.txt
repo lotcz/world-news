@@ -1,39 +1,3 @@
-Images
-
-- link to original work from CC
-- author contact?
-- insert new image from clipboard
-- AI images Gateway timeout
-- add crop feature before upload
-- allow auto-cropping to top with imagez
-- store original image dimensions
-- allow uploading different file to existing Image
-- show where image is used on image detail
-- downloading image doesnt show error messages
-- preview in aspects as in web
-
-
-- don't update existing external articles
-- wait with compilation until topic approved
-- topic approval/article approval
-- dont compile if articles come from the same source
-
-Topic Approval
-
-- show topic for approval before compilation
-- only with >1 external articles from >1 different sources
-- only from published realms
-
-Article Approval queue and form
-
-- disable auto publication
-- allow article content review and changing topic image on single page
-- select topic manually
-- merge topics
-- mark articles already used/compiled into internal
-- stop recompilation (lock all?)
-- allow multiple topic select to unpublish en mass
-
 
 Article Sources
 
@@ -61,7 +25,33 @@ Realms
 - show number of published internal articles
 - show number of unused external articles
 
-- run workers automatically
+Topic Approval
+
+- show topic for approval before compilation
+- only with >1 external articles from >1 different sources
+- only from published realms
+
+Article Approval queue and form
+
+- disable auto publication
+- allow article content review and changing topic image on single page
+- select topic manually
+- merge topics
+- mark articles already used/compiled into internal
+- stop recompilation (lock all?)
+- allow multiple topic select to unpublish en mass
+
+
+Images
+
+- insert new image from clipboard
+- AI images Gateway timeout
+- add crop feature before upload
+- allow uploading different file to existing Image
+- show where image is used on image detail
+- downloading image doesnt show error messages
+
+- run ingest worker automatically
 
 2.0
 ===

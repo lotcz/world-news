@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Data
-public class ArticleData {
+public class ExternalArticleData {
 
 	private String title;
 

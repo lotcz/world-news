@@ -1,9 +1,9 @@
 package eu.zavadil.wn.worker.ingest;
 
 import eu.zavadil.java.spring.common.queues.PagedSmartQueue;
-import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.service.ArticleSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,13 +28,6 @@ public class IngestArticleSourceQueue extends PagedSmartQueue<ArticleSource> {
 					&& ars.getProcessingState().equals(ProcessingState.Waiting))
 			.toList();
 		return new PageImpl<>(sources);
-		/*
-		return new PageImpl<>(
-			sources,
-			PageRequest.of(0, sources.size()),
-			sources.size()
-		);
-		 */
 	}
 
 }

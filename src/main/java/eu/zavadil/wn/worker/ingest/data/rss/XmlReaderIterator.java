@@ -7,16 +7,13 @@ import eu.zavadil.java.iterators.BasicIterator;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.util.ArticleScraper;
 import eu.zavadil.wn.util.RssFeedUtil;
-import eu.zavadil.wn.util.WnStringUtil;
-import eu.zavadil.wn.worker.ingest.data.ArticleData;
+import eu.zavadil.wn.worker.ingest.data.ExternalArticleData;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.StringEscapeUtils;
-import org.jsoup.Jsoup;
 
 import java.util.List;
 
 @Slf4j
-public class XmlReaderIterator implements BasicIterator<ArticleData> {
+public class XmlReaderIterator implements BasicIterator<ExternalArticleData> {
 
 	private final int maxReadItems = 100;
 
@@ -27,14 +24,6 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 	private int index = 0;
 
 	private String nextPageUrl;
-
-	private String sanitizeText(String text) {
-		if (StringUtils.isBlank(text)) return null;
-
-		return WnStringUtil.normalizeAndClean(
-			Jsoup.parse(StringEscapeUtils.unescapeHtml4(text.replace("\0", ""))).text()
-		);
-	}
 
 	private void loadNextPage(String url) {
 		SyndFeed feed = RssFeedUtil.readFeed(url);
@@ -67,30 +56,21 @@ public class XmlReaderIterator implements BasicIterator<ArticleData> {
 	}
 
 	@Override
-	public ArticleData next() {
+	public ExternalArticleData next() {
 		this.checkReloadNextPage();
 		SyndEntry entry = this.entries.get(this.index);
 		this.index++;
 		this.processedItems++;
 
-		ArticleData articleData = new ArticleData();
+		ExternalArticleData articleData = new ExternalArticleData();
 		articleData.setOriginalUrl(entry.getLink());
 		articleData.setUid(entry.getUri());
-		articleData.setTitle(this.sanitizeText(entry.getTitle()));
-		articleData.setSummary((entry.getDescription() != null) ? this.sanitizeText(entry.getDescription().getValue()) : null);
+		articleData.setTitle(ArticleScraper.sanitizeText(entry.getTitle()));
+		articleData.setSummary((entry.getDescription() != null) ? ArticleScraper.sanitizeText(entry.getDescription().getValue()) : null);
 		articleData.setPublishDate(entry.getPublishedDate() == null ? null : entry.getPublishedDate().toInstant());
 
-		String body = this.sanitizeText(RssFeedUtil.getBestContent(entry));
-
-		if (StringUtils.isBlank(body) || body.length() < 255) {
-			try {
-				body = ArticleScraper.scrape(entry.getLink());
-			} catch (Exception e) {
-				log.error("Failed downloading article body from {}: {}", entry.getLink(), e.getMessage());
-			}
-		}
-
-		articleData.setBody(this.sanitizeText(body));
+		String body = ArticleScraper.sanitizeText(RssFeedUtil.getBestContent(entry));
+		articleData.setBody(body);
 
 		return articleData;
 	}
