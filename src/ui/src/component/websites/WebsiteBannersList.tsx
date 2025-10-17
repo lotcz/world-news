@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Banner} from "../../types/Banner";
+import {Button} from "react-bootstrap";
 
 export type WebsiteBannersListProps = {
 	websiteId: number;
@@ -45,6 +46,13 @@ export default function WebsiteBannersList({websiteId}: WebsiteBannersListProps)
 
 	return (
 		<div>
+			<div className="pt-2 d-flex gap-2 align-items-center">
+				<Button
+					variant="primary"
+					onClick={() => navigate(`/banners/detail/add/${websiteId}`)}>
+					+ Add Banner
+				</Button>
+			</div>
 			{
 				(data === null) ? <TablePlaceholder/>
 					: (

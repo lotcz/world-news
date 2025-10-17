@@ -1,17 +1,3 @@
-
-Article Sources
-
-- detail does not refresh state
-
-Website detail
-
-- add banner from website detail form
-
-Articles
-
-- allow showing only internal articles on Articles page
-- also allow showing only published
-
 Topics
 
 - show number of published internal articles

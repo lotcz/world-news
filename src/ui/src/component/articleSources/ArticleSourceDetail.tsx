@@ -41,6 +41,7 @@ export default function ArticleSourceDetail() {
 				return;
 			}
 			setData(undefined);
+			restClient.articleSources.reset();
 			restClient.articleSources
 				.loadSingle(Number(id))
 				.then(

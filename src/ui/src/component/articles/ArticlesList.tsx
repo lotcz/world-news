@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
-import {AdvancedTable, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
+import {AdvancedTable, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
 import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -20,10 +20,10 @@ const HEADER = [
 	{name: '', label: ''},
 ];
 
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]}
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
 
 function ArticlesList() {
-	const {pagingString} = useParams();
+	const {pagingString, published, internal} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -35,6 +35,16 @@ function ArticlesList() {
 		[pagingString]
 	);
 
+	const onlyPublished = useMemo(
+		() => published === 'true',
+		[published]
+	);
+
+	const onlyInternal = useMemo(
+		() => internal === 'true',
+		[internal]
+	);
+
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
@@ -42,10 +52,12 @@ function ArticlesList() {
 	};
 
 	const navigateToPage = useCallback(
-		(p?: PagingRequest) => {
-			navigate(`/articles/${PagingUtil.pagingRequestToString(p)}`);
+		(p?: PagingRequest, pub?: boolean, int?: boolean) => {
+			if (pub === undefined) pub = onlyPublished;
+			if (int === undefined) int = onlyInternal;
+			navigate(`/articles/${PagingUtil.pagingRequestToString(p)}/${pub}/${int}`);
 		},
-		[navigate]
+		[navigate, onlyPublished, onlyInternal]
 	);
 
 	const navigateToDetail = (l: Article) => {
@@ -57,9 +69,27 @@ function ArticlesList() {
 			e && e.preventDefault();
 			paging.search = searchInput;
 			paging.page = 0;
-			navigateToPage(paging);
+			navigateToPage(paging, onlyPublished, onlyInternal);
 		},
-		[paging, searchInput, navigateToPage]
+		[paging, searchInput, navigateToPage, onlyPublished, onlyInternal]
+	);
+
+	const applyPublished = useCallback(
+		(pub: boolean) => {
+			paging.search = searchInput;
+			paging.page = 0;
+			navigateToPage(paging, pub, onlyInternal);
+		},
+		[paging, searchInput, navigateToPage, onlyInternal]
+	);
+
+	const applyInternal = useCallback(
+		(int: boolean) => {
+			paging.search = searchInput;
+			paging.page = 0;
+			navigateToPage(paging, onlyPublished, int);
+		},
+		[paging, searchInput, navigateToPage, onlyPublished]
 	);
 
 	const loadPageHandler = useCallback(
@@ -67,14 +97,14 @@ function ArticlesList() {
 			setData(undefined);
 			restClient
 				.articles
-				.loadPage(paging)
+				.search(paging, onlyPublished, onlyInternal)
 				.then(setData)
 				.catch((e: Error) => userAlerts.err(e));
 		},
-		[paging, restClient, userAlerts]
+		[paging, restClient, userAlerts, onlyPublished, onlyInternal]
 	);
 
-	useEffect(loadPageHandler, [paging]);
+	useEffect(loadPageHandler, [paging, onlyPublished, onlyInternal]);
 
 	return (
 		<div>
@@ -97,6 +127,8 @@ function ArticlesList() {
 						</Form>
 					</div>
 					<Button onClick={applySearch}>Search</Button>
+					<Switch checked={onlyPublished} onChange={(v) => applyPublished(v)} label="Published" id="published-switch"/>
+					<Switch checked={onlyInternal} onChange={(v) => applyInternal(v)} label="Internal" id="internal-switch"/>
 				</Stack>
 			</div>
 

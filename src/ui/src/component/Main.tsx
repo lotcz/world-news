@@ -91,6 +91,7 @@ function Main() {
 								<Route path="add" element={<ArticleDetail/>}/>
 								<Route path=":id" element={<ArticleDetail/>}/>
 							</Route>
+							<Route path=":pagingString/:published/:internal" element={<ArticlesList/>}/>
 							<Route path=":pagingString" element={<ArticlesList/>}/>
 						</Route>
 						<Route path="images">
@@ -113,6 +114,7 @@ function Main() {
 							<Route path="" element={<BannersList/>}/>
 							<Route path="detail">
 								<Route path="add" element={<BannerDetail/>}/>
+								<Route path="add/:websiteId" element={<BannerDetail/>}/>
 								<Route path=":id" element={<BannerDetail/>}/>
 							</Route>
 							<Route path=":pagingString" element={<BannersList/>}/>

@@ -19,7 +19,6 @@ import eu.zavadil.wn.data.website.Website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,9 +61,24 @@ public class ArticleService {
 		return saved;
 	}
 
-	public Page<Article> search(@Param("search") String search, PageRequest pr) {
-		return StringUtils.isBlank(search) ? this.articleRepository.findAll(pr)
-			: this.articleRepository.search(search, pr);
+	public Page<Article> search(String search, boolean onlyPublished, boolean onlyInternal, PageRequest pr) {
+		if (StringUtils.isBlank(search)) {
+			if (onlyPublished) {
+				return onlyInternal ? this.articleRepository.loadPublishedInternal(pr)
+					: this.articleRepository.loadPublished(pr);
+			} else {
+				return onlyInternal ? this.articleRepository.loadInternal(pr)
+					: this.articleRepository.findAll(pr);
+			}
+		} else {
+			if (onlyPublished) {
+				return onlyInternal ? this.articleRepository.searchPublishedInternal(search, pr)
+					: this.articleRepository.searchPublished(search, pr);
+			} else {
+				return onlyInternal ? this.articleRepository.searchInternal(search, pr)
+					: this.articleRepository.search(search, pr);
+			}
+		}
 	}
 
 	public List<Article> loadAllByTopicId(int topicId) {

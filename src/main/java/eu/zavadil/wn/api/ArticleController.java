@@ -28,9 +28,11 @@ public class ArticleController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size,
 		@RequestParam(defaultValue = "") String search,
-		@RequestParam(defaultValue = "") String sorting
+		@RequestParam(defaultValue = "") String sorting,
+		@RequestParam(defaultValue = "false") boolean published,
+		@RequestParam(defaultValue = "false") boolean internal
 	) {
-		return JsonPageImpl.of(this.articleService.search(search, PagingUtils.of(page, size, sorting)));
+		return JsonPageImpl.of(this.articleService.search(search, published, internal, PagingUtils.of(page, size, sorting)));
 	}
 
 	@GetMapping("by-topic/{topicId}")

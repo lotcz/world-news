@@ -20,7 +20,7 @@ const COL_1_LG = 1;
 const COL_2_LG = 6;
 
 export default function BannerDetail() {
-	const {id} = useParams();
+	const {id, websiteId} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
@@ -45,7 +45,8 @@ export default function BannerDetail() {
 				setData({
 					name: '',
 					type: 'Content',
-					requiresCookiesConsent: false
+					requiresCookiesConsent: false,
+					websiteId: websiteId ? Number(websiteId) : undefined,
 				});
 				return;
 			}

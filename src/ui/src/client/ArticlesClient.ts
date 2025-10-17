@@ -8,6 +8,11 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 		super(client, `articles`);
 	}
 
+	search(pr: PagingRequest, published: boolean = false, internal: boolean = false): Promise<Page<Article>> {
+		const params = PagingUtil.pagingRequestToQueryParams(pr);
+		return this.client.getJson(this.name, {...params, published, internal});
+	}
+
 	loadAllByTopic(topicId: number, pr: PagingRequest): Promise<Page<Article>> {
 		return this.client.getJson(`${this.name}/by-topic/${topicId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}

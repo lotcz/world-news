@@ -26,6 +26,66 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> search(@Param("search") String search, Pageable pr);
 
+	@Query("""
+			select a
+			from Article a
+			where a.publishDate is not null
+		""")
+	Page<Article> loadPublished(Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.publishDate is not null
+				and	(
+					a.title ILIKE %:search%
+					or a.summary ILIKE %:search%
+					or a.originalUrl LIKE %:search%
+					or a.uid LIKE %:search%
+				)
+		""")
+	Page<Article> searchPublished(@Param("search") String search, Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.source.importType = 'Internal'
+		""")
+	Page<Article> loadInternal(Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.source.importType = 'Internal'
+				and	(
+					a.title ILIKE %:search%
+					or a.summary ILIKE %:search%
+					or a.originalUrl LIKE %:search%
+					or a.uid LIKE %:search%
+				)
+		""")
+	Page<Article> searchInternal(@Param("search") String search, Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.publishDate is not null and a.source.importType = 'Internal'
+		""")
+	Page<Article> loadPublishedInternal(Pageable pr);
+
+	@Query("""
+			select a
+			from Article a
+			where a.publishDate is not null and a.source.importType = 'Internal'
+				and	(
+					a.title ILIKE %:search%
+					or a.summary ILIKE %:search%
+					or a.originalUrl LIKE %:search%
+					or a.uid LIKE %:search%
+				)
+		""")
+	Page<Article> searchPublishedInternal(@Param("search") String search, Pageable pr);
+
 	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, Pageable pr);
 
 	@Query("""
