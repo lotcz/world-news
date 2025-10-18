@@ -114,12 +114,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		compiled.getTags().clear();
 		this.annotateWorker.updateTitle(compiled);
 		this.annotateWorker.updateSummary(compiled);
-		//this.annotateWorker.updateTags(compiled);
 		compiled.setProcessingState(ProcessingState.Done);
-
-		if (!compiled.isPublished()) {
-			compiled.setPublishDate(Instant.now());
-		}
 
 		this.articleService.save(compiled);
 
@@ -134,6 +129,11 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		}
 
 		this.topicService.save(topic);
+
+		for (Article article : articlesForCompilation) {
+			article.setUsedForCompilation(true);
+			this.articleService.save(article);
+		}
 	}
 
 	@Override

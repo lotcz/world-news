@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
-import {AdvancedTable, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateTime, SelectableTableHeader, Switch, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
+import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -11,14 +11,21 @@ import {ImagezImageThumb} from "../images/ImagezImage";
 import ArticleUsedBadge from "./badges/ArticleUsedBadge";
 import ArticleLockedBadge from "./badges/ArticleLockedBadge";
 
-const HEADER = [
-	{name: '', label: ''},
-	{name: '', label: 'Image'},
+const HEADER: SelectableTableHeader<Article> = [
+	{
+		name: '',
+		label: '',
+		renderer: (item) => <div>
+			<ArticleLockedBadge article={item}/>
+			<ArticleUsedBadge article={item}/>
+		</div>
+	},
+	{name: '', label: 'Image', renderer: (item) => <ImagezImageThumb name={item.mainImage?.name || item.topic?.mainImage?.name}/>},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'topic.realm.name', label: 'Realm'},
-	{name: 'publishDate', label: 'Published'},
+	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
@@ -137,38 +144,17 @@ function ArticlesList() {
 				{
 					(data === undefined) ? <TablePlaceholder/>
 						: (
-							<AdvancedTable
+							<TableWithSelect
+								showSelect={false}
 								header={HEADER}
 								paging={paging}
+								items={data.content}
 								totalItems={data.totalItems}
 								onPagingChanged={navigateToPage}
+								onClick={navigateToDetail}
 								hover={true}
 								striped={true}
-							>
-								{
-									(data.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>Nothing here...</td>
-										</tr> :
-										data.content.map(
-											(item, index) => {
-												return (
-													<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-														<td>
-															<ArticleLockedBadge article={item}/>
-															<ArticleUsedBadge article={item}/>
-														</td>
-														<td><ImagezImageThumb name={item.mainImage?.name || item.topic?.mainImage?.name}/></td>
-														<td>{item.source?.name}</td>
-														<td>{item.processingState}</td>
-														<td>{item.title}</td>
-														<td>{item.topic?.realm?.name}</td>
-														<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
-													</tr>
-												);
-											}
-										)
-								}
-							</AdvancedTable>
+							/>
 						)
 				}
 			</div>

@@ -131,4 +131,14 @@ public class ArticleController {
 		this.articleService.moveToTopic(id, topicId);
 	}
 
+	@PutMapping("{id}/approve-for-publication")
+	public void approveForPublication(@PathVariable int id) {
+		this.articleService.approveForPublication(id);
+	}
+
+	@PutMapping("{id}/reject-for-publication")
+	public void rejectForPublication(@PathVariable int id) {
+		this.articleService.rejectForPublication(id);
+	}
+
 }

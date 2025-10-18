@@ -128,8 +128,20 @@ public class TopicService {
 		return similar.get(0).getEntity();
 	}
 
-	public Page<Topic> loadImageSupplyQueue(int size) {
-		return this.topicRepository.loadImageSupplyQueue(size);
+	public Page<Topic> loadImageSupplyQueue(PageRequest pr) {
+		return this.topicRepository.loadImageSupplyQueue(pr);
+	}
+
+	public int loadImageSupplyQueueSize() {
+		return this.topicRepository.loadImageSupplyQueueSize();
+	}
+
+	public Page<Topic> loadApprovalQueue(PageRequest pr) {
+		return this.topicRepository.loadApprovalQueue(pr);
+	}
+
+	public int loadApprovalQueueSize() {
+		return this.topicRepository.loadApprovalQueueSize();
 	}
 
 	@Transactional

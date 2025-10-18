@@ -23,10 +23,6 @@ function TopicsSimilarTopicsList({topicId, onUpdate}: TopicSimilarTopicsListProp
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Array<TopicEmbeddingDistance>>();
 
-	const navigateToDetail = (d: TopicEmbeddingDistance) => {
-		navigate(`/topics/detail/${d.entityId}`);
-	}
-
 	const load = useCallback(
 		() => {
 			restClient

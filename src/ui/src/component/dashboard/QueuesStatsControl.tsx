@@ -21,7 +21,7 @@ function QueuesStatsControl() {
 
 	const startIngestion = useCallback(
 		() => {
-			restClient.startIngestion()
+			restClient.queues.startIngestion()
 				.catch((e) => userAlerts.err(e))
 		},
 		[restClient, userAlerts]

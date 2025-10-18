@@ -44,4 +44,12 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 	moveToTopic(articleId: number, topicId: number): Promise<any> {
 		return this.client.put(`${this.name}/${articleId}/move-to-topic`, undefined, {topicId});
 	}
+
+	approveForPublication(articleId: number): Promise<any> {
+		return this.client.put(`${this.name}/${articleId}/approve-for-publication`);
+	}
+
+	rejectForPublication(articleId: number): Promise<any> {
+		return this.client.put(`${this.name}/${articleId}/reject-for-publication`);
+	}
 }

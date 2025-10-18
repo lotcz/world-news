@@ -183,7 +183,33 @@ public class ArticleService {
 			);
 	}
 
+	public Page<Article> loadApprovalQueue(PageRequest pr) {
+		return this.articleRepository.loadApprovalQueue(pr);
+	}
+
+	public int loadApprovalQueueSize() {
+		return this.articleRepository.loadApprovalQueueSize();
+	}
+
 	public void moveToTopic(int articleId, int topicId) {
 		this.articleStubRepository.moveToTopic(articleId, topicId);
+	}
+
+	@Transactional
+	public void approveForPublication(int articleId) {
+		ArticleStub article = this.requireStubById(articleId);
+		if (article.getPublishDate() == null) {
+			article.setPublishDate(Instant.now());
+		}
+		article.setLocked(true);
+		this.articleStubRepository.save(article);
+	}
+
+	@Transactional
+	public void rejectForPublication(int articleId) {
+		ArticleStub article = this.requireStubById(articleId);
+		article.setPublishDate(null);
+		article.setLocked(true);
+		this.articleStubRepository.save(article);
 	}
 }

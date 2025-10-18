@@ -23,9 +23,11 @@ import WebsitesList from "./websites/WebsitesList";
 import WebsiteDetail from "./websites/WebsiteDetail";
 import BannersList from "./banners/BannersList";
 import BannerDetail from "./banners/BannerDetail";
-import TopicsImageSupplyQueue from "./topics/TopicsImageSupplyQueue";
+import ApproveTopicsForCompilation from "./check/ApproveTopicsForCompilation";
+import ApproveArticlesForPublication from "./check/ApproveArticlesForPublication";
+import SupplyTopicImages from "./check/SupplyTopicImages";
 
-function Main() {
+export default function Main() {
 	return (
 		<main>
 			<Stack direction="horizontal" className="align-items-stretch">
@@ -33,7 +35,18 @@ function Main() {
 				<div className="flex-grow-1 pb-4">
 					<Routes>
 						<Route path="/" element={<Dashboard/>}/>
-						<Route path="supply-images" element={<TopicsImageSupplyQueue/>}/>
+						<Route path="approve-topics">
+							<Route path="" element={<ApproveTopicsForCompilation/>}/>
+							<Route path=":pagingString" element={<ApproveTopicsForCompilation/>}/>
+						</Route>
+						<Route path="approve-articles">
+							<Route path="" element={<ApproveArticlesForPublication/>}/>
+							<Route path=":pagingString" element={<ApproveArticlesForPublication/>}/>
+						</Route>
+						<Route path="supply-images">
+							<Route path="" element={<SupplyTopicImages/>}/>
+							<Route path=":pagingString" element={<SupplyTopicImages/>}/>
+						</Route>
 						<Route path="ai-log">
 							<Route path="" element={<AiLogList/>}/>
 							<Route path="detail">
@@ -127,5 +140,3 @@ function Main() {
 		</main>
 	);
 }
-
-export default Main;

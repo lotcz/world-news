@@ -1,11 +1,8 @@
 package eu.zavadil.wn.data.topic;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
-import eu.zavadil.wn.data.ProcessingState;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -73,19 +70,45 @@ public interface TopicRepository extends EntityRepository<Topic> {
 	@Query("""
 			select t
 			from Topic t
-			where t.processingState = :processingState
+			where t.processingState = 'NotReady'
+				and t.publishDate is null
+				and t.externalArticlesSourceCount > 1
+				and t.externalArticlesUnusedCount > 1
+				and t.realm.publishDate is not null
+		""")
+	Page<Topic> loadApprovalQueue(Pageable pr);
+
+	@Query("""
+			select count(t)
+			from Topic t
+			where t.processingState = 'NotReady'
+				and t.publishDate is null
+				and t.externalArticlesSourceCount > 1
+				and t.externalArticlesUnusedCount > 1
+				and t.realm.publishDate is not null
+		""")
+	int loadApprovalQueueSize();
+
+	@Query("""
+			select t
+			from Topic t
+			where t.processingState = 'Done'
 				and t.mainImage is null
 				and t.publishDate is not null
 				and t.articleType != 'Toast'
 				and t.articleCountInternal > 0
 		""")
-	Page<Topic> loadImageSupplyQueueInternal(ProcessingState processingState, Pageable pr);
+	Page<Topic> loadImageSupplyQueue(Pageable pr);
 
-	default Page<Topic> loadImageSupplyQueue(int size) {
-		return this.loadImageSupplyQueueInternal(
-			ProcessingState.Done,
-			PageRequest.of(0, size, Sort.by("publishDate"))
-		);
-	}
+	@Query("""
+			select count(t)
+			from Topic t
+			where t.processingState = 'Done'
+				and t.mainImage is null
+				and t.publishDate is not null
+				and t.articleType != 'Toast'
+				and t.articleCountInternal > 0
+		""")
+	int loadImageSupplyQueueSize();
 
 }

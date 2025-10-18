@@ -163,6 +163,24 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		""")
 	Page<Article> loadAnnotationQueue(Pageable pr);
 
+	@Query("""
+			select a
+			from Article a
+			where a.processingState = 'Done'
+				and a.publishDate is null
+				and a.isLocked = false
+		""")
+	Page<Article> loadApprovalQueue(Pageable pr);
+
+	@Query("""
+			select count(a)
+			from Article a
+			where a.processingState = 'Done'
+				and a.publishDate is null
+				and a.isLocked = false
+		""")
+	int loadApprovalQueueSize();
+
 	// IMPORT
 
 	@Query("""

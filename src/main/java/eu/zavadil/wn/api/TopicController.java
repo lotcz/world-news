@@ -92,13 +92,6 @@ public class TopicController {
 		return this.topicService.findSimilarToRealm(realmId, size);
 	}
 
-	@GetMapping("image-supply-queue")
-	public JsonPage<Topic> loadImageSupplyQueue(
-		@RequestParam(defaultValue = "10") int size
-	) {
-		return JsonPageImpl.of(this.topicService.loadImageSupplyQueue(size));
-	}
-
 	@PutMapping("{id}/merge-into")
 	public void mergeInto(
 		@PathVariable int id,

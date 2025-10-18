@@ -1,6 +1,6 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Table} from 'react-bootstrap';
-import {Link, useNavigate} from "react-router";
+import {Link} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleEmbeddingDistance} from "../../types/EmbeddingDistance";
@@ -15,14 +15,9 @@ export type TopicSimilarArticlesListProps = {
 }
 
 function TopicSimilarArticlesList({topicId, onUpdate}: TopicSimilarArticlesListProps) {
-	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Array<ArticleEmbeddingDistance>>();
-
-	const navigateToDetail = (d: ArticleEmbeddingDistance) => {
-		navigate(`/articles/detail/${d.entityId}`);
-	}
 
 	const load = useCallback(
 		() => {

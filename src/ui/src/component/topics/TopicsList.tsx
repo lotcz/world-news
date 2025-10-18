@@ -1,6 +1,6 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
-import {AdvancedTable, DateTime, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
+import {DateTime, SelectableTableHeader, Switch, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
 import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -14,18 +14,26 @@ import ExternalArticlesCount from "./badges/ExternalArticlesCount";
 import ExternalSourcesCount from "./badges/ExternalSourcesCount";
 import UnusedArticlesCount from "./badges/UnusedArticlesCount";
 
-const HEADER = [
-	{name: '', label: ''},
-	{name: 'mainImageId', label: 'Image'},
+const HEADER: SelectableTableHeader<Topic> = [
+	{name: '', label: '', renderer: (item) => <td><IsLockedIcon locked={item.isLocked}/></td>},
+	{
+		name: 'mainImageId',
+		label: 'Image',
+		renderer: (item) => <ImagezImageThumb
+			name={item.mainImage?.name}
+			verticalAlign={item.mainImage?.verticalAlign}
+			horizontalAlign={item.mainImage?.horizontalAlign}
+		/>
+	},
 	{name: 'processingState', label: 'State'},
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
 	{name: 'realm.name', label: 'Realm'},
-	{name: 'articleCountInternal', label: 'Internal'},
-	{name: 'articleCountExternal', label: 'External'},
-	{name: 'externalArticlesSourceCount', label: 'Sources'},
-	{name: 'externalArticlesUnusedCount', label: 'Unused'},
-	{name: 'publishDate', label: 'Published'}
+	{name: 'articleCountInternal', label: 'Internal', renderer: (item) => <InternalArticlesCount topic={item}/>},
+	{name: 'articleCountExternal', label: 'External', renderer: (item) => <ExternalArticlesCount topic={item}/>},
+	{name: 'externalArticlesSourceCount', label: 'Sources', renderer: (item) => <ExternalSourcesCount topic={item}/>},
+	{name: 'externalArticlesUnusedCount', label: 'Unused', renderer: (item) => <UnusedArticlesCount topic={item}/>},
+	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
@@ -131,43 +139,17 @@ function TopicsList() {
 				{
 					(data === null) ? <TablePlaceholder/>
 						: (
-							<AdvancedTable
+							<TableWithSelect
+								showSelect={false}
 								header={HEADER}
 								paging={paging}
+								items={data.content}
 								totalItems={data.totalItems}
 								onPagingChanged={navigateToPage}
+								onClick={navigateToDetail}
 								hover={true}
 								striped={true}
-							>
-								{
-									(data.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>Nothing here...</td>
-										</tr> :
-										data.content.map((item, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td><IsLockedIcon locked={item.isLocked}/></td>
-													<td>
-														<ImagezImageThumb
-															name={item.mainImage?.name}
-															verticalAlign={item.mainImage?.verticalAlign}
-															horizontalAlign={item.mainImage?.horizontalAlign}
-														/>
-													</td>
-													<td>{item.processingState}</td>
-													<td>{item.name}</td>
-													<td>{item.summary}</td>
-													<td>{item.realm?.name}</td>
-													<td><InternalArticlesCount topic={item}/></td>
-													<td><ExternalArticlesCount topic={item}/></td>
-													<td><ExternalSourcesCount topic={item}/></td>
-													<td><UnusedArticlesCount topic={item}/></td>
-													<td><DateTime value={item.publishDate}/></td>
-												</tr>
-											);
-										})
-								}
-							</AdvancedTable>
+							/>
 						)
 				}
 			</div>

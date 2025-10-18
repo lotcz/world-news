@@ -14,3 +14,9 @@ export type WnStats = {
 export type ClientStats = {
 	languagesCache: CacheStats;
 };
+
+export type QueueSizes = {
+	topicApproval: number;
+	articleApproval: number;
+	topicImageSupply: number;
+};

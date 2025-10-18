@@ -1,8 +1,8 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Stack} from 'react-bootstrap';
 import {SelectableTableHeader, TablePlaceholder, TableWithSelect} from "zavadil-react-common";
-import {DateUtil, Page, PagingRequest} from "zavadil-ts-common";
-import {useNavigate} from "react-router";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Topic} from "../../types/Topic";
@@ -17,15 +17,27 @@ const HEADER: SelectableTableHeader<Topic> = [
 	{name: 'publishDate', label: 'Published', sort: false, renderer: (t) => DateUtil.formatDateTimeForHumans(t.publishDate)}
 ];
 
-const DEFAULT_SIZE = 10;
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: DEFAULT_SIZE, sorting: [{name: 'publishDate'}]};
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'publishDate'}]};
 
-export default function TopicsImageSupplyQueue() {
+export default function SupplyTopicImages() {
+	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Page<Topic> | null>(null);
-	const [size, setSize] = useState<number>(DEFAULT_SIZE);
+
+	const paging = useMemo(
+		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
+			: PagingUtil.pagingRequestFromString(pagingString),
+		[pagingString]
+	);
+
+	const navigateToPage = useCallback(
+		(p?: PagingRequest) => {
+			navigate(`/supply-images/${PagingUtil.pagingRequestToString(p)}`);
+		},
+		[navigate]
+	);
 
 	const navigateToDetail = (l: Topic) => {
 		navigate(`/topics/detail/${l.id}`);
@@ -33,34 +45,27 @@ export default function TopicsImageSupplyQueue() {
 
 	const loadPageHandler = useCallback(
 		() => {
+			setData(null);
 			restClient
-				.topics
-				.loadSupplyImageQueue(10)
+				.queues
+				.loadTopicSupplyImageQueue(paging)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(null);
 					userAlerts.err(e);
 				});
 		},
-		[restClient, userAlerts]
+		[restClient, userAlerts, paging]
 	);
 
-	useEffect(loadPageHandler, []);
-
-	const reload = useCallback(
-		() => {
-			setData(null);
-			loadPageHandler();
-		},
-		[loadPageHandler]
-	);
+	useEffect(loadPageHandler, [paging]);
 
 	return (
 		<div>
 			<div className="pt-2 ps-3">
 				<Stack direction="horizontal" gap={2}>
-					<RefreshIconButton onClick={reload}/>
-					<div>Total queue size: {data?.totalItems}</div>
+					<RefreshIconButton onClick={loadPageHandler}/>
+
 				</Stack>
 			</div>
 
@@ -69,11 +74,10 @@ export default function TopicsImageSupplyQueue() {
 					(data === null) ? <TablePlaceholder/>
 						: (
 							<TableWithSelect
-								showSelect={false}
 								header={HEADER}
-								paging={DEFAULT_PAGING}
+								paging={paging}
 								totalItems={data.totalItems}
-								onPagingChanged={() => null}
+								onPagingChanged={navigateToPage}
 								onClick={navigateToDetail}
 								items={data.content}
 								hover={true}

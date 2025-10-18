@@ -29,10 +29,6 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		return this.client.getJson(`${this.name}/similar-to-realm/${realmId}`);
 	}
 
-	loadSupplyImageQueue(size: number): Promise<Page<Topic>> {
-		return this.client.getJson(`${this.name}/image-supply-queue`, {size});
-	}
-
 	mergeTopics(fromTopicId: number, toTopicId: number): Promise<any> {
 		return this.client.put(`${this.name}/${fromTopicId}/merge-into`, undefined, {topicId: toTopicId});
 	}

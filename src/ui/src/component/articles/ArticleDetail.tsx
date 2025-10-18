@@ -5,9 +5,9 @@ import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleStub} from "../../types/Article";
-import {ConfirmDialogContext, DateTimeInput, DeleteButton, IconButton, SaveButton, Switch} from "zavadil-react-common";
+import {ConfirmDialogContext, DateTimeInput, DeleteButton, IconButton, LoadingButton, SaveButton, Switch} from "zavadil-react-common";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
-import {BsArrowRightSquare, BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
+import {BsArrowRightSquare, BsBoxArrowUpRight, BsCheck, BsTrash, BsXCircle} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
@@ -19,6 +19,7 @@ import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 import ArticleSourceSelect from "../articleSources/ArticleSourceSelect";
 import ArticleTypeSelect from "./ArticleTypeSelect";
+import TopicSelect from "../topics/TopicSelect";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'ai-log';
@@ -144,7 +145,33 @@ export default function ArticleDetail() {
 				entityId: data.id
 			}
 		),
-		[data, supplyImageDialog]
+		[data, supplyImageDialog, onChanged]
+	);
+
+	const approveForPublication = useCallback(
+		() => {
+			setSaving(true);
+			restClient
+				.articles
+				.approveForPublication(Number(id))
+				.then(reload)
+				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
+		},
+		[id, restClient, userAlerts, reload]
+	);
+
+	const rejectForPublication = useCallback(
+		() => {
+			setSaving(true);
+			restClient
+				.articles
+				.rejectForPublication(Number(id))
+				.then(reload)
+				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
+		},
+		[id, restClient, userAlerts, reload]
 	);
 
 	if (!data) {
@@ -162,6 +189,25 @@ export default function ArticleDetail() {
 						onClick={saveData}
 						loading={saving}
 					>Save</SaveButton>
+					{
+						!data.isLocked
+						&& <>
+							<LoadingButton
+								disabled={changed}
+								variant="success"
+								loading={saving}
+								icon={<BsCheck/>}
+								onClick={approveForPublication}
+							>Approve</LoadingButton>
+							<LoadingButton
+								disabled={changed}
+								variant="secondary"
+								loading={saving}
+								icon={<BsXCircle/>}
+								onClick={rejectForPublication}
+							>Reject</LoadingButton>
+						</>
+					}
 					<DeleteButton onClick={deleteArticle}>Delete</DeleteButton>
 				</Stack>
 			</div>
@@ -228,7 +274,7 @@ export default function ArticleDetail() {
 								}}
 							/>
 							{
-								data.sourceId && <Link to={`/article-sources/detail/${data.sourceId}`}><BsArrowRightSquare/></Link>
+								data.sourceId && <Link to={`/article-sources/detail/${data.sourceId}`}><BsArrowRightSquare size={20}/></Link>
 							}
 						</Col>
 					</Row>
@@ -282,12 +328,21 @@ export default function ArticleDetail() {
 							</div>
 						</Col>
 					</Row>
-					<Row className="align-items-center">
+					<Row className="align-items-start">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Topic:</Form.Label>
 						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex flex-column gap-2">
 							<TopicInfo topicId={data.topicId}/>
+							<TopicSelect
+								topicId={data.topicId}
+								onChange={
+									(e) => {
+										data.topicId = e;
+										onChanged();
+									}
+								}
+							/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

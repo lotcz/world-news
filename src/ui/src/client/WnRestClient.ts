@@ -13,10 +13,13 @@ import {RealmsClient} from "./RealmsClient";
 import {ImagesClient} from "./ImagesClient";
 import {Website} from "../types/Website";
 import {BannersClient} from "./BannersClient";
+import {QueuesClient} from "./QueuesClient";
 
 export class WnRestClient extends RestClientWithOAuth {
 
 	public enumerations: EnumerationsClient;
+
+	public queues: QueuesClient;
 
 	public languages: LookupClient<Language>;
 
@@ -42,6 +45,7 @@ export class WnRestClient extends RestClientWithOAuth {
 		super(conf.API_URL);
 
 		this.enumerations = new EnumerationsClient(this);
+		this.queues = new QueuesClient(this);
 		this.languages = new LookupClient<Language>(this, 'languages');
 		this.realms = new RealmsClient(this);
 		this.articleSources = new LookupClient<ArticleSource>(this, 'article-sources');
@@ -66,14 +70,6 @@ export class WnRestClient extends RestClientWithOAuth {
 		return {
 			languagesCache: this.languages.getStats()
 		}
-	}
-
-	startIngestion(): Promise<Response> {
-		return this.post('queues/ingest/start');
-	}
-
-	startIngestionBySource(sourceId: number): Promise<Response> {
-		return this.post(`queues/ingest/start/${sourceId}`);
 	}
 
 }

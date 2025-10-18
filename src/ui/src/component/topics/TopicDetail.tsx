@@ -193,6 +193,7 @@ export default function TopicDetail() {
 					>Save</SaveButton>
 					{
 						ObjectUtil.notEmpty(data.publishDate) && <LoadingButton
+							disabled={changed}
 							variant="warning"
 							loading={saving}
 							icon={<BsLock/>}
@@ -205,12 +206,14 @@ export default function TopicDetail() {
 						&& data.externalArticlesUnusedCount > 1
 						&& <>
 							<LoadingButton
+								disabled={changed}
 								variant="success"
 								loading={saving}
 								icon={<BsCheck/>}
 								onClick={approveForCompilation}
 							>Approve</LoadingButton>
 							<LoadingButton
+								disabled={changed}
 								variant="secondary"
 								loading={saving}
 								icon={<BsXCircle/>}
