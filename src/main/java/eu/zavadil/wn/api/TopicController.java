@@ -98,4 +98,13 @@ public class TopicController {
 	) {
 		return JsonPageImpl.of(this.topicService.loadImageSupplyQueue(size));
 	}
+
+	@PutMapping("{id}/merge-into")
+	public void mergeInto(
+		@PathVariable int id,
+		@RequestParam int topicId
+	) {
+		this.topicService.mergeTopics(id, topicId);
+	}
+
 }

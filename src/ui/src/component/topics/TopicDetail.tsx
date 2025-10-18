@@ -20,8 +20,11 @@ import {ImagezImagePreview} from "../images/ImagezImage";
 import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
 import TopicExternalArticlesList from "./TopicExternalArticlesList";
-import ArticleCountBadge from "../articles/ArticleCountBadge";
+import InternalArticlesCount from "./badges/InternalArticlesCount";
 import ArticleTypeSelect from "../articles/ArticleTypeSelect";
+import ExternalSourcesCount from "./badges/ExternalSourcesCount";
+import UnusedArticlesCount from "./badges/UnusedArticlesCount";
+import ExternalArticlesCount from "./badges/ExternalArticlesCount";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'internal-articles';
@@ -342,7 +345,7 @@ export default function TopicDetail() {
 							title={
 								<div className="d-flex align-items-center gap-2">
 									<div>Internal Articles</div>
-									<ArticleCountBadge count={data.articleCountInternal} internal/>
+									<InternalArticlesCount topic={data}/>
 								</div>
 							}
 							eventKey="internal-articles"
@@ -351,7 +354,9 @@ export default function TopicDetail() {
 							title={
 								<div className="d-flex align-items-center gap-2">
 									<div>External Articles</div>
-									<ArticleCountBadge count={data.articleCountExternal}/>
+									<ExternalArticlesCount topic={data}/>
+									<ExternalSourcesCount topic={data}/>
+									<UnusedArticlesCount topic={data}/>
 								</div>
 							}
 							eventKey="external-articles"
@@ -372,10 +377,10 @@ export default function TopicDetail() {
 							activeTab === 'ai-log' && <TopicAiLogList topicId={data.id}/>
 						}
 						{
-							activeTab === 'similar-topics' && <TopicSimilarTopicsList topicId={data.id}/>
+							activeTab === 'similar-topics' && <TopicSimilarTopicsList topicId={data.id} onUpdate={reload}/>
 						}
 						{
-							activeTab === 'similar-articles' && <TopicSimilarArticlesList topicId={data.id}/>
+							activeTab === 'similar-articles' && <TopicSimilarArticlesList topicId={data.id} onUpdate={reload}/>
 						}
 						{
 							activeTab === 'similar-realms' && <TopicSimilarRealmsList topicId={data.id}/>

@@ -123,4 +123,12 @@ public class ArticleController {
 		return this.articleService.findSimilarToTopic(topicId, size);
 	}
 
+	@PutMapping("{id}/move-to-topic")
+	public void moveToTopic(
+		@PathVariable int id,
+		@RequestParam int topicId
+	) {
+		this.articleService.moveToTopic(id, topicId);
+	}
+
 }

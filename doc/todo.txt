@@ -1,13 +1,13 @@
 Topics
 
-- allow selecting articles from Similar articles and moving it to current topic
-- allow selecting topics from Similar topics and merging it with current topic
+- KILL - single button to lock and unpublish topic and internal articles
 
 Topic Approval
 
 - show topic for approval before compilation
 - only with >1 external articles from >1 different sources
 - only from published realms
+- allow multiple topic select to unpublish en mass
 
 Article Approval queue and form
 
@@ -15,7 +15,7 @@ Article Approval queue and form
 - allow article content review and changing topic image on single page
 - select topic manually
 - stop recompilation (lock all?)
-- allow multiple topic select to unpublish en mass
+
 
 Images
 

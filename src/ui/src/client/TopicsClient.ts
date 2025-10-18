@@ -5,7 +5,7 @@ import {Topic, TopicStub} from "../types/Topic";
 export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 
 	constructor(client: RestClient) {
-		super(client, `topics`);
+		super(client, 'topics');
 	}
 
 	search(published: boolean, pr?: PagingRequest): Promise<Page<Topic>> {
@@ -17,12 +17,12 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		return this.client.getJson(`${this.name}/by-realm/${realmId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
-	loadSimilarToArticle(articleId: number): Promise<Array<TopicEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar-to-article/${articleId}`);
+	loadSimilarToArticle(articleId: number, size: number = 10): Promise<Array<TopicEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-article/${articleId}`, {size});
 	}
 
-	loadSimilarToTopic(topicId: number): Promise<Array<TopicEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`);
+	loadSimilarToTopic(topicId: number, size: number = 10): Promise<Array<TopicEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`, {size});
 	}
 
 	loadSimilarToRealm(realmId: number): Promise<Array<TopicEmbeddingDistance>> {
@@ -31,6 +31,10 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 
 	loadSupplyImageQueue(size: number): Promise<Page<Topic>> {
 		return this.client.getJson(`${this.name}/image-supply-queue`, {size});
+	}
+
+	mergeTopics(fromTopicId: number, toTopicId: number): Promise<any> {
+		return this.client.put(`${this.name}/${fromTopicId}/merge-into`, undefined, {topicId: toTopicId});
 	}
 
 }

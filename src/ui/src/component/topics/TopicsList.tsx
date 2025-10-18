@@ -1,7 +1,7 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Stack} from 'react-bootstrap';
-import {AdvancedTable, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
-import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {AdvancedTable, DateTime, Switch, TablePlaceholder, TextInputWithReset} from "zavadil-react-common";
+import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -9,10 +9,14 @@ import {Topic} from "../../types/Topic";
 import RefreshIconButton from "../general/RefreshIconButton";
 import IsLockedIcon from "../general/IsLockedIcon";
 import {ImagezImageThumb} from "../images/ImagezImage";
-import ArticleCountBadge from "../articles/ArticleCountBadge";
+import InternalArticlesCount from "./badges/InternalArticlesCount";
+import ExternalArticlesCount from "./badges/ExternalArticlesCount";
+import ExternalSourcesCount from "./badges/ExternalSourcesCount";
+import UnusedArticlesCount from "./badges/UnusedArticlesCount";
 
 const HEADER = [
-	{name: 'mainImageId', label: ''},
+	{name: '', label: ''},
+	{name: 'mainImageId', label: 'Image'},
 	{name: 'processingState', label: 'State'},
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
@@ -21,8 +25,7 @@ const HEADER = [
 	{name: 'articleCountExternal', label: 'External'},
 	{name: 'externalArticlesSourceCount', label: 'Sources'},
 	{name: 'externalArticlesUnusedCount', label: 'Unused'},
-	{name: 'publishDate', label: 'Published'},
-	{name: '', label: ''}
+	{name: 'publishDate', label: 'Published'}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};
@@ -143,6 +146,7 @@ function TopicsList() {
 										data.content.map((item, index) => {
 											return (
 												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
+													<td><IsLockedIcon locked={item.isLocked}/></td>
 													<td>
 														<ImagezImageThumb
 															name={item.mainImage?.name}
@@ -154,12 +158,11 @@ function TopicsList() {
 													<td>{item.name}</td>
 													<td>{item.summary}</td>
 													<td>{item.realm?.name}</td>
-													<td><ArticleCountBadge count={item.articleCountInternal} internal/></td>
-													<td><ArticleCountBadge count={item.articleCountExternal}/></td>
-													<td><ArticleCountBadge count={item.externalArticlesSourceCount} bg="info"/></td>
-													<td><ArticleCountBadge count={item.externalArticlesUnusedCount} bg="warning"/></td>
-													<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
-													<td><IsLockedIcon locked={item.isLocked}/></td>
+													<td><InternalArticlesCount topic={item}/></td>
+													<td><ExternalArticlesCount topic={item}/></td>
+													<td><ExternalSourcesCount topic={item}/></td>
+													<td><UnusedArticlesCount topic={item}/></td>
+													<td><DateTime value={item.publishDate}/></td>
 												</tr>
 											);
 										})

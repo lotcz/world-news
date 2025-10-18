@@ -5,7 +5,7 @@ import {ArticleEmbeddingDistance} from "../types/EmbeddingDistance";
 export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 
 	constructor(client: RestClient) {
-		super(client, `articles`);
+		super(client, 'articles');
 	}
 
 	search(pr: PagingRequest, published: boolean = false, internal: boolean = false): Promise<Page<Article>> {
@@ -33,12 +33,15 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 		return this.client.getJson(`${this.name}/by-tag/${tagId}`, PagingUtil.pagingRequestToQueryParams(pr));
 	}
 
-	loadSimilarToArticle(articleId: number): Promise<Array<ArticleEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar-to-article/${articleId}`);
+	loadSimilarToArticle(articleId: number, size: number = 10): Promise<Array<ArticleEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-article/${articleId}`, {size});
 	}
 
-	loadSimilarToTopic(topicId: number): Promise<Array<ArticleEmbeddingDistance>> {
-		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`);
+	loadSimilarToTopic(topicId: number, size: number = 10): Promise<Array<ArticleEmbeddingDistance>> {
+		return this.client.getJson(`${this.name}/similar-to-topic/${topicId}`, {size});
 	}
 
+	moveToTopic(articleId: number, topicId: number): Promise<any> {
+		return this.client.put(`${this.name}/${articleId}/move-to-topic`, undefined, {topicId});
+	}
 }

@@ -7,17 +7,18 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import RefreshIconButton from "../general/RefreshIconButton";
-import IsLockedIcon from "../general/IsLockedIcon";
 import {ImagezImageThumb} from "../images/ImagezImage";
+import ArticleUsedBadge from "./badges/ArticleUsedBadge";
+import ArticleLockedBadge from "./badges/ArticleLockedBadge";
 
 const HEADER = [
 	{name: '', label: ''},
+	{name: '', label: 'Image'},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'topic.realm.name', label: 'Realm'},
 	{name: 'publishDate', label: 'Published'},
-	{name: '', label: ''},
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
@@ -152,13 +153,16 @@ function ArticlesList() {
 											(item, index) => {
 												return (
 													<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
+														<td>
+															<ArticleLockedBadge article={item}/>
+															<ArticleUsedBadge article={item}/>
+														</td>
 														<td><ImagezImageThumb name={item.mainImage?.name || item.topic?.mainImage?.name}/></td>
 														<td>{item.source?.name}</td>
 														<td>{item.processingState}</td>
 														<td>{item.title}</td>
 														<td>{item.topic?.realm?.name}</td>
 														<td className="text-nowrap">{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
-														<td><IsLockedIcon locked={item.isLocked}/></td>
 													</tr>
 												);
 											}

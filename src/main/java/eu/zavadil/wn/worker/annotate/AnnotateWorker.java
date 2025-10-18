@@ -205,6 +205,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			}
 		} catch (Exception e) {
 			article.setProcessingState(ProcessingState.Error);
+			log.error("Error during article annotation", e);
 		} finally {
 			this.articleService.save(article);
 		}

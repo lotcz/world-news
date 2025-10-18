@@ -10,6 +10,7 @@ import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.article.ArticleRepository;
+import eu.zavadil.wn.data.article.ArticleStubRepository;
 import eu.zavadil.wn.data.topic.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class TopicService {
 
 	@Autowired
 	ArticleRepository articleRepository;
+
+	@Autowired
+	ArticleStubRepository articleStubRepository;
 
 	@Autowired
 	TopicStubRepository topicStubRepository;
@@ -125,5 +129,12 @@ public class TopicService {
 	public Page<Topic> loadImageSupplyQueue(int size) {
 		return this.topicRepository.loadImageSupplyQueue(size);
 	}
+
+	public void mergeTopics(int fromTopicId, int toTopicId) {
+		this.articleStubRepository.mergeTopics(fromTopicId, toTopicId);
+		this.topicStubRepository.markAsChanged(fromTopicId);
+		this.topicStubRepository.markAsChanged(toTopicId);
+	}
+
 }
 

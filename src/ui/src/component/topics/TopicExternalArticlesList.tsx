@@ -5,19 +5,19 @@ import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
-import IsLockedIcon from "../general/IsLockedIcon";
+import ArticleUsedBadge from "../articles/badges/ArticleUsedBadge";
 
 export type TopicArticlesListProps = {
 	topicId: number;
 }
 
 const HEADER: SelectableTableHeader<Article> = [
+	{name: '', label: '', renderer: (item: Article) => <ArticleUsedBadge article={item}/>},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'publishDate', label: 'Published', renderer: (item: Article) => <DateTime value={item.publishDate}/>},
-	{name: '', label: '', renderer: (item: Article) => <IsLockedIcon locked={item.isLocked}/>}
+	{name: 'publishDate', label: 'Published', renderer: (item: Article) => <DateTime value={item.publishDate}/>}
 ];
 
 export default function TopicExternalArticlesList({topicId}: TopicArticlesListProps) {

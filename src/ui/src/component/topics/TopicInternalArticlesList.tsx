@@ -12,12 +12,12 @@ export type TopicArticlesListProps = {
 }
 
 const HEADER: SelectableTableHeader<Article> = [
+	{name: '', label: '', renderer: (item: Article) => <IsLockedIcon locked={item.isLocked}/>},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'summary', label: 'Summary'},
-	{name: 'publishDate', label: 'Published', renderer: (item: Article) => <DateTime value={item.publishDate}/>},
-	{name: '', label: '', renderer: (item: Article) => <IsLockedIcon locked={item.isLocked}/>}
+	{name: 'publishDate', label: 'Published', renderer: (item: Article) => <DateTime value={item.publishDate}/>}
 ];
 
 export default function TopicInternalArticlesList({topicId}: TopicArticlesListProps) {

@@ -182,4 +182,8 @@ public class ArticleService {
 				size
 			);
 	}
+
+	public void moveToTopic(int articleId, int topicId) {
+		this.articleStubRepository.moveToTopic(articleId, topicId);
+	}
 }

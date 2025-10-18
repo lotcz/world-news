@@ -5,7 +5,10 @@ import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {DateUtil, Page, PagingRequest} from "zavadil-ts-common";
 import {AdvancedTable, TablePlaceholder} from "zavadil-react-common";
 import {Topic} from "../../types/Topic";
-import ArticleCountBadge from "../articles/ArticleCountBadge";
+import InternalArticlesCount from "../topics/badges/InternalArticlesCount";
+import ExternalArticlesCount from "../topics/badges/ExternalArticlesCount";
+import ExternalSourcesCount from "../topics/badges/ExternalSourcesCount";
+import UnusedArticlesCount from "../topics/badges/UnusedArticlesCount";
 
 export type RealmTopicsListProps = {
 	realmId: number;
@@ -71,10 +74,10 @@ function RealmTopicsList({realmId}: RealmTopicsListProps) {
 										<td>{item.summary}</td>
 										<td>
 											<div className="d-flex gap-2">
-												<ArticleCountBadge count={item.articleCountInternal} internal/>
-												<ArticleCountBadge count={item.articleCountExternal}/>
-												<ArticleCountBadge count={item.externalArticlesSourceCount} bg="info"/>
-												<ArticleCountBadge count={item.externalArticlesUnusedCount} bg="warning"/>
+												<InternalArticlesCount topic={item}/>
+												<ExternalArticlesCount topic={item}/>
+												<ExternalSourcesCount topic={item}/>
+												<UnusedArticlesCount topic={item}/>
 											</div>
 										</td>
 										<td>{DateUtil.formatDateTimeForHumans(item.publishDate)}</td>
