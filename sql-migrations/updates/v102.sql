@@ -6,3 +6,5 @@ create index idx_topic_load_compilation_queue
 drop index idx_article_original_url;
 
 alter table article alter column original_url type text;
+
+alter type tp_processing_state add value IF NOT EXISTS 'Disabled';

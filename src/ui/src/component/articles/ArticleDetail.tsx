@@ -11,7 +11,6 @@ import {BsArrowRightSquare, BsBoxArrowUpRight, BsTrash} from "react-icons/bs";
 import RefreshIconButton from "../general/RefreshIconButton";
 import TopicInfo from "../topics/TopicInfo";
 import {LanguageIdSelect} from "../languages/LanguageSelect";
-import ArticleTagsList from "./ArticleTagsList";
 import ArticleAiLogList from "./ArticleAiLogList";
 import ArticleSimilarArticlesList from "./ArticleSimilarArticlesList";
 import ArticleSimilarTopicsList from "./ArticleSimilarTopicsList";
@@ -180,6 +179,7 @@ export default function ArticleDetail() {
 									data.isLocked = e;
 									onChanged();
 								}}
+								label="Locked for changes"
 							/>
 						</Col>
 					</Row>
@@ -234,6 +234,22 @@ export default function ArticleDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label htmlFor="usedForCompilation">Used:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<Switch
+								id="usedForCompilation"
+								checked={data.usedForCompilation}
+								onChange={(e) => {
+									data.usedForCompilation = e;
+									onChanged();
+								}}
+								label="Used for compilation"
+							/>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label>Published:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
@@ -272,16 +288,6 @@ export default function ArticleDetail() {
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex align-items-center gap-2">
 							<TopicInfo topicId={data.topicId}/>
-						</Col>
-					</Row>
-					<Row className="align-items-start">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Tags:</Form.Label>
-						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG}>
-							{
-								data.id && <ArticleTagsList articleId={data.id}/>
-							}
 						</Col>
 					</Row>
 					<Row className="align-items-center">

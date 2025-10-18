@@ -9,6 +9,8 @@ import eu.zavadil.wn.ai.embeddings.data.TopicEmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.RealmEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
+import eu.zavadil.wn.data.ProcessingState;
+import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleRepository;
 import eu.zavadil.wn.data.article.ArticleStubRepository;
 import eu.zavadil.wn.data.topic.*;
@@ -130,10 +132,42 @@ public class TopicService {
 		return this.topicRepository.loadImageSupplyQueue(size);
 	}
 
+	@Transactional
 	public void mergeTopics(int fromTopicId, int toTopicId) {
 		this.articleStubRepository.mergeTopics(fromTopicId, toTopicId);
 		this.topicStubRepository.markAsChanged(fromTopicId);
 		this.topicStubRepository.markAsChanged(toTopicId);
+	}
+
+	@Transactional
+	public void approveForCompilation(int topicId) {
+		TopicStub topic = this.requireById(topicId);
+		topic.setProcessingState(ProcessingState.Waiting);
+		topic.setLocked(false);
+		this.topicStubRepository.save(topic);
+	}
+
+	@Transactional
+	public void rejectForCompilation(int topicId) {
+		TopicStub topic = this.requireById(topicId);
+		topic.setProcessingState(ProcessingState.Disabled);
+		topic.setLocked(true);
+		this.topicStubRepository.save(topic);
+	}
+
+	@Transactional
+	public void unpublishAndLock(int topicId) {
+		TopicStub topic = this.requireById(topicId);
+		topic.setProcessingState(ProcessingState.Disabled);
+		topic.setLocked(true);
+		topic.setPublishDate(null);
+		this.save(topic);
+
+		List<Article> internal = this.articleRepository.loadAllInternalByTopicId(topicId);
+		for (Article article : internal) {
+			article.setPublishDate(null);
+			this.articleRepository.save(article);
+		}
 	}
 
 }

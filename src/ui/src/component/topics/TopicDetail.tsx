@@ -1,8 +1,7 @@
 import {Button, Col, Form, Row, Spinner, Stack, Tab, Tabs} from "react-bootstrap";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router";
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import {FaFloppyDisk} from "react-icons/fa6";
-import {NumberUtil, StringUtil} from "zavadil-ts-common";
+import {NumberUtil, ObjectUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {TopicStub} from "../../types/Topic";
@@ -14,8 +13,8 @@ import TopicSimilarTopicsList from "./TopicSimilarTopicsList";
 import TopicSimilarArticlesList from "./TopicSimilarArticlesList";
 import TopicSimilarRealmsList from "./TopicSimilarRealmsList";
 import RealmSelect from "../realms/RealmSelect";
-import {BsArrowRightSquare, BsTrash} from "react-icons/bs";
-import {DateTimeInput, IconButton, Switch} from "zavadil-react-common";
+import {BsArrowRightSquare, BsCheck, BsLock, BsTrash, BsXCircle} from "react-icons/bs";
+import {DateTimeInput, IconButton, LoadingButton, SaveButton, Switch} from "zavadil-react-common";
 import {ImagezImagePreview} from "../images/ImagezImage";
 import BackIconLink from "../general/BackIconLink";
 import {SupplyImageDialogContext} from "../../util/SupplyImageDialogContext";
@@ -44,6 +43,7 @@ export default function TopicDetail() {
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [saving, setSaving] = useState<boolean>(false);
 
 	const onChanged = useCallback(
 		() => {
@@ -99,6 +99,7 @@ export default function TopicDetail() {
 	const saveData = useCallback(
 		() => {
 			if (!data) return;
+			setSaving(true);
 			const inserting = NumberUtil.isEmpty(data.id);
 			restClient
 				.topics
@@ -113,6 +114,7 @@ export default function TopicDetail() {
 						setChanged(false);
 					})
 				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
 		},
 		[restClient, data, userAlerts, navigate]
 	);
@@ -135,6 +137,45 @@ export default function TopicDetail() {
 		[data, supplyImageDialog]
 	);
 
+	const unpublishAndLock = useCallback(
+		() => {
+			setSaving(true);
+			restClient
+				.topics
+				.unpublishAndLock(Number(id))
+				.then(reload)
+				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
+		},
+		[id, restClient, userAlerts, reload]
+	);
+
+	const approveForCompilation = useCallback(
+		() => {
+			setSaving(true);
+			restClient
+				.topics
+				.approveForCompilation(Number(id))
+				.then(reload)
+				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
+		},
+		[id, restClient, userAlerts, reload]
+	);
+
+	const rejectForCompilation = useCallback(
+		() => {
+			setSaving(true);
+			restClient
+				.topics
+				.rejectForCompilation(Number(id))
+				.then(reload)
+				.catch((e: Error) => userAlerts.err(e))
+				.finally(() => setSaving(false));
+		},
+		[id, restClient, userAlerts, reload]
+	);
+
 	if (!data) {
 		return <Spinner/>
 	}
@@ -145,16 +186,38 @@ export default function TopicDetail() {
 				<Stack direction="horizontal" gap={2}>
 					<BackIconLink changed={changed}/>
 					<RefreshIconButton onClick={reload}/>
-					<Button
+					<SaveButton
 						disabled={!changed}
+						loading={saving}
 						onClick={saveData}
-						className="d-flex gap-2 align-items-center text-nowrap"
-					>
-						<div className="d-flex align-items-center gap-2">
-							<FaFloppyDisk/>
-							<div>Save</div>
-						</div>
-					</Button>
+					>Save</SaveButton>
+					{
+						ObjectUtil.notEmpty(data.publishDate) && <LoadingButton
+							variant="warning"
+							loading={saving}
+							icon={<BsLock/>}
+							onClick={unpublishAndLock}
+						>Unpublish & Lock</LoadingButton>
+					}
+					{
+						data.processingState === 'NotReady'
+						&& data.externalArticlesSourceCount > 1
+						&& data.externalArticlesUnusedCount > 1
+						&& <>
+							<LoadingButton
+								variant="success"
+								loading={saving}
+								icon={<BsCheck/>}
+								onClick={approveForCompilation}
+							>Approve</LoadingButton>
+							<LoadingButton
+								variant="secondary"
+								loading={saving}
+								icon={<BsXCircle/>}
+								onClick={rejectForCompilation}
+							>Reject</LoadingButton>
+						</>
+					}
 				</Stack>
 			</div>
 			<Form className="p-3">
@@ -287,8 +350,7 @@ export default function TopicDetail() {
 					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>
-								Type:</Form.Label>
+							<Form.Label>Type:</Form.Label>
 						</Col>
 						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
 							<div>

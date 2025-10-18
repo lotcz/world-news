@@ -37,4 +37,16 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		return this.client.put(`${this.name}/${fromTopicId}/merge-into`, undefined, {topicId: toTopicId});
 	}
 
+	unpublishAndLock(topicId: number): Promise<any> {
+		return this.client.put(`${this.name}/${topicId}/unpublish-and-lock`);
+	}
+
+	approveForCompilation(topicId: number): Promise<any> {
+		return this.client.put(`${this.name}/${topicId}/approve-for-compilation`);
+	}
+
+	rejectForCompilation(topicId: number): Promise<any> {
+		return this.client.put(`${this.name}/${topicId}/reject-for-compilation`);
+	}
+
 }

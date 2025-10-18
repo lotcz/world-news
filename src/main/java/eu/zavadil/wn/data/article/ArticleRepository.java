@@ -114,6 +114,14 @@ public interface ArticleRepository extends EntityRepository<Article> {
 			select a
 			from Article a
 			where a.topic.id = :topicId
+				and a.source.importType = 'Internal'
+		""")
+	List<Article> loadAllInternalByTopicId(int topicId);
+
+	@Query("""
+			select a
+			from Article a
+			where a.topic.id = :topicId
 				and a.source.importType <> 'Internal'
 		""")
 	Page<Article> loadExternalByTopicId(int topicId, Pageable pr);

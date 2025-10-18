@@ -107,4 +107,19 @@ public class TopicController {
 		this.topicService.mergeTopics(id, topicId);
 	}
 
+	@PutMapping("{id}/approve-for-compilation")
+	public void approveForCompilation(@PathVariable int id) {
+		this.topicService.approveForCompilation(id);
+	}
+
+	@PutMapping("{id}/reject-for-compilation")
+	public void rejectForCompilation(@PathVariable int id) {
+		this.topicService.rejectForCompilation(id);
+	}
+
+	@PutMapping("{id}/unpublish-and-lock")
+	public void unpublishAndLock(@PathVariable int id) {
+		this.topicService.unpublishAndLock(id);
+	}
+
 }

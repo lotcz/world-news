@@ -1,6 +1,3 @@
-Topics
-
-- KILL - single button to lock and unpublish topic and internal articles
 
 Topic Approval
 
