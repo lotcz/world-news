@@ -13,6 +13,7 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleRepository;
 import eu.zavadil.wn.data.article.ArticleStubRepository;
+import eu.zavadil.wn.data.article.ArticleType;
 import eu.zavadil.wn.data.topic.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,5 +183,9 @@ public class TopicService {
 		}
 	}
 
+	@Transactional
+	public void changeArticleType(int topicId, ArticleType articleType) {
+		this.topicStubRepository.changeArticleType(topicId, articleType);
+	}
 }
 

@@ -9,10 +9,7 @@ import eu.zavadil.wn.ai.embeddings.data.EmbeddingDistance;
 import eu.zavadil.wn.ai.embeddings.service.ArticleEmbeddingsService;
 import eu.zavadil.wn.ai.embeddings.service.TopicEmbeddingsService;
 import eu.zavadil.wn.data.ProcessingState;
-import eu.zavadil.wn.data.article.Article;
-import eu.zavadil.wn.data.article.ArticleRepository;
-import eu.zavadil.wn.data.article.ArticleStub;
-import eu.zavadil.wn.data.article.ArticleStubRepository;
+import eu.zavadil.wn.data.article.*;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.realm.Realm;
 import eu.zavadil.wn.data.website.Website;
@@ -212,4 +209,10 @@ public class ArticleService {
 		article.setLocked(true);
 		this.articleStubRepository.save(article);
 	}
+
+	@Transactional
+	public void changeArticleType(int articleId, ArticleType articleType) {
+		this.articleStubRepository.changeArticleType(articleId, articleType);
+	}
+
 }

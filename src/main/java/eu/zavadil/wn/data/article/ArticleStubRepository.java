@@ -26,4 +26,13 @@ public interface ArticleStubRepository extends EntityRepository<ArticleStub> {
 		""")
 	void mergeTopics(@Param("fromTopicId") int fromTopicId, @Param("toTopicId") int toTopicId);
 
+	@Modifying
+	@Transactional
+	@Query("""
+		update ArticleStub a
+		set a.articleType = :articleType
+		where a.id = :articleId
+		""")
+	void changeArticleType(@Param("articleId") int articleId, @Param("articleType") ArticleType articleType);
+
 }

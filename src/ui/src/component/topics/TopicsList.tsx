@@ -33,7 +33,8 @@ const HEADER: SelectableTableHeader<Topic> = [
 	{name: 'articleCountExternal', label: 'External', renderer: (item) => <ExternalArticlesCount topic={item}/>},
 	{name: 'externalArticlesSourceCount', label: 'Sources', renderer: (item) => <ExternalSourcesCount topic={item}/>},
 	{name: 'externalArticlesUnusedCount', label: 'Unused', renderer: (item) => <UnusedArticlesCount topic={item}/>},
-	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>}
+	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>},
+	{name: 'lastUpdatedOn', label: 'Updated', renderer: (item) => <DateTime value={item.lastUpdatedOn}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]};

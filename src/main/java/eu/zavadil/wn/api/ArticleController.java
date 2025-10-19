@@ -6,6 +6,7 @@ import eu.zavadil.java.spring.common.paging.PagingUtils;
 import eu.zavadil.wn.ai.embeddings.data.ArticleEmbeddingDistance;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleStub;
+import eu.zavadil.wn.data.article.ArticleType;
 import eu.zavadil.wn.service.ArticleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -139,6 +140,14 @@ public class ArticleController {
 	@PutMapping("{id}/reject-for-publication")
 	public void rejectForPublication(@PathVariable int id) {
 		this.articleService.rejectForPublication(id);
+	}
+
+	@PutMapping("{id}/change-type/{articleType}")
+	public void changeType(
+		@PathVariable int id,
+		@PathVariable ArticleType articleType
+	) {
+		this.articleService.changeArticleType(id, articleType);
 	}
 
 }

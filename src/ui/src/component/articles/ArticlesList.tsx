@@ -25,10 +25,11 @@ const HEADER: SelectableTableHeader<Article> = [
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},
 	{name: 'topic.realm.name', label: 'Realm'},
-	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>}
+	{name: 'publishDate', label: 'Published', renderer: (item) => <DateTime value={item.publishDate}/>},
+	{name: 'lastUpdatedOn', label: 'Updated', renderer: (item) => <DateTime value={item.lastUpdatedOn}/>}
 ];
 
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'publishDate', desc: true}]}
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'lastUpdatedOn', desc: true}]}
 
 function ArticlesList() {
 	const {pagingString, published, internal} = useParams();

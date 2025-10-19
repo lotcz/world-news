@@ -52,8 +52,7 @@ public interface TopicRepository extends EntityRepository<Topic> {
 			select t
 			from Topic t
 			where t.realm is null
-				and t.processingState = 'Done'
-				and t.articleCountInternal > 0
+				and t.articleCountExternal > 1
 				and t.isLocked = false
 		""")
 	Page<Topic> loadCategorizationQueue(Pageable pr);

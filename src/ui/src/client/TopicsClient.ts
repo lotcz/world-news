@@ -45,4 +45,8 @@ export class TopicsClient extends EntityClientWithStub<Topic, TopicStub> {
 		return this.client.put(`${this.name}/${topicId}/reject-for-compilation`);
 	}
 
+	changeType(topicId: number, articleType: string): Promise<any> {
+		return this.client.put(`${this.name}/${topicId}/change-type/${articleType}`);
+	}
+
 }

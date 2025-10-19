@@ -1,6 +1,7 @@
 package eu.zavadil.wn.data.topic;
 
 import eu.zavadil.java.spring.common.entity.EntityRepository;
+import eu.zavadil.wn.data.article.ArticleType;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,14 @@ public interface TopicStubRepository extends EntityRepository<TopicStub> {
 	default void markAsChanged(int topicId) {
 		this.markAsChanged(topicId, Instant.now());
 	}
+
+	@Modifying
+	@Transactional
+	@Query("""
+		update TopicStub t
+		set t.articleType = :articleType
+		where t.id = :topicId
+		""")
+	void changeArticleType(@Param("topicId") int topicId, @Param("articleType") ArticleType articleType);
+
 }

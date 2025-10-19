@@ -183,9 +183,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			this.updateTitle(article);
 			this.updateSummary(article);
 
-			// todo: rethink tags
-			//this.updateTags(article);
-
 			Embedding embedding = this.updateEmbedding(article);
 			if (article.isInternal()) {
 				if (article.getPublishDate() == null) {
