@@ -82,7 +82,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 			);
 
 		List<Article> articlesForCompilation = articles.stream()
-			.filter(a -> !a.isInternal())
+			.filter(a -> !a.equals(compiled))
+			.filter(a -> !a.isUsedForCompilation())
 			.filter(a -> StringUtils.notBlank(a.getBody()))
 			.filter(a -> a.getBody().length() > 100)
 			.toList();
