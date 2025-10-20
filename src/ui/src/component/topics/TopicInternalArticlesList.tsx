@@ -6,13 +6,21 @@ import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {Article} from "../../types/Article";
 import IsLockedIcon from "../general/IsLockedIcon";
+import ArticleUsedBadge from "../articles/badges/ArticleUsedBadge";
 
 export type TopicArticlesListProps = {
 	topicId: number;
 }
 
 const HEADER: SelectableTableHeader<Article> = [
-	{name: '', label: '', renderer: (item: Article) => <IsLockedIcon locked={item.isLocked}/>},
+	{
+		name: '',
+		label: '',
+		renderer: (item: Article) => <>
+			<IsLockedIcon locked={item.isLocked}/>
+			<ArticleUsedBadge article={item}/>
+		</>
+	},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},

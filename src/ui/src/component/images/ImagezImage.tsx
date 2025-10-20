@@ -36,7 +36,7 @@ export function ImagezImage({id, name, type, width, height, ext, verticalAlign, 
 		[restClient, id, name, type, width, height, ext, verticalAlign, horizontalAlign]
 	);
 
-	return <Img url={url}/>
+	return <Img url={url} maxWidth={width} maxHeight={height}/>
 }
 
 export type ImagezImageResizedProps = {

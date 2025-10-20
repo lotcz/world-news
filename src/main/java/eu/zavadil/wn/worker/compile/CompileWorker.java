@@ -118,16 +118,11 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		compiled.setProcessingState(ProcessingState.Done);
 
 		this.articleService.save(compiled);
-
-		// update topic with title and summary from new article
+		
 		topic.setName(compiled.getTitle());
 		topic.setSummary(compiled.getSummary());
-
 		topic.setProcessingState(ProcessingState.Done);
-
-		if (!topic.isPublished()) {
-			topic.setPublishDate(Instant.now());
-		}
+		topic.setPublishDate(Instant.now());
 
 		this.topicService.save(topic);
 

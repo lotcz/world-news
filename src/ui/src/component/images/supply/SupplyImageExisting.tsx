@@ -8,7 +8,11 @@ import {Image} from "../../../types/Image";
 import {ImagezImageThumb} from "../ImagezImage";
 
 const HEADER: SelectableTableHeader<Image> = [
-	{name: '', label: '', renderer: (i) => <ImagezImageThumb name={i.name}/>},
+	{
+		name: '',
+		label: '',
+		renderer: (i) => <ImagezImageThumb name={i.name} verticalAlign={i.verticalAlign} horizontalAlign={i.horizontalAlign}/>
+	},
 	{name: 'description', label: 'Description'},
 	{name: 'source', label: 'Source'},
 	{name: 'author', label: 'Author'},
@@ -66,7 +70,7 @@ export default function SupplyImageExisting({onSelected, search, onSearchChanged
 							<TextInputWithReset
 								value={search}
 								onChange={onSearchChanged}
-								onReset={() => setPaging({page: 0, size: 0})}
+								onReset={() => setPaging(DEFAULT_PAGING)}
 							/>
 						</Form>
 					</div>

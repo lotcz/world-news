@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Stack} from 'react-bootstrap';
-import {LoadingButton, SelectableTableHeader, TablePlaceholder, TableWithSelect} from "zavadil-react-common";
-import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {DateTime, LoadingButton, SelectableTableHeader, TablePlaceholder, TableWithSelect} from "zavadil-react-common";
+import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -14,8 +14,7 @@ const HEADER: SelectableTableHeader<Topic> = [
 	{name: 'name', label: 'Name', sort: false},
 	{name: 'summary', label: 'Summary', sort: false},
 	{name: 'realm.name', label: 'Realm', sort: false},
-	{name: 'articleCountExternal', label: 'External', sort: false},
-	{name: 'publishDate', label: 'Published', sort: false, renderer: (t) => DateUtil.formatDateTimeForHumans(t.publishDate)}
+	{name: 'publishDate', label: 'Published', sort: false, renderer: (t) => <DateTime value={t.publishDate}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'publishDate'}]};

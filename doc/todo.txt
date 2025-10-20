@@ -5,6 +5,13 @@
 - article continuation - when new articles exist and internal article is locked, write a new article from the internal and unsued external
   - use only unused during compilation
 
+- topic detail
+  - detach articles to new topic
+
+Articles
+
+ - explore external unused articles
+
 Images
 
 - when image added to article, propagate to topic is it doesn't have one

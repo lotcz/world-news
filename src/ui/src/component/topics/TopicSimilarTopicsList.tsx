@@ -78,6 +78,7 @@ function TopicsSimilarTopicsList({topicId, onUpdate}: TopicSimilarTopicsListProp
 						<th>Summary</th>
 						<th></th>
 						<th>Published</th>
+						<th>Updated</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -124,6 +125,7 @@ function TopicsSimilarTopicsList({topicId, onUpdate}: TopicSimilarTopicsListProp
 											</div>
 										</td>
 										<td><DateTime value={ed.entity.publishDate}/></td>
+										<td><DateTime value={ed.entity.lastUpdatedOn}/></td>
 										<td>
 											<Link to={`/topics/detail/${ed.entityId}`}><BsArrowRightSquare/></Link>
 										</td>
