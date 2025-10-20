@@ -51,25 +51,28 @@ public class QueuesController {
 	@GetMapping("topic/approval-queue")
 	public JsonPage<Topic> loadTopicApprovalQueue(
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
 	) {
-		return JsonPageImpl.of(this.topicService.loadApprovalQueue(PagingUtils.of(page, size)));
+		return JsonPageImpl.of(this.topicService.loadApprovalQueue(PagingUtils.of(page, size, sorting)));
 	}
 
 	@GetMapping("topic/image-supply-queue")
 	public JsonPage<Topic> loadTopicImageSupplyQueue(
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
 	) {
-		return JsonPageImpl.of(this.topicService.loadImageSupplyQueue(PagingUtils.of(page, size)));
+		return JsonPageImpl.of(this.topicService.loadImageSupplyQueue(PagingUtils.of(page, size, sorting)));
 	}
 
 	@GetMapping("article/approval-queue")
 	public JsonPage<Article> loadArticleApprovalQueue(
 		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size
+		@RequestParam(defaultValue = "10") int size,
+		@RequestParam(defaultValue = "") String sorting
 	) {
-		return JsonPageImpl.of(this.articleService.loadApprovalQueue(PagingUtils.of(page, size)));
+		return JsonPageImpl.of(this.articleService.loadApprovalQueue(PagingUtils.of(page, size, sorting)));
 	}
 
 	@Data

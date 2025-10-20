@@ -1,7 +1,14 @@
-- test approvals and spoke download
+- sorting in approvals
+- crop images in approvals
+- count published internal articles and only offer image supply for topics with some
+
+- article continuation - when new articles exist and internal article is locked, write a new article from the internal and unsued external
+  - use only unused during compilation
 
 Images
 
+- when image added to article, propagate to topic is it doesn't have one
+- allow hiding of image description (but keep the description for search)
 - insert new image from clipboard
 - AI images Gateway timeout
 - add crop feature before upload
