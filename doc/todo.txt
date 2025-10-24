@@ -1,7 +1,3 @@
-- sorting in approvals
-- crop images in approvals
-- count published internal articles and only offer image supply for topics with some
-
 - article continuation - when new articles exist and internal article is locked, write a new article from the internal and unsued external
   - use only unused during compilation
 
@@ -12,8 +8,13 @@ Articles
 
  - explore external unused articles
 
+Topics
+
+  - remove publish date , only use article values
+
 Images
 
+- better wikimedia integration https://developer.wikimedia.org/use-content/
 - when image added to article, propagate to topic is it doesn't have one
 - allow hiding of image description (but keep the description for search)
 - insert new image from clipboard
@@ -28,11 +29,13 @@ Images
 2.0
 ===
 
+- EU API - https://data.europarl.europa.eu/cs/developer-corner/opendata-api
 - mobile admin
 
 - improve OAuth server (see todo.txt in there)
   - run as OAUTH prod
 
+- automatically supply images from existing article images
 - use bigserial/Long as IDs
 - add Topic Extension worker to extend existing topic with new info when available
 - add manual instructions to realm for compilation

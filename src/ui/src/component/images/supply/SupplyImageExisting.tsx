@@ -70,7 +70,12 @@ export default function SupplyImageExisting({onSelected, search, onSearchChanged
 							<TextInputWithReset
 								value={search}
 								onChange={onSearchChanged}
-								onReset={() => setPaging(DEFAULT_PAGING)}
+								onReset={
+									() => {
+										setPaging(DEFAULT_PAGING);
+										onSearchChanged('');
+									}
+								}
 							/>
 						</Form>
 					</div>

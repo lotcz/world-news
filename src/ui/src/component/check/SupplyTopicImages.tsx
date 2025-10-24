@@ -10,11 +10,11 @@ import RefreshIconButton from "../general/RefreshIconButton";
 import {BsCardImage} from "react-icons/bs";
 
 const HEADER: SelectableTableHeader<Topic> = [
-	{name: 'processingState', label: 'State', sort: false},
-	{name: 'name', label: 'Name', sort: false},
-	{name: 'summary', label: 'Summary', sort: false},
-	{name: 'realm.name', label: 'Realm', sort: false},
-	{name: 'publishDate', label: 'Published', sort: false, renderer: (t) => <DateTime value={t.publishDate}/>}
+	{name: 'processingState', label: 'State'},
+	{name: 'name', label: 'Name'},
+	{name: 'summary', label: 'Summary'},
+	{name: 'realm.name', label: 'Realm'},
+	{name: 'publishDate', label: 'Published', renderer: (t) => <DateTime value={t.publishDate}/>}
 ];
 
 const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'publishDate'}]};

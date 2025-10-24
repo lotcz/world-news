@@ -98,6 +98,7 @@ function TopicsSimilarTopicsList({topicId, onUpdate}: TopicSimilarTopicsListProp
 												(ed.entityId !== topicId) &&
 												<div className="d-flex flex-column gap-2">
 													<IconButton
+														disabled={ed.entity.articleCountExternal === 0 && ed.entity.articleCountInternal === 0}
 														icon={<BsArrowUpLeft/>}
 														onClick={() => mergeFromTopic(ed.entityId)}
 														size="sm"

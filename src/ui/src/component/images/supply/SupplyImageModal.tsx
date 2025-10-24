@@ -14,7 +14,6 @@ import {SupplyImageGenerateWithAi} from "./SupplyImageGenerateWithAi";
 const DEFAULT_TAB = 'commons';
 
 export type SupplyImageModalProps = {
-	keywords?: Array<string> | null;
 	description?: string | null;
 	onClose: () => any;
 	onSelected: (imageId: number) => any;
@@ -22,12 +21,12 @@ export type SupplyImageModalProps = {
 	entityId?: number | null;
 }
 
-export function SupplyImageModal({onClose, onSelected, keywords, description, entityType, entityId}: SupplyImageModalProps) {
+export function SupplyImageModal({onClose, onSelected, description, entityType, entityId}: SupplyImageModalProps) {
 	const restClient = useContext(WnRestClientContext);
 	const alerts = useContext(WnUserAlertsContext);
 	const [activeTab, setActiveTab] = useState<string>(DEFAULT_TAB);
 	const [preview, setPreview] = useState<Image>();
-	const [search, setSearch] = useState<string>(keywords ? keywords.join(' ') : '');
+	const [search, setSearch] = useState<string>('');
 	const [ccPaging, setCcPaging] = useState<PagingRequest>({page: 0, size: 10})
 
 	const saveImage = useCallback(

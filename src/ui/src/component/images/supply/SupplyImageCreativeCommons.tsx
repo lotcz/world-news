@@ -87,7 +87,12 @@ function SupplyImageCreativeCommons({onSelected, search, onSearchChanged, paging
 							<TextInputWithReset
 								value={search}
 								onChange={onSearchChanged}
-								onReset={() => onPagingChanged({page: 0, size: 10})}
+								onReset={
+									() => {
+										onPagingChanged({page: 0, size: 10});
+										onSearchChanged('');
+									}
+								}
 							/>
 						</Form>
 					</div>

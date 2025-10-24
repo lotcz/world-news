@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,7 +154,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 	}
 
 	private Topic assignTopic(Article article, Embedding embedding) {
-		if (article.getTopic() != null && article.isInternal()) return null;
+		if (article.getTopic() != null) return null;
 
 		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
 
@@ -177,29 +176,14 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		article.setProcessingState(ProcessingState.Processing);
 		this.articleService.save(article);
 
-		Topic topic = null;
-
 		try {
 			this.updateTitle(article);
 			this.updateSummary(article);
 
 			Embedding embedding = this.updateEmbedding(article);
-			if (article.isInternal()) {
-				if (article.getPublishDate() == null) {
-					article.setPublishDate(Instant.now());
-				}
-			} else {
-				topic = this.assignTopic(article, embedding);
-			}
+			this.assignTopic(article, embedding);
 
 			article.setProcessingState(ProcessingState.Done);
-
-			if (topic != null) {
-				// dont mark it for compilation now
-				//topic.setProcessingState(ProcessingState.Waiting);
-
-				this.topicService.save(topic);
-			}
 		} catch (Exception e) {
 			article.setProcessingState(ProcessingState.Error);
 			log.error("Error during article annotation", e);
