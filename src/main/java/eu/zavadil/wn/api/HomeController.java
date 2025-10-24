@@ -20,6 +20,8 @@ public class HomeController {
 	 */
 	@GetMapping(
 		value = {
+			"approve-topics/**",
+			"approve-articles/**",
 			"supply-images/**",
 			"topics/**",
 			"articles/**",
