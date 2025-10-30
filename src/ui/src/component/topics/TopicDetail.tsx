@@ -43,6 +43,7 @@ export default function TopicDetail() {
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<TopicStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [imageChanged, setImageChanged] = useState<boolean>(false);
 	const [saving, setSaving] = useState<boolean>(false);
 
 	const onChanged = useCallback(
@@ -50,6 +51,15 @@ export default function TopicDetail() {
 			if (!data) return;
 			setData({...data});
 			setChanged(true);
+		},
+		[data]
+	);
+
+	const onImageChanged = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setImageChanged(true);
 		},
 		[data]
 	);
@@ -84,11 +94,19 @@ export default function TopicDetail() {
 					externalArticlesSourceCount: 0,
 					externalArticlesUnusedCount: 0
 				});
+				setChanged(true);
 				return;
 			}
 			setData(undefined);
-			restClient.topics.loadSingleStub(Number(id))
-				.then(setData)
+			restClient.topics
+				.loadSingleStub(Number(id))
+				.then(
+					(t) => {
+						setData(t);
+						setChanged(false);
+						setImageChanged(false);
+					}
+				)
 				.catch((e: Error) => userAlerts.err(e))
 		},
 		[id, restClient, userAlerts]
@@ -100,23 +118,33 @@ export default function TopicDetail() {
 		() => {
 			if (!data) return;
 			setSaving(true);
-			const inserting = NumberUtil.isEmpty(data.id);
-			restClient
-				.topics
-				.saveStub(data)
-				.then(
-					(f) => {
-						if (inserting) {
-							navigate(`/topics/detail/${f.id}`, {replace: true});
-						} else {
-							setData(f);
-						}
-						setChanged(false);
-					})
-				.catch((e: Error) => userAlerts.err(e))
-				.finally(() => setSaving(false));
+			if (data.id && imageChanged && !changed) {
+				restClient
+					.topics
+					.changeImage(data.id, data.mainImageId || null, data.mainImageIsIllustrative)
+					.then(() => setImageChanged(false))
+					.catch((e: Error) => userAlerts.err(e))
+					.finally(() => setSaving(false));
+			} else {
+				const inserting = NumberUtil.isEmpty(data.id);
+				restClient
+					.topics
+					.saveStub(data)
+					.then(
+						(f) => {
+							if (inserting) {
+								navigate(`/topics/detail/${f.id}`, {replace: true});
+							} else {
+								setData(f);
+							}
+							setChanged(false);
+							setImageChanged(false);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+					.finally(() => setSaving(false));
+			}
 		},
-		[restClient, data, userAlerts, navigate]
+		[restClient, data, userAlerts, navigate, changed, imageChanged]
 	);
 
 	const showImageSupplyDialog = useCallback(
@@ -127,7 +155,7 @@ export default function TopicDetail() {
 					data.mainImageId = id;
 					setData({...data});
 					supplyImageDialog.hide();
-					setChanged(true);
+					setImageChanged(true);
 				},
 				description: data.summary,
 				entityType: 'Topic',
@@ -184,16 +212,16 @@ export default function TopicDetail() {
 		<div>
 			<div className="d-flex justify-content-between p-2 gap-2">
 				<Stack direction="horizontal" gap={2}>
-					<BackIconLink changed={changed}/>
+					<BackIconLink changed={changed || imageChanged}/>
 					<RefreshIconButton onClick={reload}/>
 					<SaveButton
-						disabled={!changed}
+						disabled={!(changed || imageChanged)}
 						loading={saving}
 						onClick={saveData}
 					>Save</SaveButton>
 					{
 						ObjectUtil.notEmpty(data.publishDate) && <LoadingButton
-							disabled={changed}
+							disabled={changed || imageChanged}
 							variant="warning"
 							loading={saving}
 							icon={<BsLock/>}
@@ -206,14 +234,14 @@ export default function TopicDetail() {
 						&& data.externalArticlesUnusedCount > 1
 						&& <>
 							<LoadingButton
-								disabled={changed}
+								disabled={changed || imageChanged}
 								variant="success"
 								loading={saving}
 								icon={<BsCheck/>}
 								onClick={approveForCompilation}
 							>Approve</LoadingButton>
 							<LoadingButton
-								disabled={changed}
+								disabled={changed || imageChanged}
 								variant="secondary"
 								loading={saving}
 								icon={<BsXCircle/>}
@@ -322,7 +350,7 @@ export default function TopicDetail() {
 												checked={data.mainImageIsIllustrative}
 												onChange={(e) => {
 													data.mainImageIsIllustrative = e;
-													onChanged();
+													onImageChanged();
 												}}
 												label="Illustrative photo"
 
@@ -339,7 +367,7 @@ export default function TopicDetail() {
 												onClick={
 													() => {
 														data.mainImageId = null;
-														onChanged();
+														onImageChanged();
 													}
 												}
 											>Remove</IconButton>

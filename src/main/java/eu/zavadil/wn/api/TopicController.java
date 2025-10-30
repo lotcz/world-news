@@ -123,4 +123,13 @@ public class TopicController {
 	) {
 		this.topicService.changeArticleType(id, articleType);
 	}
+
+	@PutMapping("{id}/change-image/{imageId}/{illustrative}")
+	public void changeImage(
+		@PathVariable int id,
+		@PathVariable Integer imageId,
+		@PathVariable boolean illustrative
+	) {
+		this.topicService.changeImage(id, imageId, illustrative);
+	}
 }

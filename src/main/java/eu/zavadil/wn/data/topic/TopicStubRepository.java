@@ -35,4 +35,22 @@ public interface TopicStubRepository extends EntityRepository<TopicStub> {
 		""")
 	void changeArticleType(@Param("topicId") int topicId, @Param("articleType") ArticleType articleType);
 
+	@Modifying
+	@Transactional
+	@Query("""
+		update TopicStub t
+		set t.mainImageId = :imageId, t.mainImageIsIllustrative = :illustrative
+		where t.id = :topicId
+		""")
+	void changeImage(@Param("topicId") int topicId, @Param("imageId") Integer imageId, @Param("illustrative") boolean illustrative);
+
+	@Modifying
+	@Transactional
+	@Query("""
+		update TopicStub t
+		set t.mainImageId = :imageId, t.mainImageIsIllustrative = :illustrative
+		where t.id = :topicId and t.mainImageId is null
+		""")
+	void changeImageIfEmpty(@Param("topicId") int topicId, @Param("imageId") Integer imageId, @Param("illustrative") boolean illustrative);
+
 }

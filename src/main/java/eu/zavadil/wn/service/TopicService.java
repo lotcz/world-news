@@ -50,24 +50,7 @@ public class TopicService {
 	@Autowired
 	RealmEmbeddingsService realmEmbeddingsService;
 
-	private void onTopicSaved(TopicBase topic) {
-		this.topicEmbeddingsService.updateEmbedding(topic);
-		this.articleRepository.markInternalArticles(topic.getId(), Instant.now());
-	}
-
-	@Transactional
-	public Topic save(Topic topic) {
-		Topic saved = this.topicRepository.save(topic);
-		this.onTopicSaved(saved);
-		return saved;
-	}
-
-	@Transactional
-	public TopicStub save(TopicStub topic) {
-		TopicStub saved = this.topicStubRepository.save(topic);
-		this.onTopicSaved(saved);
-		return saved;
-	}
+	// LOAD AND SEARCH
 
 	public Page<Topic> search(String search, boolean published, PageRequest pr) {
 		if (StringUtils.isBlank(search)) {
@@ -83,14 +66,6 @@ public class TopicService {
 
 	public TopicStub requireById(int id) {
 		return this.topicStubRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Topic Stub", id));
-	}
-
-	public void deleteById(int id) {
-		TopicStub topic = this.requireById(id);
-		if (topic.getArticleCountInternal() > 0) {
-			throw new BadRequestException("Cannot delete topic with internal articles! Unpublish instead.");
-		}
-		this.topicRepository.deleteById(id);
 	}
 
 	public Page<Topic> loadByRealm(int realmId, PageRequest pr) {
@@ -145,6 +120,29 @@ public class TopicService {
 		return this.topicRepository.loadApprovalQueueSize();
 	}
 
+	// SAVE
+
+	private void onTopicSaved(TopicBase topic) {
+		this.topicEmbeddingsService.updateEmbedding(topic);
+		this.articleRepository.markInternalArticles(topic.getId(), Instant.now());
+	}
+
+	@Transactional
+	public Topic save(Topic topic) {
+		Topic saved = this.topicRepository.save(topic);
+		this.onTopicSaved(saved);
+		return saved;
+	}
+
+	@Transactional
+	public TopicStub save(TopicStub topic) {
+		TopicStub saved = this.topicStubRepository.save(topic);
+		this.onTopicSaved(saved);
+		return saved;
+	}
+
+	// UPDATE
+
 	@Transactional
 	public void mergeTopics(int fromTopicId, int toTopicId) {
 		this.articleStubRepository.mergeTopics(fromTopicId, toTopicId);
@@ -187,5 +185,26 @@ public class TopicService {
 	public void changeArticleType(int topicId, ArticleType articleType) {
 		this.topicStubRepository.changeArticleType(topicId, articleType);
 	}
+
+	@Transactional
+	public void changeImage(int topicId, Integer imageId, boolean illustrative) {
+		this.topicStubRepository.changeImage(topicId, imageId, illustrative);
+	}
+
+	@Transactional
+	public void changeImageIfEmpty(int topicId, Integer imageId, boolean illustrative) {
+		this.topicStubRepository.changeImageIfEmpty(topicId, imageId, illustrative);
+	}
+
+	// DELETE
+
+	public void deleteById(int id) {
+		TopicStub topic = this.requireById(id);
+		if (topic.getArticleCountInternal() > 0) {
+			throw new BadRequestException("Cannot delete topic with internal articles! Unpublish instead.");
+		}
+		this.topicRepository.deleteById(id);
+	}
+
 }
 

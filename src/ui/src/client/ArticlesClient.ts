@@ -56,4 +56,8 @@ export class ArticlesClient extends EntityClientWithStub<Article, ArticleStub> {
 	changeType(articleId: number, articleType: string): Promise<any> {
 		return this.client.put(`${this.name}/${articleId}/change-type/${articleType}`);
 	}
+
+	changeImage(topicId: number, imageId: number | null, illustrative: boolean): Promise<any> {
+		return this.client.put(`${this.name}/${topicId}/change-image/${imageId}/${illustrative}`);
+	}
 }

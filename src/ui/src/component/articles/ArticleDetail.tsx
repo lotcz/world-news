@@ -40,6 +40,7 @@ export default function ArticleDetail() {
 	const [activeTab, setActiveTab] = useState<string>();
 	const [data, setData] = useState<ArticleStub>();
 	const [changed, setChanged] = useState<boolean>(false);
+	const [imageChanged, setImageChanged] = useState<boolean>(false);
 	const [saving, setSaving] = useState<boolean>(false);
 
 	const onChanged = useCallback(
@@ -47,6 +48,15 @@ export default function ArticleDetail() {
 			if (!data) return;
 			setData({...data});
 			setChanged(true);
+		},
+		[data]
+	);
+
+	const onImageChanged = useCallback(
+		() => {
+			if (!data) return;
+			setData({...data});
+			setImageChanged(true);
 		},
 		[data]
 	);
@@ -77,11 +87,19 @@ export default function ArticleDetail() {
 					mainImageIsIllustrative: true,
 					usedForCompilation: false
 				});
+				setChanged(true);
 				return;
 			}
 			setData(undefined);
-			restClient.articles.loadSingleStub(Number(id))
-				.then(setData)
+			restClient.articles
+				.loadSingleStub(Number(id))
+				.then(
+					(a) => {
+						setData(a);
+						setChanged(false);
+						setImageChanged(false);
+					}
+				)
 				.catch((e: Error) => userAlerts.err(e))
 		},
 		[id, restClient, userAlerts]
@@ -92,24 +110,34 @@ export default function ArticleDetail() {
 	const saveData = useCallback(
 		() => {
 			if (!data) return;
-			const inserting = NumberUtil.isEmpty(data.id);
 			setSaving(true);
-			restClient
-				.articles
-				.saveStub(data)
-				.then(
-					(f) => {
-						if (inserting) {
-							navigate(`/articles/detail/${f.id}`, {replace: true});
-						} else {
-							setData(f);
-						}
-						setChanged(false);
-					})
-				.catch((e: Error) => userAlerts.err(e))
-				.finally(() => setSaving(false))
+			if (data.id && imageChanged && !changed) {
+				restClient
+					.articles
+					.changeImage(data.id, data.mainImageId || null, data.mainImageIsIllustrative)
+					.then(reload)
+					.catch((e: Error) => userAlerts.err(e))
+					.finally(() => setSaving(false));
+			} else {
+				const inserting = NumberUtil.isEmpty(data.id);
+				restClient
+					.articles
+					.saveStub(data)
+					.then(
+						(f) => {
+							if (inserting) {
+								navigate(`/articles/detail/${f.id}`, {replace: true});
+							} else {
+								setData(f);
+							}
+							setChanged(false);
+							setImageChanged(false);
+						})
+					.catch((e: Error) => userAlerts.err(e))
+					.finally(() => setSaving(false));
+			}
 		},
-		[restClient, data, userAlerts, navigate]
+		[restClient, data, userAlerts, navigate, changed, imageChanged]
 	);
 
 	const deleteArticle = useCallback(
@@ -138,14 +166,14 @@ export default function ArticleDetail() {
 				onSelected: (id) => {
 					data.mainImageId = id;
 					supplyImageDialog.hide();
-					onChanged();
+					onImageChanged();
 				},
 				description: data.summary,
 				entityType: 'Topic',
 				entityId: data.id
 			}
 		),
-		[data, supplyImageDialog, onChanged]
+		[data, supplyImageDialog, onImageChanged]
 	);
 
 	const approveForPublication = useCallback(
@@ -182,10 +210,10 @@ export default function ArticleDetail() {
 		<div>
 			<div className="p-2">
 				<Stack direction="horizontal" gap={2}>
-					<BackIconLink changed={changed}/>
+					<BackIconLink changed={changed || imageChanged}/>
 					<RefreshIconButton onClick={reload}/>
 					<SaveButton
-						disabled={!changed}
+						disabled={!(changed || imageChanged)}
 						onClick={saveData}
 						loading={saving}
 					>Save</SaveButton>
@@ -193,14 +221,14 @@ export default function ArticleDetail() {
 						!data.isLocked
 						&& <>
 							<LoadingButton
-								disabled={changed}
+								disabled={changed || imageChanged}
 								variant="success"
 								loading={saving}
 								icon={<BsCheck/>}
 								onClick={approveForPublication}
 							>Approve</LoadingButton>
 							<LoadingButton
-								disabled={changed}
+								disabled={changed || imageChanged}
 								variant="secondary"
 								loading={saving}
 								icon={<BsXCircle/>}
@@ -380,7 +408,7 @@ export default function ArticleDetail() {
 												checked={data.mainImageIsIllustrative}
 												onChange={(e) => {
 													data.mainImageIsIllustrative = e;
-													onChanged();
+													onImageChanged();
 												}}
 												label="Illustrative photo"
 
@@ -397,7 +425,7 @@ export default function ArticleDetail() {
 												onClick={
 													() => {
 														data.mainImageId = null;
-														onChanged();
+														onImageChanged();
 													}
 												}
 											>Remove</IconButton>

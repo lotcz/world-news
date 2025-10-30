@@ -12,6 +12,7 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.article.*;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.realm.Realm;
+import eu.zavadil.wn.data.topic.TopicStubRepository;
 import eu.zavadil.wn.data.website.Website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,24 +40,15 @@ public class ArticleService {
 	TopicEmbeddingsService topicEmbeddingsService;
 
 	@Autowired
+	TopicStubRepository topicStubRepository;
+
+	@Autowired
 	RealmService realmService;
 
 	@Autowired
 	ArticleSourceService articleSourceService;
 
-	@Transactional
-	public Article save(Article article) {
-		Article saved = this.articleRepository.save(article);
-		this.articleEmbeddingsService.updateEmbedding(saved);
-		return saved;
-	}
-
-	@Transactional
-	public ArticleStub save(ArticleStub article) {
-		ArticleStub saved = this.articleStubRepository.save(article);
-		this.articleEmbeddingsService.updateEmbedding(saved);
-		return saved;
-	}
+	// LOAD AND SEARCH
 
 	public Page<Article> search(String search, boolean onlyPublished, boolean onlyInternal, PageRequest pr) {
 		if (StringUtils.isBlank(search)) {
@@ -118,20 +110,8 @@ public class ArticleService {
 		return this.articleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Article", id));
 	}
 
-	public void deleteById(int id) {
-		Article article = this.requireById(id);
-		if (article.isInternal()) {
-			throw new BadRequestException("Internal articles cannot be deleted! Unpublish them instead.");
-		}
-		this.articleRepository.deleteById(id);
-	}
-
 	public Article loadByUid(int sourceId, String uid) {
 		return this.articleRepository.findFirstBySourceIdAndUid(sourceId, uid).orElse(null);
-	}
-
-	public Embedding updateEmbedding(Article article) {
-		return this.articleEmbeddingsService.updateEmbedding(article);
 	}
 
 	public List<ArticleEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
@@ -188,6 +168,34 @@ public class ArticleService {
 		return this.articleRepository.loadApprovalQueueSize();
 	}
 
+	// SAVE
+
+	@Transactional
+	public Article save(Article article) {
+		Article saved = this.articleRepository.save(article);
+		this.articleEmbeddingsService.updateEmbedding(saved);
+		if (article.getTopic() != null && article.getMainImage() != null) {
+			this.topicStubRepository.changeImageIfEmpty(article.getTopic().getId(), article.getMainImage().getId(), article.isMainImageIsIllustrative());
+		}
+		return saved;
+	}
+
+	@Transactional
+	public ArticleStub save(ArticleStub article) {
+		ArticleStub saved = this.articleStubRepository.save(article);
+		this.articleEmbeddingsService.updateEmbedding(saved);
+		if (article.getTopicId() != null && article.getMainImageId() != null) {
+			this.topicStubRepository.changeImageIfEmpty(article.getTopicId(), article.getMainImageId(), article.isMainImageIsIllustrative());
+		}
+		return saved;
+	}
+
+	// UPDATE
+
+	public Embedding updateEmbedding(Article article) {
+		return this.articleEmbeddingsService.updateEmbedding(article);
+	}
+
 	public void moveToTopic(int articleId, int topicId) {
 		this.articleStubRepository.moveToTopic(articleId, topicId);
 	}
@@ -213,6 +221,27 @@ public class ArticleService {
 	@Transactional
 	public void changeArticleType(int articleId, ArticleType articleType) {
 		this.articleStubRepository.changeArticleType(articleId, articleType);
+	}
+
+	@Transactional
+	public void changeImage(int articleId, Integer imageId, boolean illustrative) {
+		this.articleStubRepository.changeImage(articleId, imageId, illustrative);
+		if (imageId != null) {
+			ArticleStub article = this.loadStubById(articleId);
+			if (article.getTopicId() != null) {
+				this.topicStubRepository.changeImageIfEmpty(article.getTopicId(), imageId, illustrative);
+			}
+		}
+	}
+
+	// DELETE
+
+	public void deleteById(int id) {
+		Article article = this.requireById(id);
+		if (article.isInternal()) {
+			throw new BadRequestException("Internal articles cannot be deleted! Unpublish them instead.");
+		}
+		this.articleRepository.deleteById(id);
 	}
 
 }

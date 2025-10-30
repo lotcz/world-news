@@ -1,6 +1,4 @@
-- article continuation - when new articles exist and internal article is locked, write a new article from the internal and unsued external
-  - use only unused during compilation
-
+- prevent processed topic/article to be overwritten with old state
 - topic detail
   - detach articles to new topic
 
@@ -15,7 +13,7 @@ Topics
 Images
 
 - better wikimedia integration https://developer.wikimedia.org/use-content/
-- when image added to article, propagate to topic is it doesn't have one
+
 - allow hiding of image description (but keep the description for search)
 - insert new image from clipboard
 - AI images Gateway timeout

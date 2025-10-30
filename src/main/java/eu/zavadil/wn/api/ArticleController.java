@@ -150,4 +150,13 @@ public class ArticleController {
 		this.articleService.changeArticleType(id, articleType);
 	}
 
+	@PutMapping("{id}/change-image/{imageId}/{illustrative}")
+	public void changeImage(
+		@PathVariable int id,
+		@PathVariable Integer imageId,
+		@PathVariable boolean illustrative
+	) {
+		this.articleService.changeImage(id, imageId, illustrative);
+	}
+
 }

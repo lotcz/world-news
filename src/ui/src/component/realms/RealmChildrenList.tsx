@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Table} from 'react-bootstrap';
+import {Button, Table} from 'react-bootstrap';
 import {useNavigate} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
@@ -40,6 +40,9 @@ function RealmChildrenList({realmId}: RealmSimilarTopicsListProps) {
 
 	return (
 		<div>
+			<div>
+				<Button onClick={() => navigate(`/realms/detail/add/${realmId}`)}>+ Add</Button>
+			</div>
 			<div className="d-flex pt-2 gap-3">
 				<Table
 					hover={true}

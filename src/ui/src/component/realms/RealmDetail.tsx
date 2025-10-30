@@ -268,28 +268,13 @@ export default function RealmDetail() {
 					</Tabs>
 					<div className="p-3">
 						{
-							activeTab === 'sub-realms' && <div>
-								<div>
-									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
-								</div>
-								<RealmChildrenList realmId={data.id}/>
-							</div>
+							activeTab === 'sub-realms' && <RealmChildrenList realmId={data.id}/>
 						}
 						{
-							activeTab === 'topics' && <div>
-								<div>
-									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
-								</div>
-								<RealmTopicsList realmId={data.id}/>
-							</div>
+							activeTab === 'topics' && <RealmTopicsList realmId={data.id}/>
 						}
 						{
-							activeTab === 'similar-topics' && <div>
-								<div>
-									<Button onClick={() => navigate(`/realms/detail/add/${data.id}`)}>+ Add</Button>
-								</div>
-								<RealmSimilarTopicsList realmId={data.id}/>
-							</div>
+							activeTab === 'similar-topics' && <RealmSimilarTopicsList realmId={data.id}/>
 						}
 					</div>
 				</div>

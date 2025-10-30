@@ -35,4 +35,13 @@ public interface ArticleStubRepository extends EntityRepository<ArticleStub> {
 		""")
 	void changeArticleType(@Param("articleId") int articleId, @Param("articleType") ArticleType articleType);
 
+	@Modifying
+	@Transactional
+	@Query("""
+		update ArticleStub a
+		set a.mainImageId = :imageId, a.mainImageIsIllustrative = :illustrative
+		where a.id = :articleId
+		""")
+	void changeImage(@Param("articleId") int articleId, @Param("imageId") Integer imageId, @Param("illustrative") boolean illustrative);
+
 }

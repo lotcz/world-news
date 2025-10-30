@@ -33,7 +33,7 @@ export default function TopicInternalArticlesList({topicId}: TopicArticlesListPr
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [articles, setArticles] = useState<Page<Article> | null>(null);
-	const [paging, setPaging] = useState<PagingRequest>({page: 0, size: 10});
+	const [paging, setPaging] = useState<PagingRequest>({page: 0, size: 10, sorting: [{name: 'id', desc: true}]});
 
 	const navigateToDetail = (d: Article) => {
 		navigate(`/articles/detail/${d.id}`);
