@@ -1,6 +1,7 @@
 - prevent processed topic/article to be overwritten with old state
 - topic detail
   - detach articles to new topic
+- mobile admin
 
 Articles
 
@@ -13,7 +14,7 @@ Topics
 Images
 
 - better wikimedia integration https://developer.wikimedia.org/use-content/
-
+- store image summary to allow embeddings search and image automation in future
 - allow hiding of image description (but keep the description for search)
 - insert new image from clipboard
 - AI images Gateway timeout
@@ -24,11 +25,25 @@ Images
 
 - run ingest worker automatically
 
+Categories
+
+- add description for SEO
+
 2.0
 ===
 
+- redesign
+  	- make state diagram of topic/article
+	- rethink tags
+	  - merge with realms
+	  - topic/article can have multiple realms
+	  - no auto generation
+	  - realms on topic only propagate to internal articles
+	  - mark realm as featured for prominent display in spoke
+	  - drop tags and article_tag tables (and triggers)
+
 - EU API - https://data.europarl.europa.eu/cs/developer-corner/opendata-api
-- mobile admin
+
 
 - improve OAuth server (see todo.txt in there)
   - run as OAUTH prod
@@ -50,17 +65,12 @@ Images
 - user paid program
 - allow to redownload whole realm by setting change date of all articles/topics
 
-- rethink tags
-  - merge with realms
-  - topic/article can have multiple realms
-  - no auto generation
-  - realms on topic only propagate to internal articles
-  - mark realm as featured for prominent display in spoke
-  - drop tags and article_tag tables (and triggers)
+Websites subscriptions
 
-- call website's import page from world news
+- each website will have subscriptions to realms
+  - assigned author will create articles
+  - articles
 
-- community grammar nazi contest
 - mobile app
 - monitor news sources by country and allow comparison (potential use in propaganda debunk)
 - cost monitoring

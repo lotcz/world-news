@@ -44,6 +44,12 @@ korupcevcesku.cz
 neziskový projekt
 donace
 
+kratkezpravy.cz
+===============
+
+všechny zprávy s odkazy na zdroj (upřednostnit pravesestalo.cz)
+ukazovat jen summary, ale vsech topics
+
 Kdysi se stalo
 ==============
 
