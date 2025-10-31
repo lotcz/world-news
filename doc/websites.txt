@@ -50,6 +50,9 @@ kratkezpravy.cz
 všechny zprávy s odkazy na zdroj (upřednostnit pravesestalo.cz)
 ukazovat jen summary, ale vsech topics
 
+absurdnizpravy.cz
+=================
+
 Kdysi se stalo
 ==============
 
