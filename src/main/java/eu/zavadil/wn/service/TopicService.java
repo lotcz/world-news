@@ -189,11 +189,7 @@ public class TopicService {
 	@Transactional
 	public void changeImage(int topicId, Integer imageId, boolean illustrative) {
 		this.topicStubRepository.changeImage(topicId, imageId, illustrative);
-	}
-
-	@Transactional
-	public void changeImageIfEmpty(int topicId, Integer imageId, boolean illustrative) {
-		this.topicStubRepository.changeImageIfEmpty(topicId, imageId, illustrative);
+		this.articleRepository.markInternalArticles(topicId);
 	}
 
 	// DELETE

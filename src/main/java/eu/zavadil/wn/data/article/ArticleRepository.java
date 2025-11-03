@@ -145,6 +145,14 @@ public interface ArticleRepository extends EntityRepository<Article> {
 		this.markInternalArticlesUnsafe(topicId, lastUpdatedOn == null ? Instant.now() : lastUpdatedOn);
 	}
 
+	/**
+	 * Set lastUpdatedOn on all internal articles to trigger redownload
+	 */
+	@Modifying
+	default void markInternalArticles(int topicId) {
+		this.markInternalArticlesUnsafe(topicId, null);
+	}
+
 	// QUEUES
 
 	/**
