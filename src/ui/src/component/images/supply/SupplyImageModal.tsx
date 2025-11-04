@@ -117,7 +117,14 @@ export function SupplyImageModal({onClose, onSelected, description, entityType, 
 							activeTab === "url" && <SupplyImageUrl
 								onSelected={
 									(url) => {
-										setPreview({originalUrl: url, isAiGenerated: false, name: '', source: UrlUtil.extractHostFromUrl(url)});
+										setPreview(
+											{
+												originalUrl: url,
+												isAiGenerated: false,
+												name: '',
+												source: UrlUtil.extractDomainFromUrl(url)
+											}
+										);
 										setActiveTab("preview");
 									}
 								}
