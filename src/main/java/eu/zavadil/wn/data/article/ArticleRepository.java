@@ -150,7 +150,7 @@ public interface ArticleRepository extends EntityRepository<Article> {
 	 */
 	@Modifying
 	default void markInternalArticles(int topicId) {
-		this.markInternalArticlesUnsafe(topicId, null);
+		this.markInternalArticles(topicId, null);
 	}
 
 	// QUEUES

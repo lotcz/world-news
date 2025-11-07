@@ -1,0 +1,5 @@
+Open World News
+===============
+
+- track most popular articles per hour/day/week/month/year
+- abstract general trends

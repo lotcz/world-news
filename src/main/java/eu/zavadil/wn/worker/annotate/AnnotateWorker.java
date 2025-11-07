@@ -47,7 +47,9 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			WnStringUtil.removeWrappingQuotes(
 				WnStringUtil.removeWrappingAsterisks(
 					WnStringUtil.removeWrappingQuotes(
-						WnStringUtil.normalizeAndClean(response)
+						WnStringUtil.replaceQuotes(
+							WnStringUtil.normalizeAndClean(response)
+						)
 					)
 				)
 			)

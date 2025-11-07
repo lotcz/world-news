@@ -15,6 +15,7 @@ import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.ArticleSourceService;
 import eu.zavadil.wn.service.TagService;
 import eu.zavadil.wn.service.TopicService;
+import eu.zavadil.wn.util.WnStringUtil;
 import eu.zavadil.wn.worker.annotate.AnnotateWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +107,8 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 			EntityType.Topic,
 			topic.getId()
 		);
-		compiled.setBody(response);
+
+		compiled.setBody(WnStringUtil.replaceQuotes(response));
 
 		// annotate new article
 		compiled.setLanguage(language);
@@ -118,7 +120,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		compiled.setProcessingState(ProcessingState.Done);
 
 		this.articleService.save(compiled);
-		
+
 		topic.setName(compiled.getTitle());
 		topic.setSummary(compiled.getSummary());
 		topic.setProcessingState(ProcessingState.Done);
@@ -133,17 +135,11 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	}
 
 	@Override
-	public void onBeforeProcessing() {
-		//log.info("Starting compilation...");
-	}
-
-	@Override
 	public void onAfterProcessing() {
 		// reset article source cache so article counts can be reloaded
 		if (this.getStats().getProcessed() > 0) {
 			this.articleSourceService.reset();
 		}
-		//log.info("Compilation finished");
 	}
 
 	@Override

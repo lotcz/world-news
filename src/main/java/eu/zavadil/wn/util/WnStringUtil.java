@@ -1,9 +1,11 @@
 package eu.zavadil.wn.util;
 
+import eu.zavadil.java.util.IntegerUtils;
 import eu.zavadil.java.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.Normalizer;
+import java.util.List;
 
 @Slf4j
 public class WnStringUtil {
@@ -45,6 +47,28 @@ public class WnStringUtil {
 			return removeWrappingAsterisks(text.substring(1, text.length() - 1));
 		}
 		return text;
+	}
+
+	public static String replaceQuotes(String text) {
+		if (StringUtils.isBlank(text)) return "";
+		List<String> strings = StringUtils.safeSplit(text, "\"");
+		int length = strings.size();
+		boolean endsWithQuote = StringUtils.safeEndsWith(text, "\"");
+		if (length < 1 || (IntegerUtils.isEven(length) && !endsWithQuote)) {
+			return text;
+		}
+		StringBuilder result = new StringBuilder();
+		result.append(strings.get(0));
+		boolean first = true;
+		for (int i = 1; i < length; i++) {
+			result.append(first ? "„" : "“");
+			first = !first;
+			result.append(strings.get(i));
+		}
+		if (endsWithQuote) {
+			result.append("“");
+		}
+		return result.toString();
 	}
 
 }

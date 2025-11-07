@@ -9,11 +9,13 @@ Articles
 
 Topics
 
+  - topic "freshness": date of new articles in last 24 hours
   - remove publish date , only use article values
 
 Images
 
 - better wikimedia integration https://developer.wikimedia.org/use-content/
+- add image from wikipedia/wikimedia
 - store image summary to allow embeddings search and image automation in future
 - allow hiding of image description (but keep the description for search)
 - insert new image from clipboard
