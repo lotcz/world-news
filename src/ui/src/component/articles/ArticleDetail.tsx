@@ -241,6 +241,25 @@ export default function ArticleDetail() {
 			</div>
 			<Form className="p-3">
 				<Stack direction="vertical" gap={2}>
+					<Row className="align-items-start">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Topic:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG}>
+							<div className="border p-2 rounded d-flex flex-column gap-2 bg-body-secondary">
+								<TopicInfo topicId={data.topicId}/>
+								<TopicSelect
+									topicId={data.topicId}
+									onChange={
+										(e) => {
+											data.topicId = e;
+											onChanged();
+										}
+									}
+								/>
+							</div>
+						</Col>
+					</Row>
 					<Row className="align-items-center">
 						<Col md={COL_1_MD} lg={COL_1_LG}>
 							<Form.Label htmlFor="isLocked">Locked:</Form.Label>
@@ -354,23 +373,6 @@ export default function ArticleDetail() {
 											}>Publish</Button>
 								}
 							</div>
-						</Col>
-					</Row>
-					<Row className="align-items-start">
-						<Col md={COL_1_MD} lg={COL_1_LG}>
-							<Form.Label>Topic:</Form.Label>
-						</Col>
-						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex flex-column gap-2">
-							<TopicInfo topicId={data.topicId}/>
-							<TopicSelect
-								topicId={data.topicId}
-								onChange={
-									(e) => {
-										data.topicId = e;
-										onChanged();
-									}
-								}
-							/>
 						</Col>
 					</Row>
 					<Row className="align-items-center">

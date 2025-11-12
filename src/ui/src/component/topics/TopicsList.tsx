@@ -19,11 +19,7 @@ const HEADER: SelectableTableHeader<Topic> = [
 	{
 		name: 'mainImageId',
 		label: 'Image',
-		renderer: (item) => <ImagezImageThumb
-			name={item.mainImage?.name}
-			verticalAlign={item.mainImage?.verticalAlign}
-			horizontalAlign={item.mainImage?.horizontalAlign}
-		/>
+		renderer: (item) => <ImagezImageThumb image={item.mainImage}/>
 	},
 	{name: 'processingState', label: 'State'},
 	{name: 'name', label: 'Name'},

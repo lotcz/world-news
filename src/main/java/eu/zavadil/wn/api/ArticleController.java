@@ -3,6 +3,7 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
+import eu.zavadil.java.util.JsonUtils;
 import eu.zavadil.wn.ai.embeddings.data.ArticleEmbeddingDistance;
 import eu.zavadil.wn.data.article.Article;
 import eu.zavadil.wn.data.article.ArticleStub;
@@ -153,10 +154,11 @@ public class ArticleController {
 	@PutMapping("{id}/change-image/{imageId}/{illustrative}")
 	public void changeImage(
 		@PathVariable int id,
-		@PathVariable Integer imageId,
+		@PathVariable String imageId,
 		@PathVariable boolean illustrative
 	) {
-		this.articleService.changeImage(id, imageId, illustrative);
+		Integer imId = JsonUtils.fromJson(imageId, Integer.class);
+		this.articleService.changeImage(id, imId, illustrative);
 	}
 
 }

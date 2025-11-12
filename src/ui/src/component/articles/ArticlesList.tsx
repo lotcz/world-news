@@ -20,7 +20,11 @@ const HEADER: SelectableTableHeader<Article> = [
 			<ArticleUsedBadge article={item}/>
 		</div>
 	},
-	{name: '', label: 'Image', renderer: (item) => <ImagezImageThumb name={item.mainImage?.name || item.topic?.mainImage?.name}/>},
+	{
+		name: '',
+		label: 'Image',
+		renderer: (item) => <ImagezImageThumb image={item.mainImage || item.topic?.mainImage}/>
+	},
 	{name: 'source.name', label: 'Source'},
 	{name: 'processingState', label: 'State'},
 	{name: 'title', label: 'Title'},

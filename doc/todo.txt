@@ -46,6 +46,7 @@ Categories
 
 - EU API - https://data.europarl.europa.eu/cs/developer-corner/opendata-api
 
+- OSINT (open source intelligence)
 
 - improve OAuth server (see todo.txt in there)
   - run as OAUTH prod
