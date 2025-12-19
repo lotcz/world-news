@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,8 +159,10 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 	private Topic assignTopic(Article article, Embedding embedding) {
 		if (article.getTopic() != null) return null;
+		if (article.getPublishDate() == null) return null;
 
-		Topic mostSimilar = this.topicService.findMostSimilar(embedding);
+		Instant since = article.getPublishDate().minus(Duration.ofDays(2));
+		Topic mostSimilar = this.topicService.findMostSimilar(embedding, since);
 
 		if (mostSimilar == null) {
 			mostSimilar = new Topic();

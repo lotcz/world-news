@@ -3,6 +3,7 @@
   - detach articles to new topic
 - mobile admin
 
+
 Articles
 
  - explore external unused articles
@@ -14,6 +15,8 @@ Topics
 
 Images
 
+- separate image description into article
+- only use article's image
 - better wikimedia integration https://developer.wikimedia.org/use-content/
 - add image from wikipedia/wikimedia
 - store image summary to allow embeddings search and image automation in future

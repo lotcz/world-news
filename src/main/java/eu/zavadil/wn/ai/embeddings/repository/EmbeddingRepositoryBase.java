@@ -112,11 +112,11 @@ public abstract class EmbeddingRepositoryBase {
 		return this.searchSimilar(embedding, 0, limit);
 	}
 
-	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, float maxDistance) {
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, int offset, float maxDistance) {
 		List<EmbeddingDistance> result = new ArrayList<>(limit);
 		int page = 0;
 		while (result.size() < limit) {
-			List<EmbeddingDistance> pageResult = this.searchSimilar(embedding, page * limit, limit);
+			List<EmbeddingDistance> pageResult = this.searchSimilar(embedding, offset + (page * limit), limit);
 			int pageIndex = 0;
 			EmbeddingDistance dist;
 			while (result.size() < limit && pageIndex < pageResult.size()) {
@@ -131,4 +131,7 @@ public abstract class EmbeddingRepositoryBase {
 		return result;
 	}
 
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, float maxDistance) {
+		return this.searchSimilar(embedding, limit, 0, maxDistance);
+	}
 }

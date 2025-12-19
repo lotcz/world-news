@@ -72,16 +72,20 @@ public class TopicService {
 		return this.topicRepository.findAllByRealmId(realmId, pr);
 	}
 
-	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
-		List<EmbeddingDistance> similar = (maxDistance == null) ? this.topicEmbeddingsService.searchSimilar(embedding, limit)
-			: this.topicEmbeddingsService.searchSimilar(embedding, limit, maxDistance);
+	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit, int offset, Float maxDistance) {
+		List<EmbeddingDistance> similar = (maxDistance == null) ? this.topicEmbeddingsService.searchSimilar(embedding, limit, offset)
+			: this.topicEmbeddingsService.searchSimilar(embedding, limit, offset, maxDistance);
 		return similar.stream().map(
 			(ed) -> new TopicEmbeddingDistance(ed, this.topicRepository.findById(ed.getEntityId()).orElse(null))
 		).toList();
 	}
 
+	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit, Float maxDistance) {
+		return this.findSimilar(embedding, limit, 0, maxDistance);
+	}
+
 	public List<TopicEmbeddingDistance> findSimilar(Embedding embedding, int limit) {
-		return this.findSimilar(embedding, limit, null);
+		return this.findSimilar(embedding, limit, 0, null);
 	}
 
 	public List<TopicEmbeddingDistance> findSimilar(int topicId, int limit) {
@@ -98,10 +102,25 @@ public class TopicService {
 		return this.findSimilar(embedding, limit);
 	}
 
+	public Topic findMostSimilar(Embedding embedding, Instant minPublishDate) {
+		int pageN = 0;
+		int pageSize = 10;
+		List<TopicEmbeddingDistance> page = null;
+		while (page == null || !page.isEmpty()) {
+			page = this.findSimilar(embedding, 1, pageN * pageSize, 0.26F);
+			for (TopicEmbeddingDistance distance : page) {
+				Instant pd = distance.getEntity().getCreatedOn();
+				if (pd != null && minPublishDate.isBefore(pd)) return distance.getEntity();
+			}
+			pageN++;
+		}
+		return null;
+	}
+
 	public Topic findMostSimilar(Embedding embedding) {
 		List<TopicEmbeddingDistance> similar = this.findSimilar(embedding, 1, 0.26F);
 		if (similar.isEmpty()) return null;
-		return similar.get(0).getEntity();
+		return similar.getFirst().getEntity();
 	}
 
 	public Page<Topic> loadImageSupplyQueue(PageRequest pr) {
