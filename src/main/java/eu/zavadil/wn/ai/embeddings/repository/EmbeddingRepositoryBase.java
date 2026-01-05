@@ -93,7 +93,7 @@ public abstract class EmbeddingRepositoryBase {
 		}
 	}
 
-	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int offset, int limit) {
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, int offset) {
 		if (embedding == null) {
 			log.warn("Empty embedding! Cannot search for similar embedding in {}. Returning empty result set...", this.getTableName());
 			return List.of();
@@ -109,14 +109,14 @@ public abstract class EmbeddingRepositoryBase {
 	}
 
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit) {
-		return this.searchSimilar(embedding, 0, limit);
+		return this.searchSimilar(embedding, limit, 0);
 	}
 
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, int offset, float maxDistance) {
 		List<EmbeddingDistance> result = new ArrayList<>(limit);
 		int page = 0;
 		while (result.size() < limit) {
-			List<EmbeddingDistance> pageResult = this.searchSimilar(embedding, offset + (page * limit), limit);
+			List<EmbeddingDistance> pageResult = this.searchSimilar(embedding, limit, offset + (page * limit));
 			int pageIndex = 0;
 			EmbeddingDistance dist;
 			while (result.size() < limit && pageIndex < pageResult.size()) {

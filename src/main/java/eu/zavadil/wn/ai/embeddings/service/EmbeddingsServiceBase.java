@@ -89,11 +89,15 @@ public abstract class EmbeddingsServiceBase<T extends EntityBase> {
 		return this.embeddingRepository.searchSimilar(embedding, limit, offset, maxDistance);
 	}
 
+	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, int offset) {
+		return this.embeddingRepository.searchSimilar(embedding, limit, offset);
+	}
+
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit, float maxDistance) {
-		return this.embeddingRepository.searchSimilar(embedding, limit, maxDistance);
+		return this.searchSimilar(embedding, limit, 0, maxDistance);
 	}
 
 	public List<EmbeddingDistance> searchSimilar(Embedding embedding, int limit) {
-		return this.embeddingRepository.searchSimilar(embedding, limit);
+		return this.searchSimilar(embedding, limit, 0);
 	}
 }
