@@ -1,6 +1,6 @@
 import {Button, Col, Form, Row, Spinner, Stack} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router";
-import {useCallback, useContext, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {FaFloppyDisk} from "react-icons/fa6";
 import {NumberUtil, StringUtil} from "zavadil-ts-common";
 import {WnRestClientContext} from "../../client/WnRestClient";
@@ -13,6 +13,7 @@ import {BsBoxArrowUpRight} from "react-icons/bs";
 import ArticleSourceArticlesList from "./ArticleSourceArticlesList";
 import RefreshIconButton from "../general/RefreshIconButton";
 import ProcessingStateSelect from "../general/ProcessingStateSelect";
+import {CountrySelect} from "../country/CountrySelect";
 
 const COL_1_MD = 4;
 const COL_2_MD = 8;
@@ -210,6 +211,23 @@ export default function ArticleSourceDetail() {
 											}
 										}
 									/>
+								</Col>
+							</Row>
+							<Row className="align-items-center">
+								<Col md={COL_1_MD} lg={COL_1_LG}>
+									<Form.Label>Language:</Form.Label>
+								</Col>
+								<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+									<div>
+										<CountrySelect
+											country={data.country}
+											onChange={(e) => {
+												data.country = e;
+												setData({...data});
+												setChanged(true);
+											}}
+										/>
+									</div>
 								</Col>
 							</Row>
 							<Row className="align-items-center">

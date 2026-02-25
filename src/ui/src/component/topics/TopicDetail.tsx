@@ -24,6 +24,7 @@ import ArticleTypeSelect from "../articles/ArticleTypeSelect";
 import ExternalSourcesCount from "./badges/ExternalSourcesCount";
 import UnusedArticlesCount from "./badges/UnusedArticlesCount";
 import ExternalArticlesCount from "./badges/ExternalArticlesCount";
+import {CountryIdSelect} from "../country/CountrySelect";
 
 const TAB_PARAM_NAME = 'tab';
 const DEFAULT_TAB = 'internal-articles';
@@ -334,6 +335,22 @@ export default function TopicDetail() {
 												}
 											}>Publish</Button>
 								}
+							</div>
+						</Col>
+					</Row>
+					<Row className="align-items-center">
+						<Col md={COL_1_MD} lg={COL_1_LG}>
+							<Form.Label>Country:</Form.Label>
+						</Col>
+						<Col md={COL_2_MD} lg={COL_2_LG} className="d-flex">
+							<div>
+								<CountryIdSelect
+									id={data.countryId}
+									onChange={(e) => {
+										data.countryId = e;
+										onChanged();
+									}}
+								/>
 							</div>
 						</Col>
 					</Row>

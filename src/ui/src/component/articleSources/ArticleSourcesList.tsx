@@ -1,22 +1,25 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {Button, Form, Spinner, Stack} from 'react-bootstrap';
-import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {SelectableTableHeader, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
 import {DateUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import {ArticleSource} from "../../types/ArticleSource";
 import RefreshIconButton from "../general/RefreshIconButton";
+import {LanguageIdSelect} from "../languages/LanguageSelect";
+import {CountryIdSelect} from "../country/CountrySelect";
 
-const HEADER = [
+const HEADER: SelectableTableHeader<ArticleSource> = [
 	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
 	{name: 'processingState', label: 'State'},
 	{name: 'language.name', label: 'Language'},
+	{name: 'country.name', label: 'Country'},
 	{name: 'url', label: 'URL'},
 	{name: 'importType', label: 'Import Type'},
 	{name: 'articleCount', label: 'Articles'},
-	{name: 'lastImported', label: 'Last Imported'}
+	{name: 'lastImported', label: 'Last Imported', renderer: (item) => DateUtil.formatDateTimeForHumans(item.lastImported)}
 ];
 
 function ArticleSourcesList() {
@@ -25,6 +28,8 @@ function ArticleSourcesList() {
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
 	const [data, setData] = useState<Page<ArticleSource> | null>(null);
+	const [countryId, setCountryId] = useState<number | null | undefined>(null);
+	const [languageId, setLanguageId] = useState<number | null | undefined>(null);
 
 	const paging = useMemo(
 		() => StringUtil.isBlank(pagingString) ? {page: 0, size: 100, sorting: [{name: 'name'}]}
@@ -64,15 +69,17 @@ function ArticleSourcesList() {
 			setData(null);
 			restClient
 				.articleSources
-				.loadPage(paging)
+				.loadFiltered(countryId, languageId, paging)
 				.then(setData)
 				.catch((e: Error) => {
 					setData(null);
 					userAlerts.err(e);
 				});
 		},
-		[paging, restClient, userAlerts]
+		[paging, restClient, userAlerts, languageId, countryId]
 	);
+
+	useEffect(loadPageHandler, [paging, languageId, countryId]);
 
 	const reload = useCallback(
 		() => {
@@ -82,7 +89,6 @@ function ArticleSourcesList() {
 		[restClient, loadPageHandler]
 	);
 
-	useEffect(loadPageHandler, [paging]);
 
 	return (
 		<div>
@@ -100,6 +106,20 @@ function ArticleSourcesList() {
 						</Form>
 					</div>
 					<Button onClick={applySearch}>Search</Button>
+					<div style={{minWidth: 150}}>
+						<LanguageIdSelect
+							showEmptyOption={true}
+							id={languageId}
+							onChange={setLanguageId}
+						/>
+					</div>
+					<div style={{minWidth: 150}}>
+						<CountryIdSelect
+							showEmptyOption={true}
+							id={countryId}
+							onChange={setCountryId}
+						/>
+					</div>
 				</Stack>
 			</div>
 
@@ -107,34 +127,17 @@ function ArticleSourcesList() {
 				{
 					(data === null) ? <span><Spinner/></span>
 						: (
-							<AdvancedTable
+							<TableWithSelect
+								showSelect={false}
 								header={HEADER}
 								paging={paging}
 								totalItems={data.totalItems}
+								items={data.content}
 								onPagingChanged={navigateToPage}
+								onClick={navigateToDetail}
 								hover={true}
 								striped={true}
-							>
-								{
-									(data.totalItems === 0) ? <tr>
-											<td colSpan={HEADER.length}>Nothing here...</td>
-										</tr> :
-										data.content.map((item, index) => {
-											return (
-												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
-													<td>{item.id}</td>
-													<td>{item.name}</td>
-													<td>{item.processingState}</td>
-													<td>{item.language?.name}</td>
-													<td>{item.url}</td>
-													<td>{item.importType}</td>
-													<td>{item.articleCount}</td>
-													<td>{DateUtil.formatDateTimeForHumans(item.lastImported)}</td>
-												</tr>
-											);
-										})
-								}
-							</AdvancedTable>
+							/>
 						)
 				}
 			</div>

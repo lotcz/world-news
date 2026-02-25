@@ -2,6 +2,7 @@ package eu.zavadil.wn.service;
 
 import eu.zavadil.java.spring.common.exceptions.BadRequestException;
 import eu.zavadil.java.spring.common.exceptions.ResourceNotFoundException;
+import eu.zavadil.java.util.IntegerUtils;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.ai.embeddings.data.Embedding;
 import eu.zavadil.wn.ai.embeddings.data.EmbeddingDistance;
@@ -102,15 +103,17 @@ public class TopicService {
 		return this.findSimilar(embedding, limit);
 	}
 
-	public Topic findMostSimilar(Embedding embedding, Instant minPublishDate) {
+	public Topic findMostSimilar(Embedding embedding, Instant minPublishDate, Integer countryId) {
 		int pageN = 0;
 		int pageSize = 10;
 		List<TopicEmbeddingDistance> page = null;
 		while (page == null || !page.isEmpty()) {
 			page = this.findSimilar(embedding, 1, pageN * pageSize, 0.26F);
 			for (TopicEmbeddingDistance distance : page) {
-				Instant pd = distance.getEntity().getCreatedOn();
-				if (pd != null && minPublishDate.isBefore(pd)) return distance.getEntity();
+				Topic t = distance.getEntity();
+				Integer topicCountryId = (t.getCountry() == null) ? null : t.getCountry().getId();
+				if (minPublishDate.isBefore(t.getCreatedOn()) && IntegerUtils.safeEquals(topicCountryId, countryId))
+					return distance.getEntity();
 			}
 			pageN++;
 		}
