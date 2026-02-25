@@ -1,4 +1,4 @@
-package eu.zavadil.wn.data.articleSource;
+package eu.zavadil.wn.data.tag;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,14 +10,19 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "article_source",
+@Table(
+	name = "tag",
 	indexes = {
-		@Index(columnList = "url")
+		@Index(columnList = "name", unique = true),
+		@Index(columnList = "synonymOfId"),
 	}
 )
-public class ArticleSourceStub extends ArticleSourceBase {
+public class TagStub extends TagBase {
 
 	@Column(name = "language_id", nullable = false)
-	private Integer languageId;
+	private int languageId;
+
+	@Column(name = "synonym_of_id")
+	private Integer synonymOfId;
 
 }

@@ -92,7 +92,7 @@ function MainMenu() {
 					<NavLink to="/languages">Languages</NavLink>
 				</div>
 				<div>
-					<NavLink to="/countries">Countries</NavLink>
+					<NavLink to="/tags">Tags</NavLink>
 				</div>
 				<div>
 					<NavLink to="/realms">Realms</NavLink>

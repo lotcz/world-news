@@ -25,7 +25,6 @@ const HEADER: SelectableTableHeader<Topic> = [
 	{name: 'name', label: 'Name'},
 	{name: 'summary', label: 'Summary'},
 	{name: 'realm.name', label: 'Realm'},
-	{name: 'country.name', label: 'Country'},
 	{name: 'articleCountInternal', label: 'Internal', renderer: (item) => <InternalArticlesCount topic={item}/>},
 	{name: 'articleCountExternal', label: 'External', renderer: (item) => <ExternalArticlesCount topic={item}/>},
 	{name: 'externalArticlesSourceCount', label: 'Sources', renderer: (item) => <ExternalSourcesCount topic={item}/>},

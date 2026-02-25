@@ -1,19 +1,20 @@
-package eu.zavadil.wn.data.articleSource;
+package eu.zavadil.wn.data.tag;
 
 import eu.zavadil.wn.data.language.Language;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "article_source")
-public class ArticleSource extends ArticleSourceBase {
+public class Tag extends TagBase {
 
-	@ManyToOne(optional = false)
+	@ManyToOne
+	private Tag synonymOf;
+
+	@ManyToOne
 	private Language language;
 
 }

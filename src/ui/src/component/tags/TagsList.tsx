@@ -1,26 +1,31 @@
 import React, {FormEvent, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {Button, Form, Stack} from 'react-bootstrap';
-import {SelectableTableHeader, TablePlaceholder, TableWithSelect, TextInputWithReset} from "zavadil-react-common";
-import {ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
+import {Button, Form, Spinner, Stack} from 'react-bootstrap';
+import {AdvancedTable, TextInputWithReset} from "zavadil-react-common";
+import {DateUtil, ObjectUtil, Page, PagingRequest, PagingUtil, StringUtil} from "zavadil-ts-common";
 import {useNavigate, useParams} from "react-router";
 import {WnRestClientContext} from "../../client/WnRestClient";
 import {WnUserAlertsContext} from "../../util/WnUserAlerts";
 import RefreshIconButton from "../general/RefreshIconButton";
-import {Country} from "../../types/Country";
+import {Tag} from "../../types/Tag";
 
-const HEADER: SelectableTableHeader<Country> = [
+const HEADER = [
+	{name: 'id', label: 'ID'},
 	{name: 'name', label: 'Name'},
-	{name: 'createOverview', label: 'Overview', renderer: (item) => item.createOverview ? 'Yes' : 'No'}
+	{name: 'language.name', label: 'Language'},
+	{name: 'synonymOf.name', label: 'Synonym Of'},
+	{name: 'articleCount', label: 'Articles'},
+	{name: 'lastUpdatedOn', label: 'Updated'},
+	{name: 'createdOn', label: 'Created'}
 ];
 
-const DEFAULT_PAGING: PagingRequest = {page: 0, size: 10, sorting: [{name: 'name'}]};
+const DEFAULT_PAGING: PagingRequest = {page: 0, size: 100, sorting: [{name: 'name'}]};
 
-export default function CountriesList() {
+function TagsList() {
 	const {pagingString} = useParams();
 	const navigate = useNavigate();
 	const restClient = useContext(WnRestClientContext);
 	const userAlerts = useContext(WnUserAlertsContext);
-	const [data, setData] = useState<Page<Country> | null>(null);
+	const [data, setData] = useState<Page<Tag> | null>(null);
 
 	const paging = useMemo(
 		() => StringUtil.isBlank(pagingString) ? ObjectUtil.clone(DEFAULT_PAGING)
@@ -31,18 +36,18 @@ export default function CountriesList() {
 	const [searchInput, setSearchInput] = useState<string>(StringUtil.getNonEmpty(paging.search));
 
 	const createNew = () => {
-		navigate("/countries/detail/add")
+		navigate("/tags/detail/add")
 	};
 
 	const navigateToPage = useCallback(
 		(p?: PagingRequest) => {
-			navigate(`/countries/${PagingUtil.pagingRequestToString(p)}`);
+			navigate(`/tags/${PagingUtil.pagingRequestToString(p)}`);
 		},
 		[navigate]
 	);
 
-	const navigateToDetail = (c: Country) => {
-		navigate(`/countries/detail/${c.id}`);
+	const navigateToDetail = (l: Tag) => {
+		navigate(`/tags/detail/${l.id}`);
 	}
 
 	const applySearch = useCallback(
@@ -57,9 +62,8 @@ export default function CountriesList() {
 
 	const loadPageHandler = useCallback(
 		() => {
-			setData(null);
 			restClient
-				.countries
+				.tags
 				.loadPage(paging)
 				.then(setData)
 				.catch((e: Error) => {
@@ -106,19 +110,35 @@ export default function CountriesList() {
 
 			<div className="pt-2 px-3 gap-3">
 				{
-					(data === null) ? <TablePlaceholder/>
+					(data === null) ? <span><Spinner/></span>
 						: (
-							<TableWithSelect
+							<AdvancedTable
 								header={HEADER}
-								showSelect={false}
-								items={data.content}
 								paging={paging}
 								totalItems={data.totalItems}
 								onPagingChanged={navigateToPage}
-								onClick={navigateToDetail}
 								hover={true}
 								striped={true}
-							/>
+							>
+								{
+									(data.totalItems === 0) ? <tr>
+											<td colSpan={HEADER.length}>Nothing here...</td>
+										</tr> :
+										data.content.map((item, index) => {
+											return (
+												<tr key={index} role="button" onClick={() => navigateToDetail(item)}>
+													<td>{item.id}</td>
+													<td>{item.name}</td>
+													<td>{item.language?.name}</td>
+													<td>{item.synonymOf?.name}</td>
+													<td>{item.articleCount}</td>
+													<td>{DateUtil.formatDateTimeForHumans(item.lastUpdatedOn)}</td>
+													<td>{DateUtil.formatDateTimeForHumans(item.createdOn)}</td>
+												</tr>
+											);
+										})
+								}
+							</AdvancedTable>
 						)
 				}
 			</div>
@@ -126,3 +146,4 @@ export default function CountriesList() {
 	);
 }
 
+export default TagsList;

@@ -13,7 +13,7 @@ import eu.zavadil.wn.data.language.Language;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.ArticleService;
 import eu.zavadil.wn.service.ArticleSourceService;
-import eu.zavadil.wn.service.CountryService;
+import eu.zavadil.wn.service.TagService;
 import eu.zavadil.wn.service.TopicService;
 import eu.zavadil.wn.util.WnStringUtil;
 import eu.zavadil.wn.worker.annotate.AnnotateWorker;
@@ -42,7 +42,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 	ArticleSourceService articleSourceService;
 
 	@Autowired
-	CountryService tagService;
+	TagService tagService;
 
 	@Autowired
 	AiAssistantService aiAssistantService;
@@ -114,6 +114,7 @@ public class CompileWorker extends SmartQueueProcessorBase<Topic> implements Com
 		compiled.setLanguage(language);
 		compiled.setTitle(null);
 		compiled.setSummary(null);
+		compiled.getTags().clear();
 		this.annotateWorker.updateTitle(compiled);
 		this.annotateWorker.updateSummary(compiled);
 		compiled.setProcessingState(ProcessingState.Done);

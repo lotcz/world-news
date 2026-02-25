@@ -90,6 +90,10 @@ public class ArticleService {
 		return this.articleRepository.findAllBySourceId(sourceId, pr);
 	}
 
+	public Page<Article> loadByTagId(int tagId, PageRequest pr) {
+		return this.articleRepository.loadByTagId(tagId, pr);
+	}
+
 	public ArticleStub loadStubById(int id) {
 		return this.articleStubRepository.findById(id).orElse(null);
 	}

@@ -3,7 +3,6 @@ package eu.zavadil.wn.api;
 import eu.zavadil.java.spring.common.paging.JsonPage;
 import eu.zavadil.java.spring.common.paging.JsonPageImpl;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
-import eu.zavadil.java.util.IntegerUtils;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.service.ArticleSourceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("${api.base-url}/article-sources")
@@ -33,20 +31,9 @@ public class ArticleSourceController {
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "10") int size,
 		@RequestParam(defaultValue = "") String search,
-		@RequestParam(defaultValue = "") String sorting,
-		@RequestParam(defaultValue = "") String languageId,
-		@RequestParam(defaultValue = "") String countryId
+		@RequestParam(defaultValue = "") String sorting
 	) {
-		Optional<Integer> language = IntegerUtils.extractInteger(languageId);
-		Optional<Integer> country = IntegerUtils.extractInteger(countryId);
-		return JsonPageImpl.of(
-			this.articleSourceService.search(
-				search,
-				language.orElse(null),
-				country.orElse(null),
-				PagingUtils.of(page, size, sorting)
-			)
-		);
+		return JsonPageImpl.of(this.articleSourceService.search(search, PagingUtils.of(page, size, sorting)));
 	}
 
 	@PostMapping("")

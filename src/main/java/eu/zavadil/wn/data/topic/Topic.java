@@ -1,6 +1,5 @@
 package eu.zavadil.wn.data.topic;
 
-import eu.zavadil.wn.data.country.Country;
 import eu.zavadil.wn.data.image.Image;
 import eu.zavadil.wn.data.realm.Realm;
 import jakarta.persistence.*;
@@ -20,9 +19,6 @@ public class Topic extends TopicBase {
 
 	@ManyToOne
 	private Image mainImage;
-
-	@ManyToOne(optional = true)
-	private Country country;
 
 	@ManyToMany
 	@JoinTable(

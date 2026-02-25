@@ -11,6 +11,8 @@ import ArticleSourcesList from "./articleSources/ArticleSourcesList";
 import ArticleSourceDetail from "./articleSources/ArticleSourceDetail";
 import ArticlesList from "./articles/ArticlesList";
 import ArticleDetail from "./articles/ArticleDetail";
+import TagsList from "./tags/TagsList";
+import TagDetail from "./tags/TagDetail";
 import AiLogList from "./ailog/AiLogList";
 import TopicsList from "./topics/TopicsList";
 import TopicDetail from "./topics/TopicDetail";
@@ -24,8 +26,6 @@ import BannerDetail from "./banners/BannerDetail";
 import ApproveTopicsForCompilation from "./check/ApproveTopicsForCompilation";
 import ApproveArticlesForPublication from "./check/ApproveArticlesForPublication";
 import SupplyTopicImages from "./check/SupplyTopicImages";
-import CountriesList from "./country/CountriesList";
-import CountryDetail from "./country/CountryDetail";
 
 export default function Main() {
 	return (
@@ -62,13 +62,13 @@ export default function Main() {
 							</Route>
 							<Route path=":pagingString" element={<LanguagesList/>}/>
 						</Route>
-						<Route path="countries">
-							<Route path="" element={<CountriesList/>}/>
+						<Route path="tags">
+							<Route path="" element={<TagsList/>}/>
 							<Route path="detail">
-								<Route path="add" element={<CountryDetail/>}/>
-								<Route path=":id" element={<CountryDetail/>}/>
+								<Route path="add" element={<TagDetail/>}/>
+								<Route path=":id" element={<TagDetail/>}/>
 							</Route>
-							<Route path=":pagingString" element={<CountriesList/>}/>
+							<Route path=":pagingString" element={<TagsList/>}/>
 						</Route>
 						<Route path="realms">
 							<Route path="" element={<RealmsList activeTab="tree"/>}/>
