@@ -1,5 +1,6 @@
 package eu.zavadil.wn.data.articleSource;
 
+import eu.zavadil.wn.data.country.Country;
 import eu.zavadil.wn.data.language.Language;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -16,4 +17,6 @@ public class ArticleSource extends ArticleSourceBase {
 	@ManyToOne(optional = false)
 	private Language language;
 
+	@ManyToOne(optional = false)
+	private Country country;
 }

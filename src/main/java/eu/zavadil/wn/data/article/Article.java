@@ -1,11 +1,10 @@
 package eu.zavadil.wn.data.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
+import eu.zavadil.wn.data.articleSource.ImportType;
 import eu.zavadil.wn.data.image.Image;
 import eu.zavadil.wn.data.language.Language;
-import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,14 +29,6 @@ public class Article extends ArticleBase {
 
 	@ManyToOne(optional = true)
 	private Image mainImage;
-
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-		name = "article_tag",
-		joinColumns = @JoinColumn(name = "article_id"),
-		inverseJoinColumns = @JoinColumn(name = "tag_id")
-	)
-	private Set<Tag> tags = new HashSet<>();
 
 	@ManyToMany
 	@JoinTable(

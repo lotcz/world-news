@@ -1,6 +1,7 @@
 import {EntityWithName} from "zavadil-ts-common";
 import {Realm} from "./Realm";
 import {Image} from "./Image";
+import {Country} from "./Country";
 
 export type TopicBase = EntityWithName & {
 	isLocked: boolean;
@@ -19,9 +20,11 @@ export type TopicBase = EntityWithName & {
 export type TopicStub = TopicBase & {
 	realmId?: number | null;
 	mainImageId?: number | null;
+	countryId?: number | null;
 }
 
 export type Topic = TopicBase & {
 	realm?: Realm;
 	mainImage?: Image;
+	country?: Country;
 }

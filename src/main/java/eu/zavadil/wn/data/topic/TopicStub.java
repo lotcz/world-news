@@ -24,4 +24,6 @@ public class TopicStub extends TopicBase {
 	@Column(name = "main_image_id")
 	private Integer mainImageId;
 
+	@Column(name = "country_id", nullable = false)
+	private Integer countryId;
 }

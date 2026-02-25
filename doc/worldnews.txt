@@ -1,5 +1,8 @@
 Open World News
 ===============
 
+- introduce "global" topics (with country null)
+- introduce sub-topics
+- topic popularity = number of sources per 24 hours
 - track most popular articles per country and hour/day/week/month/year
 - abstract general trends
