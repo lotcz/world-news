@@ -1,6 +1,7 @@
 import {EntityWithName} from "zavadil-ts-common";
 import {Language} from "./Language";
 import {Realm} from "./Realm";
+import {Country} from "./Country";
 
 export type ArticleSourceBase = EntityWithName & {
 	processingState?: string;
@@ -15,9 +16,11 @@ export type ArticleSourceBase = EntityWithName & {
 
 export type ArticleSourceStub = ArticleSourceBase & {
 	languageId?: number | null;
+	countryId?: number | null;
 }
 
 export type ArticleSource = ArticleSourceBase & {
 	language?: Language | null;
+	country?: Country | null;
 	realms: Array<Realm>;
 }

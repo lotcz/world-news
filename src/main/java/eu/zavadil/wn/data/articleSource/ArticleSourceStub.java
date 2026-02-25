@@ -18,6 +18,9 @@ import lombok.EqualsAndHashCode;
 public class ArticleSourceStub extends ArticleSourceBase {
 
 	@Column(name = "language_id", nullable = false)
-	private Integer languageId;
+	private int languageId;
+
+	@Column(name = "country_id", nullable = false)
+	private int countryId;
 
 }

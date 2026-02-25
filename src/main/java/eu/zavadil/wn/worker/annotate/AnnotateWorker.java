@@ -8,10 +8,8 @@ import eu.zavadil.wn.data.ProcessingState;
 import eu.zavadil.wn.data.aiLog.AiOperation;
 import eu.zavadil.wn.data.aiLog.EntityType;
 import eu.zavadil.wn.data.article.Article;
-import eu.zavadil.wn.data.tag.Tag;
 import eu.zavadil.wn.data.topic.Topic;
 import eu.zavadil.wn.service.ArticleService;
-import eu.zavadil.wn.service.TagService;
 import eu.zavadil.wn.service.TopicService;
 import eu.zavadil.wn.util.WnStringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +30,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 
 	@Autowired
 	TopicService topicService;
-
-	@Autowired
-	TagService tagService;
 
 	@Autowired
 	AiAssistantService aiAssistantService;
@@ -109,44 +104,6 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		article.setSummary(this.cleanResponse(response));
 	}
 
-	public void updateTags(Article article) {
-		if (!(article.isInternal() && article.getTags().isEmpty())) return;
-
-		if (StringUtils.isBlank(article.getTitle())) {
-			throw new RuntimeException(
-				String.format("Article %s has no title! Cannot update tags.", article.toString())
-			);
-		}
-
-		if (StringUtils.isBlank(article.getSummary())) {
-			throw new RuntimeException(
-				String.format("Article %s has no summary! Cannot update tags.", article.toString())
-			);
-		}
-
-		List<String> userPrompt = new ArrayList<>(article.getLanguage().getUserPromptDetectTags());
-		userPrompt.add(article.getTitle());
-		userPrompt.add(article.getSummary());
-
-		String response = this.aiAssistantService.ask(
-			article.getLanguage().getSystemPrompt(),
-			userPrompt,
-			AiOperation.DetectTags,
-			EntityType.Article,
-			article.getId()
-		);
-		List<String> words = StringUtils.safeSplit(response, ",");
-
-		for (String raw : words) {
-			String word = WnStringUtil.removeWrappingQuotes(StringUtils.safeTrim(raw));
-			word = StringUtils.safeTrim(StringUtils.removeEnd(word, "."));
-			if (StringUtils.notBlank(word)) {
-				Tag tag = this.tagService.obtain(article.getLanguage().getId(), word);
-				article.getTags().add(tag);
-			}
-		}
-	}
-
 	private Embedding updateEmbedding(Article article) {
 		if (StringUtils.isBlank(article.getSummary())) {
 			throw new RuntimeException(
@@ -161,8 +118,8 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 		if (article.getTopic() != null) return null;
 		if (article.getPublishDate() == null) return null;
 
-		Instant since = article.getPublishDate().minus(Duration.ofDays(2));
-		Topic mostSimilar = this.topicService.findMostSimilar(embedding, since);
+		Instant since = article.getPublishDate().minus(Duration.ofDays(1));
+		Topic mostSimilar = this.topicService.findMostSimilar(embedding, since, article.getSource().getCountry().getId());
 
 		if (mostSimilar == null) {
 			mostSimilar = new Topic();

@@ -3,6 +3,7 @@ package eu.zavadil.wn.service;
 import eu.zavadil.java.caching.Lazy;
 import eu.zavadil.java.spring.common.entity.cache.RepositoryLookupTableCache;
 import eu.zavadil.java.spring.common.paging.PagingUtils;
+import eu.zavadil.java.util.IntegerUtils;
 import eu.zavadil.java.util.StringUtils;
 import eu.zavadil.wn.data.articleSource.ArticleSource;
 import eu.zavadil.wn.data.articleSource.ArticleSourceRepository;
@@ -55,6 +56,34 @@ public class ArticleSourceService extends RepositoryLookupTableCache<ArticleSour
 			(item) -> StringUtils.safeContainsIgnoreCase(item.getName(), search)
 				|| StringUtils.safeContainsIgnoreCase(item.getUrl(), search)
 		).toList();
+		return PagingUtils.getPage(filtered, pr);
+	}
+
+	public Page<ArticleSource> search(
+		String search,
+		Integer languageId,
+		Integer countryId,
+		PageRequest pr
+	) {
+		List<ArticleSource> filtered = this.all().stream()
+			.filter(
+				(item) -> {
+					if (StringUtils.isBlank(search)) return true;
+					return StringUtils.safeContainsIgnoreCase(item.getName(), search)
+						|| StringUtils.safeContainsIgnoreCase(item.getUrl(), search);
+				}
+			).filter(
+				(item) -> {
+					if (languageId == null) return true;
+					return IntegerUtils.safeEquals(languageId, item.getLanguage().getId());
+				}
+			).filter(
+				(item) -> {
+					if (countryId == null) return true;
+					return IntegerUtils.safeEquals(countryId, item.getCountry().getId());
+				}
+			)
+			.toList();
 		return PagingUtils.getPage(filtered, pr);
 	}
 

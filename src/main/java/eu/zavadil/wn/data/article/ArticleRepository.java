@@ -88,14 +88,6 @@ public interface ArticleRepository extends EntityRepository<Article> {
 
 	Page<Article> findAllBySourceId(@Param("sourceId") int sourceId, Pageable pr);
 
-	@Query("""
-			select a
-			from Article a
-			join ArticleTagStub ats on (a.id = ats.id.articleId)
-			where ats.id.tagId = :tagId
-		""")
-	Page<Article> loadByTagId(int tagId, Pageable pr);
-
 	Optional<Article> findFirstBySourceIdAndUid(int sourceId, String uid);
 
 	List<Article> findAllByTopicId(@Param("topicId") int topicId);
