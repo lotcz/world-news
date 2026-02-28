@@ -125,6 +125,7 @@ public class AnnotateWorker extends SmartQueueProcessorBase<Article> implements 
 			mostSimilar = new Topic();
 			mostSimilar.setName(article.getTitle());
 			mostSimilar.setSummary(article.getSummary());
+			mostSimilar.setCountry(article.getSource().getCountry());
 		}
 
 		// save topic, but don't mark it ready for compilation until article is not saved

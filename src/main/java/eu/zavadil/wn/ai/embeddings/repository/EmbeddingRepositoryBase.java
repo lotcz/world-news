@@ -68,13 +68,13 @@ public abstract class EmbeddingRepositoryBase {
 		new EmbeddingDistance(rs.getFloat("distance"), rs.getInt(this.getIdName()));
 
 	public Embedding loadEmbedding(int entityId) {
-		List<Embedding> results = jdbcTemplate.query(this.selectSql, this.embeddingRowMapper, entityId);
+		List<Embedding> results = this.jdbcTemplate.query(this.selectSql, this.embeddingRowMapper, entityId);
 		if (results.isEmpty()) return null;
 		return results.get(0);
 	}
 
 	public void deleteEmbedding(int entityId) {
-		jdbcTemplate.update(this.deleteSql, entityId);
+		this.jdbcTemplate.update(this.deleteSql, entityId);
 	}
 
 	public void updateEmbedding(int entityId, Embedding embedding) {
@@ -87,7 +87,7 @@ public abstract class EmbeddingRepositoryBase {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
 			vectorObj.setValue(embedding.toString());
-			jdbcTemplate.update(this.updateSql, entityId, vectorObj);
+			this.jdbcTemplate.update(this.updateSql, entityId, vectorObj);
 		} catch (Exception e) {
 			throw new RuntimeException("Error when updating embedding", e);
 		}
@@ -102,7 +102,7 @@ public abstract class EmbeddingRepositoryBase {
 			PGobject vectorObj = new PGobject();
 			vectorObj.setType("vector");
 			vectorObj.setValue(embedding.toString());
-			return jdbcTemplate.query(this.selectDistancesSql, this.embeddingDistanceRowMapper, vectorObj, offset, limit);
+			return this.jdbcTemplate.query(this.selectDistancesSql, this.embeddingDistanceRowMapper, vectorObj, offset, limit);
 		} catch (Exception e) {
 			throw new RuntimeException("Error when searching similar embeddings", e);
 		}

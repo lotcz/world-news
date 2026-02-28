@@ -108,7 +108,7 @@ public class TopicService {
 		int pageSize = 10;
 		List<TopicEmbeddingDistance> page = null;
 		while (page == null || !page.isEmpty()) {
-			page = this.findSimilar(embedding, 1, pageN * pageSize, 0.26F);
+			page = this.findSimilar(embedding, pageSize, pageN * pageSize, 0.26F);
 			for (TopicEmbeddingDistance distance : page) {
 				Topic t = distance.getEntity();
 				Integer topicCountryId = (t.getCountry() == null) ? null : t.getCountry().getId();
